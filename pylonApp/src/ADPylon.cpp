@@ -589,11 +589,11 @@ void ADPylon::report(FILE *fp, int details)
         Pylon::CTlFactory::GetInstance().EnumerateDevices(devices);
         numCameras = (int) devices.size();
         fprintf(fp, "\nNumber of cameras detected: %d\n", numCameras);
-        if (details > 1) {
+        if (details >= 1) {
             for (i=0; i<numCameras; i++) {
                 const Pylon::CDeviceInfo& deviceInfo  = devices[i];
                 fprintf(fp, "Camera %d\n", i);
-                fprintf(fp, "            Name: %s\n", deviceInfo.GetFriendlyName().c_str());
+                fprintf(fp, "            Name: %s\n", deviceInfo.GetFullName().c_str());
                 fprintf(fp, "           Model: %s\n", deviceInfo.GetModelName().c_str());
                 fprintf(fp, "        Serial #: %s\n", deviceInfo.GetSerialNumber().c_str());
                 fprintf(fp, "    Interface ID: %s\n", deviceInfo.GetInterfaceID().c_str());
