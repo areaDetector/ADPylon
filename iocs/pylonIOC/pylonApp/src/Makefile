@@ -5,6 +5,9 @@ include $(TOP)/configure/CONFIG
 
 PROD_NAME = pylonApp
 PROD_IOC_WIN32 += $(PROD_NAME)
+ifdef PYLON_INCLUDE
+PROD_IOC_Linux += $(PROD_NAME)
+endif
 
 # <name>.dbd will be created from <name>Include.dbd
 DBD += $(PROD_NAME).dbd
