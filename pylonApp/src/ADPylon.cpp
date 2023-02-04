@@ -203,14 +203,14 @@ asynStatus ADPylon::connectCamera(void)
     try {
         // If cameraId_ is a number < 1000, use it as the index
         if (cameraId_.size()<4 && std::all_of(cameraId_.begin(), cameraId_.end(), isdigit)) {
-            int index = std::stoi(cameraId_);
+            size_t index = std::stoi(cameraId_);
             Pylon::DeviceInfoList devices;
             Pylon::CTlFactory::GetInstance().EnumerateDevices(devices);
             if (index < devices.size()) {
                 camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(devices[index]), Pylon::Cleanup_Delete); 
             } else {
                 asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
-                    "%s::%s index %s >= cameras found %d\n", driverName, functionName, cameraId_.c_str(), devices.size());
+                    "%s::%s index %s >= cameras found %zd\n", driverName, functionName, cameraId_.c_str(), devices.size());
                 return asynError;
             }
         } else {
@@ -328,26 +328,21 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     getIntegerParam(PYLONConvertPixelFormat, &convertPixelFormat);
     if (convertPixelFormat != PYLONPixelConvertNone) {
         Pylon::EPixelType outputPixelType;
-        int bitsPerPixel = 8;
         switch (convertPixelFormat) {
             case PYLONPixelConvertMono8:
                 outputPixelType = Pylon::PixelType_Mono8;
-                bitsPerPixel = 8;
                 numColors = 1;
                 break;
             case PYLONPixelConvertMono16:
                 outputPixelType = Pylon::PixelType_Mono16;
-                bitsPerPixel = 16;
                 numColors = 1;
                 break;
             case PYLONPixelConvertRGB8:
                 outputPixelType = Pylon::PixelType_RGB8planar;
-                bitsPerPixel = 8;
                 numColors = 3;
                 break;
             case PYLONPixelConvertRGB16:
                 outputPixelType = Pylon::PixelType_RGB16planar;
-                bitsPerPixel = 16;
                 numColors = 3;
                 break;
             default:
@@ -366,7 +361,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
             pixelType = outputPixelType;
         } catch (const Pylon::GenericException& e) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
-                "%s::%s error converting, input pixel type=0x%x, output pixel type=0x%x: %s\n", 
+                "%s::%s error converting, input pixel type=0x%lx, output pixel type=0x%lx: %s\n",
                 driverName, functionName, pixelType, outputPixelType, e.GetDescription());
         }
     }
@@ -408,7 +403,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
 
         default:
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-                "%s:%s: unsupported pixel type=0x%x\n",
+                "%s:%s: unsupported pixel type=0x%lx\n",
                 driverName, functionName, pixelType);
             status = asynError;
             goto done;
@@ -582,7 +577,7 @@ void ADPylon::report(FILE *fp, int details)
 {
     int numCameras;
     int i;
-    static const char *functionName = "report";
+    //static const char *functionName = "report";
 
     try {
         Pylon::DeviceInfoList_t devices;
