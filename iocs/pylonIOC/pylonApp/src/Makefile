@@ -5,7 +5,7 @@ include $(TOP)/configure/CONFIG
 
 PROD_NAME = pylonApp
 PROD_IOC_WIN32 += $(PROD_NAME)
-ifdef PYLON_INCLUDE
+ifeq ($(WITH_PYLON), YES)
 PROD_IOC_Linux += $(PROD_NAME)
 endif
 
