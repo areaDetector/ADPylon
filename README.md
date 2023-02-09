@@ -12,4 +12,4 @@ which handles many of the details of mapping GenICam features to EPICS records.
 
 Additional information:
 * [Documentation](https://areadetector.github.io/master/ADPylon/ADPylon.html)
-* [Release notes and links to source and binary releases](RELEASE.md)
+* [Release notes](RELEASE.md)

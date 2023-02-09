@@ -24,8 +24,15 @@ mapping GenICam_ features to EPICS records.
 
 `ADPylon class`_ describes this class in detail.
 
-As it name implies, ADPylon_ uses the Basler Pylon_ library.
-It runs on Windows, and on Ubuntu Linux.
+As it name implies, ADPylon_ uses the Basler Pylon_ library. It runs on Windows, and on many Linux with
+glibc 2.27+ and gcc 5.1+ (e.g. Ubuntu 18, RHEL 8. Debian 10).
+The header files and Windows import libraries are include, so it is ready to build for Windows.
+Because of the sheer size of the Linux libraries, they are not included. To build, unpacked the Linux
+SDK to ``/opt/pylon``, and define this in the areaDetector top level ``CONFIG_SITE.local`` file,
+
+   WITH_PYLON = YES
+   PYLON_INCLUDE = /opt/pylon/include
+   PYLON_LIB = /opt/pylon/lib
 
 Prior to using ADPylon with a specific camera model, the XML file must be read from the camera using the arv-tool utility,
 as described in the
