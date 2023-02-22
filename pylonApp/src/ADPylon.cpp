@@ -193,7 +193,14 @@ void ADPylon::shutdown(void)
 GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set, 
                                        std::string const & asynName, asynParamType asynType, int asynIndex,
                                        std::string const & featureName, GCFeatureType_t featureType) {
-    return new PylonFeature(set, asynName, asynType, asynIndex, featureName, featureType, camera_.GetNodeMap());
+    GenApi::INodeMap *nodeMap = nullptr;
+    try {
+        nodeMap = &camera_.GetNodeMap();
+    } catch (const Pylon::GenericException& e) {
+        // It normally means the camera is not connected.
+    }
+
+    return new PylonFeature(set, asynName, asynType, asynIndex, featureName, featureType, nodeMap);
 }
 
 asynStatus ADPylon::connectCamera(void)

@@ -5,14 +5,17 @@ static const char *driverName="PylonFeature";
 PylonFeature::PylonFeature(GenICamFeatureSet *set, 
                            std::string const & asynName, asynParamType asynType, int asynIndex,
                            std::string const & featureName, GCFeatureType_t featureType,
-                           const GenApi::INodeMap& nodeMap)
+                           const GenApi::INodeMap* nodeMap)
          : GenICamFeature(set, asynName, asynType, asynIndex, featureName, featureType),
          mAsynUser(set->getUser()),mFeaturePtr(nullptr),mIsImplemented(false)
 {
     static const char *functionName = "PylonFeature";
 
+    if (!nodeMap)
+        return;
+
     try {
-        mFeaturePtr = nodeMap.GetNode(featureName.c_str());
+        mFeaturePtr = nodeMap->GetNode(featureName.c_str());
     } catch (const Pylon::GenericException& e) {
         asynPrint(mAsynUser, ASYN_TRACE_ERROR,
                 "%s::%s error in get feature featurename=%s: %s\n",
