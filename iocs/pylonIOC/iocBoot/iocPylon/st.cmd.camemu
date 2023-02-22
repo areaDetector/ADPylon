@@ -8,16 +8,16 @@ pylonApp_registerRecordDeviceDriver(pdbbase)
 epicsEnvSet("PYLON_CAMEMU", "1")
 
 # The maximum image width; used for row profiles in the NDPluginStats plugin
-epicsEnvSet("XSIZE",  "2464")
+epicsEnvSet("XSIZE",  "4096")
 # The maximum image height; used for column profiles in the NDPluginStats plugin
-epicsEnvSet("YSIZE",  "2056")
-# Define NELEMENTS to be enough for a 2464x2056x3 (color) image
-epicsEnvSet("NELEMENTS", "15197952")
+epicsEnvSet("YSIZE",  "4096")
+# Define NELEMENTS to be enough for a 4096x4096x3 (color) image
+epicsEnvSet("NELEMENTS", "50331648")
 
 # The CAMERA_ID can be either of the following:
-#  Camera full name
+#  Camera serial number
 #  Camera index number, starting from 0
-epicsEnvSet("CAMERA_ID", "0")
+epicsEnvSet("CAMERA_ID", "0815-0000")
 
 #epicsEnvSet("GENICAM_DB_FILE", "$(ADGENICAM)/db/AVT_Manta_G507C.template")
 
