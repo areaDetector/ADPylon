@@ -118,10 +118,17 @@ epicsInt64 PylonFeature::readIncrement() {
 }
 
 void PylonFeature::writeInteger(epicsInt64 value) {
+    const char *functionName = "writeInteger";
     if (!mIsImplemented) return;
     GenApi::IInteger *pValue = dynamic_cast<GenApi::IInteger *>(mFeaturePtr);
     if (!pValue) return;
-    pValue->SetValue(value);
+    try {
+        pValue->SetValue(value);
+    } catch (const Pylon::GenericException& e) {
+        asynPrint(mAsynUser, ASYN_TRACE_ERROR,
+            "%s::%s %s: %s\n",
+            driverName, functionName, mFeatureName.c_str(), e.GetDescription());
+    }
 }
 
 bool PylonFeature::readBoolean() {
@@ -132,10 +139,17 @@ bool PylonFeature::readBoolean() {
 }
 
 void PylonFeature::writeBoolean(bool value) { 
+    const char *functionName = "writeBoolean";
     if (!mIsImplemented) return;
     GenApi::IBoolean *pValue = dynamic_cast<GenApi::IBoolean *>(mFeaturePtr);
     if (!pValue) return;
-    pValue->SetValue(value);
+    try {
+        pValue->SetValue(value);
+    } catch (const Pylon::GenericException& e) {
+        asynPrint(mAsynUser, ASYN_TRACE_ERROR,
+            "%s::%s %s: %s\n",
+            driverName, functionName, mFeatureName.c_str(), e.GetDescription());
+    }
 }
 
 double PylonFeature::readDouble() {
@@ -146,10 +160,17 @@ double PylonFeature::readDouble() {
 }
 
 void PylonFeature::writeDouble(double value) { 
+    const char *functionName = "writeDouble";
     if (!mIsImplemented) return;
     GenApi::IFloat *pValue = dynamic_cast<GenApi::IFloat *>(mFeaturePtr);
     if (!pValue) return;
-    pValue->SetValue(value);
+    try {
+        pValue->SetValue(value);
+    } catch (const Pylon::GenericException& e) {
+        asynPrint(mAsynUser, ASYN_TRACE_ERROR,
+            "%s::%s %s: %s\n",
+            driverName, functionName, mFeatureName.c_str(), e.GetDescription());
+    }
 }
 
 double PylonFeature::readDoubleMin() {
@@ -174,10 +195,17 @@ int PylonFeature::readEnumIndex() {
 }
 
 void PylonFeature::writeEnumIndex(int value) {
+    static const char *functionName = "writeEnumIndex";
     if (!mIsImplemented) return;
     GenApi::IEnumeration *pValue = dynamic_cast<GenApi::IEnumeration *>(mFeaturePtr);
     if (!pValue) return;
-    pValue->SetIntValue(value);
+    try {
+        pValue->SetIntValue(value);
+    } catch (const Pylon::GenericException& e) {
+        asynPrint(mAsynUser, ASYN_TRACE_ERROR,
+            "%s::%s %s: %s\n",
+            driverName, functionName, mFeatureName.c_str(), e.GetDescription());
+    }
 }
 
 std::string PylonFeature::readEnumString() {
@@ -195,18 +223,29 @@ std::string PylonFeature::readString() {
 }
 
 void PylonFeature::writeString(std::string const & value) { 
+    static const char *functionName = "writeString";
     if (!mIsImplemented) return;
     GenApi::IString *pValue = dynamic_cast<GenApi::IString *>(mFeaturePtr);
     if (!pValue) return;
-    return pValue->SetValue(value.c_str());
+    try {
+        pValue->SetValue(value.c_str());
+    } catch (const Pylon::GenericException& e) {
+        asynPrint(mAsynUser, ASYN_TRACE_ERROR,
+            "%s::%s %s: %s\n",
+            driverName, functionName, mFeatureName.c_str(), e.GetDescription());
+    }
 }
 
 void PylonFeature::writeCommand() { 
+    const char *functionName = "writeCommand";
     if (!mIsImplemented) return;
     GenApi::ICommand *pValue = dynamic_cast<GenApi::ICommand *>(mFeaturePtr);
-    pValue->Execute();
-    while(!pValue->IsDone()) {
-        epicsThreadSleep(0.01);
+    try {
+        pValue->Execute();
+    } catch (const Pylon::GenericException& e) {
+        asynPrint(mAsynUser, ASYN_TRACE_ERROR,
+            "%s::%s %s: %s\n",
+            driverName, functionName, mFeatureName.c_str(), e.GetDescription());
     }
 }
 
