@@ -214,7 +214,9 @@ asynStatus ADPylon::connectCamera(void)
                 return asynError;
             }
         } else {
-            camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(cameraId_.c_str()), Pylon::Cleanup_Delete);
+            Pylon::CDeviceInfo deviceInfo;
+            deviceInfo.SetSerialNumber(cameraId_.c_str());
+            camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(deviceInfo), Pylon::Cleanup_Delete);
         }
         camera_.RegisterImageEventHandler(new ADPylonImageEventHandler(this), Pylon::RegistrationMode_Append, Pylon::Cleanup_Delete);
         camera_.Open();
@@ -588,7 +590,7 @@ void ADPylon::report(FILE *fp, int details)
             for (i=0; i<numCameras; i++) {
                 const Pylon::CDeviceInfo& deviceInfo  = devices[i];
                 fprintf(fp, "Camera %d\n", i);
-                fprintf(fp, "            Name: %s\n", deviceInfo.GetFullName().c_str());
+                fprintf(fp, "            Name: %s\n", deviceInfo.GetFriendlyName().c_str());
                 fprintf(fp, "           Model: %s\n", deviceInfo.GetModelName().c_str());
                 fprintf(fp, "        Serial #: %s\n", deviceInfo.GetSerialNumber().c_str());
                 fprintf(fp, "    Interface ID: %s\n", deviceInfo.GetInterfaceID().c_str());
