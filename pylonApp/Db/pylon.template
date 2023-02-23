@@ -135,10 +135,3 @@ record(longin, "$(P)$(R)GC_StatPacketResent_RBV") {
   info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
 }
 
-record(mbbi, "$(P)$(R)GC_StreamType_RBV") {
-  field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_E_StreamType")
-  field(SCAN, "I/O Intr")
-  field(DISA, "0")
-  info(autosaveFields, "DESC ZRSV ONSV TWSV THSV FRSV FVSV SXSV SVSV EISV NISV TESV ELSV TVSV TTSV FTSV FFSV TSE")
-}
