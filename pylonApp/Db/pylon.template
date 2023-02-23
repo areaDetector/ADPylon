@@ -77,42 +77,27 @@ record(mbbi, "$(P)$(R)ConvertPixelFormat_RBV") {
   field(INP,  "@asyn($(PORT) 0)PYLON_CONVERT_PIXEL_FORMAT")
 }
 
-# GigE statistics
-record(longin, "$(P)$(R)GC_StatFrameDelivered_RBV") {
+# Stream grabber statistics
+record(longin, "$(P)$(R)GC_StatBufferReceived_RBV") {
   field(DTYP, "asynInt64")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_StatFrameDelivered")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_Statistic_Total_Buffer_Count")
   field(SCAN, "I/O Intr")
   field(DISA, "0")
   info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
 }
 
-record(longin, "$(P)$(R)GC_StatFrameDropped_RBV") {
+record(longin, "$(P)$(R)GC_StatBufferFailed_RBV") {
   field(DTYP, "asynInt64")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_StatFrameDropped")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_Statistic_Failed_Buffer_Count")
   field(SCAN, "I/O Intr")
   field(DISA, "0")
   info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
 }
 
-record(longin, "$(P)$(R)GC_StatFrameUnderrun_RBV") {
+# GigE specific statistics
+record(longin, "$(P)$(R)GC_StatBufferUnderrun_RBV") {
   field(DTYP, "asynInt64")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_StatFrameUnderrun")
-  field(SCAN, "I/O Intr")
-  field(DISA, "0")
-  info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
-}
-
-record(longin, "$(P)$(R)GC_StatPacketErrors_RBV") {
-  field(DTYP, "asynInt64")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_StatPacketErrors")
-  field(SCAN, "I/O Intr")
-  field(DISA, "0")
-  info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
-}
-
-record(longin, "$(P)$(R)GC_StatPacketMissed_RBV") {
-  field(DTYP, "asynInt64")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_StatPacketMissed")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_Statistic_Buffer_Underrun_Count")
   field(SCAN, "I/O Intr")
   field(DISA, "0")
   info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
@@ -120,7 +105,15 @@ record(longin, "$(P)$(R)GC_StatPacketMissed_RBV") {
 
 record(longin, "$(P)$(R)GC_StatPacketReceived_RBV") {
   field(DTYP, "asynInt64")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_StatPacketReceived")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_Statistic_Total_Packet_Count")
+  field(SCAN, "I/O Intr")
+  field(DISA, "0")
+  info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
+}
+
+record(longin, "$(P)$(R)GC_StatPacketFailed_RBV") {
+  field(DTYP, "asynInt64")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_Statistic_Failed_Packet_Count")
   field(SCAN, "I/O Intr")
   field(DISA, "0")
   info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
@@ -128,7 +121,7 @@ record(longin, "$(P)$(R)GC_StatPacketReceived_RBV") {
 
 record(longin, "$(P)$(R)GC_StatPacketRequested_RBV") {
   field(DTYP, "asynInt64")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_StatPacketRequested")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_Statistic_Resend_Request_Count")
   field(SCAN, "I/O Intr")
   field(DISA, "0")
   info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")
@@ -136,7 +129,7 @@ record(longin, "$(P)$(R)GC_StatPacketRequested_RBV") {
 
 record(longin, "$(P)$(R)GC_StatPacketResent_RBV") {
   field(DTYP, "asynInt64")
-  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_StatPacketResent")
+  field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))GC_I_Statistic_Resend_Packet_Count")
   field(SCAN, "I/O Intr")
   field(DISA, "0")
   info(autosaveFields, "DESC LOLO LOW HIGH HIHI LLSV LSV HSV HHSV EGU TSE")

@@ -158,14 +158,13 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
     startEventId_ = epicsEventCreate(epicsEventEmpty);
     newFrameEventId_ = epicsEventCreate(epicsEventEmpty);
 
-    TLStatisticsFeatureNames_.push_back("StatFrameDelivered");
-    TLStatisticsFeatureNames_.push_back("StatFrameDropped");
-    TLStatisticsFeatureNames_.push_back("StatFrameUnderrun");
-    TLStatisticsFeatureNames_.push_back("StatPacketErrors");
-    TLStatisticsFeatureNames_.push_back("StatPacketMissed");
-    TLStatisticsFeatureNames_.push_back("StatPacketReceived");
-    TLStatisticsFeatureNames_.push_back("StatPacketRequested");
-    TLStatisticsFeatureNames_.push_back("StatPacketResent");
+    TLStatisticsFeatureNames_.push_back("Statistic_Total_Buffer_Count");
+    TLStatisticsFeatureNames_.push_back("Statistic_Failed_Buffer_Count");
+    TLStatisticsFeatureNames_.push_back("Statistic_Buffer_Underrun_Count");
+    TLStatisticsFeatureNames_.push_back("Statistic_Total_Packet_Count");
+    TLStatisticsFeatureNames_.push_back("Statistic_Failed_Packet_Count");
+    TLStatisticsFeatureNames_.push_back("Statistic_Resend_Request_Count");
+    TLStatisticsFeatureNames_.push_back("Statistic_Resend_Packet_Count");
 
     // launch image read task
     epicsThreadCreate("PylonImageTask", 
@@ -195,7 +194,11 @@ GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set,
                                        std::string const & featureName, GCFeatureType_t featureType) {
     GenApi::INodeMap *nodeMap = nullptr;
     try {
-        nodeMap = &camera_.GetNodeMap();
+	// Statistics features are from StreamGrabber
+        if (std::find(TLStatisticsFeatureNames_.begin(), TLStatisticsFeatureNames_.end(), featureName) != TLStatisticsFeatureNames_.end())
+            nodeMap = &camera_.GetStreamGrabberNodeMap();
+        else
+            nodeMap = &camera_.GetNodeMap();
     } catch (const Pylon::GenericException& e) {
         // It normally means the camera is not connected.
     }
