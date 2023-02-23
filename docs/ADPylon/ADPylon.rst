@@ -75,38 +75,34 @@ specific to ADPylon.
      - Controls conversion of the pixel format read from the camera to a different format.  For example this can be used
        to convert BayerRG8 to RGB8, which allows the camera to send 8-bit Bayer color data over the bus and then convert to 24-bit
        RGB on the host computer, reducing the required bandwidth by a factor of 3 and increasing the frame rate.
-   * - GC_StatFrameDelivered_RBV
+   * - GC_StatBufferReceived_RBV
      - longin
-     - GC_I_StatFrameDelivered
+     - GC_I_Statistic_Total_Buffer_Count
      - Number of frames delivered since acquisition was started.
-   * - GC_StatFrameDropped_RBV
+   * - GC_StatBufferFailed_RBV
      - longin
-     - GC_I_StatFrameDropped
-     - Number of frames dropped since acquisition was started.
-   * - GC_StatFrameUnderrun_RBV
+     - GC_I_Statistic_Failed_Buffer_Count
+     - Number of buffers with at least one failed packet.
+   * - GC_StatBufferUnderrun_RBV
      - longin
-     - GC_I_StatFrameUnderrrun
-     - Number of frames that failed because no user buffer was available since acquisition was started.
-   * - GC_StatPacketErrors_RBV
-     - longin
-     - GC_I_StatPacketErrors
-     - Number of packet errors since acquisition was started.
-   * - GC_StatPacketMissed_RBV
-     - longin
-     - GC_I_StatPacketMissed
-     - Number of packets missed since acquisition was started.
+     - GC_I_Statistic_Buffer_Underrun_Count
+     - Number of frames lost because there were no buffers in the queue.
    * - GC_StatPacketReceived_RBV
      - longin
-     - GC_I_StatPacketReceived
-     - Number of packets received since acquisition was started.
+     - GC_I_Statistic_Total_Packet_Count
+     - Number of packets received.
+   * - GC_StatPacketFailed_RBV
+     - longin
+     - GC_I_Statistic_Failed_Packet_Count
+     - Number of failed packets.
    * - GC_StatPacketRequested_RBV
      - longin
-     - GC_I_StatPacketRequested
-     - Number of packet retransmissions requested since acquisition was started.
+     - GC_I_Statistic_Resend_Request_Count
+     - Number of packets requested by packet resend commands.
    * - GC_StatPacketResent_RBV
      - longin
-     - GC_I_StatPacketResent
-     - Number of retransmitted packets received since acquisition was started.
+     - GC_I_Statistic_Resend_Packet_Count
+     - Number of emitted packet resend commands sent.
    * - GC_StreamType_RBV
      - mbbi
      - GC_E_StreamType
