@@ -148,5 +148,5 @@ They are loaded from the "Camera-specific features" related display widget in th
 .. figure:: ADPylon_features3.png
     :align: center
 
- .. figure:: ADPylon_features3.png
+.. figure:: ADPylon_features4.png
     :align: center
