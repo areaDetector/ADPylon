@@ -28,7 +28,7 @@ As it name implies, ADPylon_ uses the Basler Pylon_ library. It runs on Windows,
 glibc 2.27+ and gcc 5.1+ (e.g. Ubuntu 18, RHEL 8. Debian 10).
 The header files and Windows import libraries are include, so it is ready to build for Windows.
 Because of the sheer size of the Linux libraries, they are not included. To build, unpacked the Linux
-SDK to ``/opt/pylon``, and define this in the areaDetector top level ``CONFIG_SITE.local`` file,
+SDK to ``/opt/pylon``, and define this in the areaDetector top level ``CONFIG_SITE.local`` file,::
 
    WITH_PYLON = YES
    PYLON_INCLUDE = /opt/pylon/include
@@ -79,7 +79,7 @@ specific to ADPylon.
      - longin
      - GC_I_Statistic_Total_Buffer_Count
      - Number of frames delivered since acquisition was started.
-   * - GC_StatBufferFailed_RBV
+   * - GC_I_StatBufferFailed_RBV
      - longin
      - GC_I_Statistic_Failed_Buffer_Count
      - Number of buffers with at least one failed packet.
@@ -103,10 +103,6 @@ specific to ADPylon.
      - longin
      - GC_I_Statistic_Resend_Packet_Count
      - Number of emitted packet resend commands sent.
-   * - GC_StreamType_RBV
-     - mbbi
-     - GC_E_StreamType
-     - The stream interface (GigE, USB, etc.).
 
 IOC startup script
 ------------------
@@ -117,8 +113,9 @@ The command to configure an ADPylon camera in the startup script is::
 
 ``portName`` is the name for the ADPylon port driver
 
-``cameraId`` is the either the IP address of the camera or the cameraID, which is last part of the camera name returned by arv-tool, for example for
-``"Allied Vision Technologies-Manta G-507C (E0022705)-50-0503419258"``, it would be 50-0503419258. 
+``cameraId`` is the either the serial number of the camera or the camera index number in the system. The serial number is normally printed on the camera,
+and it is also the last part of the camera name returned by arv-tool, for example for ``"Basler-23524298"``, it would be 23524298.
+If cameraId is less than 1000 it is assumed to be the system index number, if 1000 or greater it is assumed to be a serial number.
 
 ``maxMemory`` is the maximum amount of memory the NDArrayPool is allowed to allocate.  0 means unlimited.
 
