@@ -54,6 +54,25 @@ typedef enum {
     UniqueIdDriver
 } PYLONUniqueId_t;
 
+class ADPylonConfigurationEventHandler : public Pylon::CConfigurationEventHandler
+{
+public:
+    ADPylonConfigurationEventHandler(ADPylon *driver)
+        : Pylon::CConfigurationEventHandler(), driver_(driver)
+    {
+
+    }
+
+    virtual void OnCameraDeviceRemoved( Pylon::CInstantCamera& /*camera*/ )
+    {
+        driver_->lock();
+        driver_->cameraDisconnected();
+        driver_->unlock();
+    }
+private:
+    ADPylon *driver_;
+};
+
 class ADPylonImageEventHandler : public Pylon::CImageEventHandler
 {
 public:
@@ -137,6 +156,8 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s:%s:  camera connection failed (%d)\n",
             driverName, functionName, status);
+        // Mark camera not reachable
+        cameraDisconnected();
         // Call report() to get a list of available cameras
         report(stdout, 1);
         return;
@@ -184,7 +205,7 @@ void ADPylon::shutdown(void)
     
     lock();
     exiting_ = true;
-    camera_.Close();
+    this->disconnectCamera();
     Pylon::PylonTerminate();
     unlock();
 }
@@ -204,6 +225,23 @@ GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set,
     }
 
     return new PylonFeature(set, asynName, asynType, asynIndex, featureName, featureType, nodeMap);
+}
+
+void ADPylon::cameraDisconnected()
+{
+    this->deviceIsReachable = false;
+    this->disconnect(pasynUserSelf);
+    setIntegerParam(ADStatus, ADStatusDisconnected);
+    setStringParam(ADStatusMessage, "Camera disconnected");
+
+    // Detach and close Pylon device
+    disconnectCamera();
+}
+
+asynStatus ADPylon::disconnectCamera(void)
+{
+    /* Closes the attached Pylon device. Does not throw C++ exceptions. */
+    camera_.Close();
 }
 
 asynStatus ADPylon::connectCamera(void)
@@ -229,6 +267,7 @@ asynStatus ADPylon::connectCamera(void)
             camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(deviceInfo), Pylon::Cleanup_Delete);
         }
         camera_.RegisterImageEventHandler(new ADPylonImageEventHandler(this), Pylon::RegistrationMode_Append, Pylon::Cleanup_Delete);
+        camera_.RegisterConfiguration(new ADPylonConfigurationEventHandler(this), Pylon::RegistrationMode_Append, Pylon::Cleanup_Delete);
         camera_.Open();
     } catch (const Pylon::GenericException& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 

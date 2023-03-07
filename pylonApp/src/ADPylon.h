@@ -39,6 +39,7 @@ public:
     void imageGrabTask();
     void shutdown();
     asynStatus processFrame(const Pylon::CGrabResultPtr& pGrabResult);
+    void cameraDisconnected();
 
 private:
     int PYLONConvertPixelFormat;
