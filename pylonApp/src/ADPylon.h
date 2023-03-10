@@ -51,7 +51,6 @@ private:
     asynStatus startCapture();
     asynStatus stopCapture();
     asynStatus connectCamera();
-    asynStatus disconnectCamera();
 
     std::string cameraId_;
     Pylon::CInstantCamera camera_;

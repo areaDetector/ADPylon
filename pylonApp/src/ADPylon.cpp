@@ -109,13 +109,6 @@ extern "C" int ADPylonConfig(const char *portName, const char *cameraId,
 }
 
 
-static void c_shutdown(void *arg)
-{
-   ADPylon *p = (ADPylon *)arg;
-   p->shutdown();
-}
-
-
 static void imageGrabTaskC(void *drvPvt)
 {
     ADPylon *pPvt = (ADPylon *)drvPvt;
@@ -193,21 +186,7 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
                       epicsThreadGetStackSize(epicsThreadStackMedium),
                       imageGrabTaskC, this);
 
-    // shutdown on exit
-    epicsAtExit(c_shutdown, this);
-
     return;
-}
-
-void ADPylon::shutdown(void)
-{
-    //static const char *functionName = "shutdown";
-    
-    lock();
-    exiting_ = true;
-    this->disconnectCamera();
-    Pylon::PylonTerminate();
-    unlock();
 }
 
 GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set, 
@@ -235,12 +214,6 @@ void ADPylon::cameraDisconnected()
     setStringParam(ADStatusMessage, "Camera disconnected");
 
     // Detach and close Pylon device
-    disconnectCamera();
-}
-
-asynStatus ADPylon::disconnectCamera(void)
-{
-    /* Closes the attached Pylon device. Does not throw C++ exceptions. */
     camera_.Close();
 }
 
