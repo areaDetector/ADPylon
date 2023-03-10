@@ -199,7 +199,7 @@ GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set,
             nodeMap = &camera_.GetStreamGrabberNodeMap();
         else
             nodeMap = &camera_.GetNodeMap();
-    } catch (const Pylon::GenericException& e) {
+    } catch (const Pylon::GenericException& /*e*/) {
         // It normally means the camera is not connected.
     }
 
@@ -618,7 +618,7 @@ void ADPylon::report(FILE *fp, int details)
                 fprintf(fp, "    Interface ID: %s\n", deviceInfo.GetInterfaceID().c_str());
             }
         }
-    } catch (const Pylon::GenericException& e) {
+    } catch (const Pylon::GenericException& /*e*/) {
 
     }
     
