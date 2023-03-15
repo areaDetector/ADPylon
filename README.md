@@ -11,5 +11,5 @@ ADPylon is based on [ADGenICam](https://areadetector.github.io/master/ADGenICam/
 which handles many of the details of mapping GenICam features to EPICS records.
 
 Additional information:
-* [Documentation](https://areadetector.github.io/master/ADPylon/ADPylon.html)
+* [Documentation](https://areadetector.github.io/areaDetector/ADPylon/ADPylon.html)
 * [Release notes](RELEASE.md)
