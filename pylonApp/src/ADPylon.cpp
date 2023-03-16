@@ -54,6 +54,7 @@ typedef enum {
     UniqueIdDriver
 } PYLONUniqueId_t;
 
+/** Pylon camera configuration event handler */
 class ADPylonConfigurationEventHandler : public Pylon::CConfigurationEventHandler
 {
 public:
@@ -62,7 +63,7 @@ public:
     {
 
     }
-
+    /** Called when a camera device removal from the PC has been detected. */
     virtual void OnCameraDeviceRemoved( Pylon::CInstantCamera& /*camera*/ )
     {
         driver_->lock();
@@ -73,6 +74,7 @@ private:
     ADPylon *driver_;
 };
 
+/** Pylon image grabber event handler */
 class ADPylonImageEventHandler : public Pylon::CImageEventHandler
 {
 public:
@@ -81,6 +83,7 @@ public:
     {
     }
 
+    /** Called when an image has been grabbed. */
     virtual void OnImageGrabbed( Pylon::CInstantCamera& /*camera*/, const Pylon::CGrabResultPtr& ptrGrabResult )
     {
         driver_->processFrame(ptrGrabResult);
@@ -206,6 +209,9 @@ GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set,
     return new PylonFeature(set, asynName, asynType, asynIndex, featureName, featureType, nodeMap);
 }
 
+/** Called by Pylon when the camera is disconnected.
+ *  Here we mark the device unreachable and any further read/write requests will be rejected.
+ */
 void ADPylon::cameraDisconnected()
 {
     this->deviceIsReachable = false;
@@ -313,6 +319,9 @@ void ADPylon::imageGrabTask()
     }
 }
 
+/** Convert Pylon grab result data to areaDetector NDArray
+ *
+ */
 asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
 {
     asynStatus status = asynSuccess;
@@ -528,20 +537,6 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     epicsEventSignal(newFrameEventId_);
     unlock();
     return status;
-}
-
-asynStatus ADPylon::readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[], 
-                               size_t nElements, size_t *nIn)
-{
-    int function = pasynUser->reason;
-    //static const char *functionName = "readEnum";
-
-    // There are a few enums we don't want to autogenerate the values
-    if (function == PYLONConvertPixelFormat) {
-        return asynError;
-    }
-    
-    return ADGenICam::readEnum(pasynUser, strings, values, severities, nElements, nIn);
 }
 
 asynStatus ADPylon::startCapture()

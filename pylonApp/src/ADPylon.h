@@ -28,16 +28,17 @@ public:
     // virtual methods to override from ADGenICam
     //virtual asynStatus writeInt32( asynUser *pasynUser, epicsInt32 value);
     //virtual asynStatus writeFloat64( asynUser *pasynUser, epicsFloat64 value);
-    virtual asynStatus readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[], 
-                                size_t nElements, size_t *nIn);
-    void report(FILE *fp, int details);
+    //virtual asynStatus readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[],
+    //                            size_t nElements, size_t *nIn);
+    virtual void report(FILE *fp, int details);
     virtual GenICamFeature *createFeature(GenICamFeatureSet *set, 
                                           std::string const & asynName, asynParamType asynType, int asynIndex,
                                           std::string const & featureName, GCFeatureType_t featureType);
+    virtual asynStatus startCapture();
+    virtual asynStatus stopCapture();
 
-    /**< These should be private but are called from C callback functions, must be public. */
+    /* These should be private but are called from C callback functions, must be public. */
     void imageGrabTask();
-    void shutdown();
     asynStatus processFrame(const Pylon::CGrabResultPtr& pGrabResult);
     void cameraDisconnected();
 
@@ -48,8 +49,6 @@ private:
     int PYLONUniqueIdMode;
 
     /* Local methods to this class */
-    asynStatus startCapture();
-    asynStatus stopCapture();
     asynStatus connectCamera();
 
     std::string cameraId_;
