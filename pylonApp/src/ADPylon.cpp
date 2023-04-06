@@ -564,8 +564,11 @@ asynStatus ADPylon::startCapture()
     // If we are already acquiring return immediately
     if (acquiring_) return asynSuccess;
 
-    // Update Decompressor
-    decompressor_.SetCompressionDescriptor(camera_.GetNodeMap());
+    // Update Decompressor and ignore exceptions if compression is not supported or configured.
+    try {
+        decompressor_.SetCompressionDescriptor(camera_.GetNodeMap());
+    } catch (const Pylon::GenericException& /*e*/) {
+    }
 
     getIntegerParam(ADImageMode, &imageMode);
     getIntegerParam(ADNumImages, &numImages);
