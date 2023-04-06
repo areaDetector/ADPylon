@@ -340,6 +340,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     int imageCounter;
     int numImagesCounter;
     int arrayCallbacks;
+    Pylon::CompressionInfo_t compressionInfo;
     Pylon::CPylonImage outputImage;
     NDArray *pRaw = NULL;
     static const char *functionName = "processFrame";
@@ -356,6 +357,20 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     nRows = pGrabResult->GetHeight();
     pixelType = pGrabResult->GetPixelType();
     outputImage.AttachGrabResultBuffer(pGrabResult);
+
+    // Check whether the image was compressed by the camera and is still compressed (could have been decompressed by a transport layer).
+    if (decompressor_.GetCompressionInfo(compressionInfo, pGrabResult) && compressionInfo.hasCompressedImage) {
+        if (compressionInfo.compressionStatus == Pylon::CompressionStatus_Ok) {
+            outputImage.Release();
+            decompressor_.DecompressImage(outputImage, pGrabResult);
+        } else {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                "%s::%s error in decompression\n",
+                driverName, functionName);
+            status = asynError;
+            goto done;
+        }
+    }
 
     // Convert the pixel format if requested
     getIntegerParam(PYLONConvertPixelFormat, &convertPixelFormat);
@@ -389,9 +404,11 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         converter.OutputPixelFormat = outputPixelType;
 
         try {
-            outputImage.Release();
-            converter.Convert(outputImage, pGrabResult);
+            /* Convert to a temporary image object and reference outputImage to it */
+            Pylon::CPylonImage tempImage;
+            converter.Convert(tempImage, outputImage);
             pixelType = outputPixelType;
+            outputImage = tempImage;
         } catch (const Pylon::GenericException& e) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
                 "%s::%s error converting, input pixel type=0x%lx, output pixel type=0x%lx: %s\n",
@@ -546,6 +563,9 @@ asynStatus ADPylon::startCapture()
 
     // If we are already acquiring return immediately
     if (acquiring_) return asynSuccess;
+
+    // Update Decompressor
+    decompressor_.SetCompressionDescriptor(camera_.GetNodeMap());
 
     getIntegerParam(ADImageMode, &imageMode);
     getIntegerParam(ADNumImages, &numImages);

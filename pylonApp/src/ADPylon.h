@@ -53,6 +53,7 @@ private:
 
     std::string cameraId_;
     Pylon::CInstantCamera camera_;
+    Pylon::CImageDecompressor decompressor_;
 
     bool exiting_;
     bool acquiring_;
