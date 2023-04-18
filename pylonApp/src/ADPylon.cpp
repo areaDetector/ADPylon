@@ -160,6 +160,8 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
     }
 
     createParam("PYLON_CONVERT_PIXEL_FORMAT",     asynParamInt32,   &PYLONConvertPixelFormat);
+    createParam("PYLON_CONVERT_BIT_ALIGN",        asynParamInt32,   &PYLONConvertBitAlignment);
+    createParam("PYLON_CONVERT_SHIFT_BITS",       asynParamInt32,   &PYLONConvertShiftBits);
     createParam("PYLON_TIME_STAMP_MODE",          asynParamInt32,   &PYLONTimeStampMode);
     createParam("PYLON_UNIQUE_ID_MODE",           asynParamInt32,   &PYLONUniqueIdMode);
 
@@ -330,6 +332,8 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     NDColorMode_t colorMode;
     Pylon::EPixelType pixelType;
     int convertPixelFormat;
+    int convertBitAlignment;
+    int convertShiftBits;
     int numColors = 1;
     size_t dims[3];
     int pixelSize;
@@ -374,6 +378,8 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
 
     // Convert the pixel format if requested
     getIntegerParam(PYLONConvertPixelFormat, &convertPixelFormat);
+    getIntegerParam(PYLONConvertBitAlignment, &convertBitAlignment);
+    getIntegerParam(PYLONConvertShiftBits, &convertShiftBits);
     if (convertPixelFormat != PYLONPixelConvertNone) {
         Pylon::EPixelType outputPixelType;
         switch (convertPixelFormat) {
@@ -402,6 +408,9 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         }
         Pylon::CImageFormatConverter converter;
         converter.OutputPixelFormat = outputPixelType;
+        converter.OutputBitAlignment = (Pylon::OutputBitAlignmentEnums) convertBitAlignment;
+        converter.MonoConversionMethod = Pylon::MonoConversionMethod_Truncate;
+        converter.AdditionalLeftShift = convertShiftBits;
 
         try {
             /* Convert to a temporary image object and reference outputImage to it */

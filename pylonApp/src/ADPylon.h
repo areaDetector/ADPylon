@@ -45,6 +45,8 @@ public:
 private:
     int PYLONConvertPixelFormat;
 #define FIRST_PYLON_PARAM PYLONConvertPixelFormat;
+    int PYLONConvertBitAlignment;
+    int PYLONConvertShiftBits;
     int PYLONTimeStampMode;
     int PYLONUniqueIdMode;
 

@@ -77,6 +77,44 @@ record(mbbi, "$(P)$(R)ConvertPixelFormat_RBV") {
   field(INP,  "@asyn($(PORT) 0)PYLON_CONVERT_PIXEL_FORMAT")
 }
 
+record(mbbo, "$(P)$(R)ConvertBitAlign") {
+  field(PINI, "YES")
+  field(DTYP, "asynInt32")
+  field(ZRVL, "0")
+  field(ZRST, "LSB")
+  field(ONVL, "1")
+  field(ONST, "MSB")
+  field(OUT,  "@asyn($(PORT) 0)PYLON_CONVERT_BIT_ALIGN")
+}
+
+record(mbbi, "$(P)$(R)ConvertBitAlign_RBV") {
+  field(SCAN, "I/O Intr")
+  field(DTYP, "asynInt32")
+  field(ZRVL, "0")
+  field(ZRST, "LSB")
+  field(ONVL, "1")
+  field(ONST, "MSB")
+  field(INP,  "@asyn($(PORT) 0)PYLON_CONVERT_BIT_ALIGN")
+}
+
+record(longout, "$(P)$(R)ConvertShiftBits") {
+  field(PINI, "YES")
+  field(DTYP, "asynInt32")
+  field(DRVL, "-16")
+  field(DRVH, "16")
+  field(LOPR, "-16")
+  field(HOPR, "16")
+  field(OUT,  "@asyn($(PORT) 0)PYLON_CONVERT_SHIFT_BITS")
+}
+
+record(longin, "$(P)$(R)ConvertShiftBits_RBV") {
+  field(SCAN, "I/O Intr")
+  field(DTYP, "asynInt32")
+  field(LOPR, "-16")
+  field(HOPR, "16")
+  field(INP,  "@asyn($(PORT) 0)PYLON_CONVERT_SHIFT_BITS")
+}
+
 # Stream grabber statistics
 record(longin, "$(P)$(R)GC_StatBufferReceived_RBV") {
   field(DTYP, "asynInt64")
