@@ -42,6 +42,9 @@ public:
     asynStatus processFrame(const Pylon::CGrabResultPtr& pGrabResult);
     void cameraDisconnected();
 
+protected:
+    asynStatus extractChunkData(const GenApi::INodeMap& nodeMap, NDAttributeList *pAttributeList);
+
 private:
     int PYLONConvertPixelFormat;
 #define FIRST_PYLON_PARAM PYLONConvertPixelFormat;

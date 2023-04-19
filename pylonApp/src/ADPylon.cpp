@@ -515,6 +515,11 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     setIntegerParam(NDColorMode, colorMode);
     setIntegerParam(NDBayerPattern, bayerFormat);
 
+    // Extract chunk data as NDArray attributes
+    if (pGrabResult->IsChunkDataAvailable()) {
+        extractChunkData(pGrabResult->GetChunkDataNodeMap(), pRaw->pAttributeList);
+    }
+
     // Get any attributes that have been defined for this driver
     getAttributes(pRaw->pAttributeList);
     pRaw->pAttributeList->add("ColorMode", "Color mode", NDAttrInt32, &colorMode);
@@ -546,6 +551,58 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     epicsEventSignal(newFrameEventId_);
     unlock();
     return status;
+}
+
+asynStatus ADPylon::extractChunkData(const GenApi::INodeMap &nodeMap, NDAttributeList *pAttributeList)
+{
+    const char *functionName = "extractChunkData";
+
+    GenApi::NodeList_t nodes;
+    nodeMap.GetNodes(nodes);
+    for (auto &node : nodes)
+    {
+        /* Assume chunk parameter with "Chunk" prefix */
+        if (node->GetAccessMode() != GenApi::RO ||
+            epicsStrGlobMatch(node->GetName(), "Chunk*") != 1)
+            continue;
+
+        try {
+            switch (node->GetPrincipalInterfaceType()) {
+            case GenApi::intfIInteger:
+            {
+                epicsInt64 ival = dynamic_cast<GenApi::IInteger *>(node)->GetValue();
+                pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrInt64, &ival);
+            }
+            break;
+            case GenApi::intfIFloat:
+            {
+                epicsFloat64 fval = dynamic_cast<GenApi::IFloat *>(node)->GetValue();
+                pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrFloat64, &fval);
+            }
+            break;
+            case GenApi::intfIEnumeration:
+            {
+                epicsInt64 ival = dynamic_cast<GenApi::IEnumeration *>(node)->GetIntValue();
+                pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrInt64, &ival);
+            }
+            break;
+            case GenApi::intfIBoolean:
+            {
+                epicsUInt8 bval = dynamic_cast<GenApi::IBoolean *>(node)->GetValue();
+                pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrUInt8, &bval);
+            }
+            break;
+            default:
+            break;
+            }
+        } catch (const Pylon::GenericException &e) {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                      "%s::%s error getting chunk data %s: %s\n",
+                      driverName, functionName, node->GetName().c_str(), e.GetDescription());
+        }
+    }
+
+    return asynSuccess;
 }
 
 asynStatus ADPylon::startCapture()
