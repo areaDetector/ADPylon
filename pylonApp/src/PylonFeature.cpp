@@ -2,7 +2,7 @@
 
 static const char *driverName="PylonFeature";
 
-PylonFeature::PylonFeature(GenICamFeatureSet *set, 
+PylonFeature::PylonFeature(GenICamFeatureSet *set,
                            std::string const & asynName, asynParamType asynType, int asynIndex,
                            std::string const & featureName, GCFeatureType_t featureType,
                            const GenApi::INodeMap* nodeMap)
@@ -28,19 +28,19 @@ PylonFeature::PylonFeature(GenICamFeatureSet *set,
         GenApi::EInterfaceType dataType = mFeaturePtr->GetPrincipalInterfaceType();
         GCFeatureType_t GCFeatureType;
         switch (dataType) {
-            case GenApi::intfIInteger: 
+            case GenApi::intfIInteger:
                 GCFeatureType = GCFeatureTypeInteger;
                 break;
-            case GenApi::intfIFloat: 
+            case GenApi::intfIFloat:
                 GCFeatureType = GCFeatureTypeDouble;
                 break;
-            case GenApi::intfIEnumeration: 
+            case GenApi::intfIEnumeration:
                 GCFeatureType = GCFeatureTypeEnum;
                 break;
-            case GenApi::intfIString: 
+            case GenApi::intfIString:
                 GCFeatureType = GCFeatureTypeString;
                 break;
-            case GenApi::intfIBoolean: 
+            case GenApi::intfIBoolean:
                 GCFeatureType = GCFeatureTypeBoolean;
                 break;
             case GenApi::intfICommand:
@@ -69,8 +69,8 @@ PylonFeature::PylonFeature(GenICamFeatureSet *set,
     }
 }
 
-bool PylonFeature::isImplemented() { 
-    return mIsImplemented; 
+bool PylonFeature::isImplemented() {
+    return mIsImplemented;
 }
 
 bool PylonFeature::isAvailable() {
@@ -80,13 +80,13 @@ bool PylonFeature::isAvailable() {
     return (mode == GenApi::RO || mode == GenApi::WO || mode == GenApi::RW);
 }
 
-bool PylonFeature::isReadable() { 
+bool PylonFeature::isReadable() {
     if (!mIsImplemented) return false;
     GenApi::EAccessMode mode = mFeaturePtr->GetAccessMode();
     return (mode == GenApi::RO || mode == GenApi::RW);
 }
 
-bool PylonFeature::isWritable() { 
+bool PylonFeature::isWritable() {
     if (!mIsImplemented) return false;
     GenApi::EAccessMode mode = mFeaturePtr->GetAccessMode();
     return (mode == GenApi::WO || mode == GenApi::RW);
@@ -113,7 +113,7 @@ epicsInt64 PylonFeature::readIntegerMax() {
     return pValue->GetMax();
 }
 
-epicsInt64 PylonFeature::readIncrement() { 
+epicsInt64 PylonFeature::readIncrement() {
     if (!mIsImplemented) return 0;
     GenApi::IInteger *pValue = dynamic_cast<GenApi::IInteger *>(mFeaturePtr);
     if (!pValue) return 0;
@@ -141,7 +141,7 @@ bool PylonFeature::readBoolean() {
     return pValue->GetValue();
 }
 
-void PylonFeature::writeBoolean(bool value) { 
+void PylonFeature::writeBoolean(bool value) {
     const char *functionName = "writeBoolean";
     if (!mIsImplemented) return;
     GenApi::IBoolean *pValue = dynamic_cast<GenApi::IBoolean *>(mFeaturePtr);
@@ -162,7 +162,7 @@ double PylonFeature::readDouble() {
     return pValue->GetValue();
 }
 
-void PylonFeature::writeDouble(double value) { 
+void PylonFeature::writeDouble(double value) {
     const char *functionName = "writeDouble";
     if (!mIsImplemented) return;
     GenApi::IFloat *pValue = dynamic_cast<GenApi::IFloat *>(mFeaturePtr);
@@ -212,10 +212,10 @@ void PylonFeature::writeEnumIndex(int value) {
 }
 
 std::string PylonFeature::readEnumString() {
-    return ""; 
+    return "";
 }
 
-void PylonFeature::writeEnumString(std::string const &value) { 
+void PylonFeature::writeEnumString(std::string const &value) {
 }
 
 std::string PylonFeature::readString() {
@@ -225,7 +225,7 @@ std::string PylonFeature::readString() {
     return pValue->GetValue().c_str();
 }
 
-void PylonFeature::writeString(std::string const & value) { 
+void PylonFeature::writeString(std::string const & value) {
     static const char *functionName = "writeString";
     if (!mIsImplemented) return;
     GenApi::IString *pValue = dynamic_cast<GenApi::IString *>(mFeaturePtr);
@@ -239,7 +239,7 @@ void PylonFeature::writeString(std::string const & value) {
     }
 }
 
-void PylonFeature::writeCommand() { 
+void PylonFeature::writeCommand() {
     const char *functionName = "writeCommand";
     if (!mIsImplemented) return;
     GenApi::ICommand *pValue = dynamic_cast<GenApi::ICommand *>(mFeaturePtr);

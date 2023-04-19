@@ -31,7 +31,7 @@ public:
     //virtual asynStatus readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[],
     //                            size_t nElements, size_t *nIn);
     virtual void report(FILE *fp, int details);
-    virtual GenICamFeature *createFeature(GenICamFeatureSet *set, 
+    virtual GenICamFeature *createFeature(GenICamFeatureSet *set,
                                           std::string const & asynName, asynParamType asynType, int asynIndex,
                                           std::string const & featureName, GCFeatureType_t featureType);
     virtual asynStatus startCapture();
@@ -62,7 +62,7 @@ private:
     epicsEventId startEventId_;
     epicsEventId newFrameEventId_;
     int uniqueId_;
-    
+
     std::vector<std::string> TLStatisticsFeatureNames_;
 
 };

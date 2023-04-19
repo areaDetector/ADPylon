@@ -104,7 +104,7 @@ private:
  * \param[in] priority The EPICS thread priority for this driver.  0=use asyn default.
  * \param[in] stackSize The size of the stack for the EPICS port thread. 0=use asyn default.
  */
-extern "C" int ADPylonConfig(const char *portName, const char *cameraId, 
+extern "C" int ADPylonConfig(const char *portName, const char *cameraId,
                              size_t maxMemory, int priority, int stackSize)
 {
     new ADPylon(portName, cameraId, maxMemory, priority, stackSize);
@@ -139,14 +139,14 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
     asynStatus status;
     char tempString[100];
 
-    epicsSnprintf(tempString, sizeof(tempString), "%d.%d.%d", 
+    epicsSnprintf(tempString, sizeof(tempString), "%d.%d.%d",
                   DRIVER_VERSION, DRIVER_REVISION, DRIVER_MODIFICATION);
     setStringParam(NDDriverVersion,tempString);
 
     Pylon::PylonInitialize();
 
     setStringParam(ADSDKVersion, Pylon::GetPylonVersionString());
- 
+
     status = connectCamera();
     if (status) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -186,7 +186,7 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
     TLStatisticsFeatureNames_.push_back("Statistic_Resend_Packet_Count");
 
     // launch image read task
-    epicsThreadCreate("PylonImageTask", 
+    epicsThreadCreate("PylonImageTask",
                       epicsThreadPriorityMedium,
                       epicsThreadGetStackSize(epicsThreadStackMedium),
                       imageGrabTaskC, this);
@@ -194,7 +194,7 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
     return;
 }
 
-GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set, 
+GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set,
                                        std::string const & asynName, asynParamType asynType, int asynIndex,
                                        std::string const & featureName, GCFeatureType_t featureType) {
     GenApi::INodeMap *nodeMap = nullptr;
@@ -236,9 +236,9 @@ asynStatus ADPylon::connectCamera(void)
             Pylon::DeviceInfoList devices;
             Pylon::CTlFactory::GetInstance().EnumerateDevices(devices);
             if (index < devices.size()) {
-                camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(devices[index]), Pylon::Cleanup_Delete); 
+                camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(devices[index]), Pylon::Cleanup_Delete);
             } else {
-                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                     "%s::%s index %s >= cameras found %zd\n", driverName, functionName, cameraId_.c_str(), devices.size());
                 return asynError;
             }
@@ -251,7 +251,7 @@ asynStatus ADPylon::connectCamera(void)
         camera_.RegisterConfiguration(new ADPylonConfigurationEventHandler(this), Pylon::RegistrationMode_Append, Pylon::Cleanup_Delete);
         camera_.Open();
     } catch (const Pylon::GenericException& e) {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s::%s error opening camera %s: %s\n", driverName, functionName, cameraId_.c_str(), e.GetDescription());
        return asynError;
     }
@@ -275,9 +275,9 @@ void ADPylon::imageGrabTask()
     lock();
 
     while (1) {
-        // Is acquisition active? 
+        // Is acquisition active?
         getIntegerParam(ADAcquire, &acquire);
-        // If we are not acquiring then wait for a semaphore that is given when acquisition is started 
+        // If we are not acquiring then wait for a semaphore that is given when acquisition is started
         if (!acquire) {
             setIntegerParam(ADStatus, ADStatusIdle);
             callParamCallbacks();
@@ -285,14 +285,14 @@ void ADPylon::imageGrabTask()
             // Wait for a signal that tells this thread that the transmission
             // has started and we can start asking for image buffers...
             asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
-                "%s::%s waiting for acquire to start\n", 
+                "%s::%s waiting for acquire to start\n",
                 driverName, functionName);
             // Release the lock while we wait for an event that says acquire has started, then lock again
             unlock();
             epicsEventWait(startEventId_);
             lock();
             asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
-                "%s::%s started!\n", 
+                "%s::%s started!\n",
                 driverName, functionName);
             setIntegerParam(ADNumImagesCounter, 0);
             setIntegerParam(ADAcquire, 1);
@@ -419,17 +419,17 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
             pixelType = outputPixelType;
             outputImage = tempImage;
         } catch (const Pylon::GenericException& e) {
-            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                 "%s::%s error converting, input pixel type=0x%lx, output pixel type=0x%lx: %s\n",
                 driverName, functionName, pixelType, outputPixelType, e.GetDescription());
         }
     }
-    
+
     switch (pixelType) {
         case Pylon::PixelType_BayerBG8:
         case Pylon::PixelType_BayerGB8:
         case Pylon::PixelType_BayerGR8:
-        case Pylon::PixelType_Mono8:        
+        case Pylon::PixelType_Mono8:
             dataType = NDUInt8;
             colorMode = NDColorModeMono;
             numColors = 1;
@@ -499,7 +499,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         // the acquisition as we have nowhere to dump the data...
         setIntegerParam(ADStatus, ADStatusAborting);
         callParamCallbacks();
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s::%s [%s] ERROR: Serious problem: not enough buffers left! Aborting acquisition!\n",
             driverName, functionName, portName);
         setIntegerParam(ADAcquire, 0);
@@ -509,7 +509,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     if (outputImage.IsValid()) {
         memcpy(pRaw->pData, outputImage.GetBuffer(), dataSize);
     } else {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s::%s [%s] ERROR: image is invalid!\n",
             driverName, functionName, portName);
         status = asynError;
@@ -533,7 +533,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         pRaw->timeStamp = pRaw->epicsTS.secPastEpoch + pRaw->epicsTS.nsec/1e9;
     }
 
-    // Get any attributes that have been defined for this driver        
+    // Get any attributes that have been defined for this driver
     getAttributes(pRaw->pAttributeList);
     pRaw->pAttributeList->add("ColorMode", "Color mode", NDAttrInt32, &colorMode);
     getIntegerParam(NDArrayCounter, &imageCounter);
@@ -591,7 +591,7 @@ asynStatus ADPylon::startCapture()
         camera_.StartGrabbing(numImages, Pylon::GrabStrategy_OneByOne, Pylon::GrabLoop_ProvidedByInstantCamera);
     else if (imageMode == ADImageContinuous)
         camera_.StartGrabbing(Pylon::GrabStrategy_OneByOne, Pylon::GrabLoop_ProvidedByInstantCamera);
-    else 
+    else
         return asynError;
 
     acquiring_ = true;
@@ -616,7 +616,7 @@ asynStatus ADPylon::stopCapture()
         lock();
     }
     // Release the driver lock here.
-    unlock(); 
+    unlock();
     camera_.StopGrabbing();
     lock();
     acquiring_ = false;
@@ -648,7 +648,7 @@ void ADPylon::report(FILE *fp, int details)
     } catch (const Pylon::GenericException& /*e*/) {
 
     }
-    
+
     ADGenICam::report(fp, details);
     return;
 }
@@ -667,7 +667,7 @@ static const iocshArg * const configArgs[] = {&configArg0,
 static const iocshFuncDef configADPylon = {"ADPylonConfig", 5, configArgs};
 static void configCallFunc(const iocshArgBuf *args)
 {
-    ADPylonConfig(args[0].sval, args[1].sval, args[2].ival, 
+    ADPylonConfig(args[0].sval, args[1].sval, args[2].ival,
                   args[3].ival, args[4].ival);
 }
 
