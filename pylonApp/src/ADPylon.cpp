@@ -54,6 +54,24 @@ typedef enum {
     UniqueIdDriver
 } PYLONUniqueId_t;
 
+struct {
+    Pylon::EPixelType fmt;
+    NDColorMode_t colorMode;
+    NDDataType_t dataType;
+    NDBayerPattern_t bayerFormat;
+} pix_lookup[] = {
+    { Pylon::PixelType_BayerBG8,    NDColorModeBayer, NDUInt8,  NDBayerBGGR },
+    { Pylon::PixelType_BayerGB8,    NDColorModeBayer, NDUInt8,  NDBayerGBRG },
+    { Pylon::PixelType_BayerGR8,    NDColorModeBayer, NDUInt8,  NDBayerGRBG },
+    { Pylon::PixelType_Mono8,       NDColorModeMono,  NDUInt8,  NDBayerBGGR },
+    { Pylon::PixelType_RGB8packed,  NDColorModeRGB1,  NDUInt8,  NDBayerBGGR },
+    { Pylon::PixelType_BayerBG16,   NDColorModeBayer, NDUInt16, NDBayerBGGR },
+    { Pylon::PixelType_BayerGB16,   NDColorModeBayer, NDUInt16, NDBayerGBRG },
+    { Pylon::PixelType_BayerGR16,   NDColorModeBayer, NDUInt16, NDBayerGRBG },
+    { Pylon::PixelType_Mono16,      NDColorModeMono,  NDUInt16, NDBayerBGGR },
+    { Pylon::PixelType_RGB16packed, NDColorModeRGB1,  NDUInt16, NDBayerBGGR }
+};
+
 /** Pylon camera configuration event handler */
 class ADPylonConfigurationEventHandler : public Pylon::CConfigurationEventHandler
 {
@@ -330,14 +348,13 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     uint32_t nRows, nCols;
     NDDataType_t dataType;
     NDColorMode_t colorMode;
+    NDBayerPattern_t bayerFormat;
     Pylon::EPixelType pixelType;
+    bool pixelTypeSupported = false;
     int convertPixelFormat;
     int convertBitAlignment;
     int convertShiftBits;
-    int numColors = 1;
     size_t dims[3];
-    int pixelSize;
-    size_t dataSize;
     int nDims;
     int uniqueIdMode;
     int timeStampMode;
@@ -385,19 +402,15 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         switch (convertPixelFormat) {
             case PYLONPixelConvertMono8:
                 outputPixelType = Pylon::PixelType_Mono8;
-                numColors = 1;
                 break;
             case PYLONPixelConvertMono16:
                 outputPixelType = Pylon::PixelType_Mono16;
-                numColors = 1;
                 break;
             case PYLONPixelConvertRGB8:
                 outputPixelType = Pylon::PixelType_RGB8packed;
-                numColors = 3;
                 break;
             case PYLONPixelConvertRGB16:
                 outputPixelType = Pylon::PixelType_RGB16packed;
-                numColors = 3;
                 break;
             default:
                 asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -425,50 +438,25 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         }
     }
 
-    switch (pixelType) {
-        case Pylon::PixelType_BayerBG8:
-        case Pylon::PixelType_BayerGB8:
-        case Pylon::PixelType_BayerGR8:
-        case Pylon::PixelType_Mono8:
-            dataType = NDUInt8;
-            colorMode = NDColorModeMono;
-            numColors = 1;
-            pixelSize = 1;
+    /* Look up NDArray colorMode, dataType and bayerormat based on Pylon pixelType */
+    for (size_t i = 0; i < sizeof(pix_lookup) / sizeof(pix_lookup[0]); i ++) {
+        if (pix_lookup[i].fmt == pixelType) {
+            colorMode   = (NDColorMode_t)pix_lookup[i].colorMode;
+            dataType    = (NDDataType_t)pix_lookup[i].dataType;
+            bayerFormat = (NDBayerPattern_t)pix_lookup[i].bayerFormat;
+            pixelTypeSupported = true;
             break;
-
-        case Pylon::PixelType_RGB8packed:
-            dataType = NDUInt8;
-            colorMode = NDColorModeRGB1;
-            numColors = 3;
-            pixelSize = 1;
-            break;
-
-        case Pylon::PixelType_BayerBG16:
-        case Pylon::PixelType_BayerGB16:
-        case Pylon::PixelType_BayerGR16:
-        case Pylon::PixelType_Mono16:
-            dataType = NDUInt16;
-            colorMode = NDColorModeMono;
-            numColors = 1;
-            pixelSize = 2;
-            break;
-
-        case Pylon::PixelType_RGB16packed:
-            dataType = NDUInt16;
-            colorMode = NDColorModeRGB1;
-            numColors = 3;
-            pixelSize = 2;
-            break;
-
-        default:
-            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+        }
+    }
+    if (!pixelTypeSupported) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                 "%s:%s: unsupported pixel type=0x%lx\n",
                 driverName, functionName, pixelType);
-            status = asynError;
-            goto done;
+        status = asynError;
+        goto done;
     }
 
-    if (numColors == 1) {
+    if (colorMode == NDColorModeMono || colorMode == NDColorModeBayer) {
         nDims = 2;
         dims[0] = nCols;
         dims[1] = nRows;
@@ -478,20 +466,6 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         dims[1] = nCols;
         dims[2] = nRows;
     }
-    dataSize = dims[0] * dims[1] * pixelSize;
-    if (nDims == 3) dataSize *= dims[2];
-    setIntegerParam(NDArraySizeX, (int)nCols);
-    setIntegerParam(NDArraySizeY, (int)nRows);
-    setIntegerParam(NDArraySize, (int)dataSize);
-    setIntegerParam(NDDataType,dataType);
-    if (nDims == 3) {
-        colorMode = NDColorModeRGB1;
-    } else {
-        // If the color mode is currently set to Bayer leave it alone
-        getIntegerParam(NDColorMode, (int *)&colorMode);
-        if (colorMode != NDColorModeBayer) colorMode = NDColorModeMono;
-    }
-    setIntegerParam(NDColorMode, colorMode);
 
     pRaw = pNDArrayPool->alloc(nDims, dims, dataType, 0, NULL);
     if (!pRaw) {
@@ -507,7 +481,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         goto done;
     }
     if (outputImage.IsValid()) {
-        memcpy(pRaw->pData, outputImage.GetBuffer(), dataSize);
+        memcpy(pRaw->pData, outputImage.GetBuffer(), pRaw->dataSize);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s::%s [%s] ERROR: image is invalid!\n",
@@ -533,9 +507,18 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         pRaw->timeStamp = pRaw->epicsTS.secPastEpoch + pRaw->epicsTS.nsec/1e9;
     }
 
+    // Update NDArray info
+    setIntegerParam(NDArraySizeX, (int)nCols);
+    setIntegerParam(NDArraySizeY, (int)nRows);
+    setIntegerParam(NDArraySize, (int)pRaw->dataSize);
+    setIntegerParam(NDDataType, dataType);
+    setIntegerParam(NDColorMode, colorMode);
+    setIntegerParam(NDBayerPattern, bayerFormat);
+
     // Get any attributes that have been defined for this driver
     getAttributes(pRaw->pAttributeList);
     pRaw->pAttributeList->add("ColorMode", "Color mode", NDAttrInt32, &colorMode);
+    pRaw->pAttributeList->add("BayerPattern", "Bayer Pattern", NDAttrInt32, &bayerFormat);
     getIntegerParam(NDArrayCounter, &imageCounter);
     getIntegerParam(ADNumImagesCounter, &numImagesCounter);
     imageCounter++;
