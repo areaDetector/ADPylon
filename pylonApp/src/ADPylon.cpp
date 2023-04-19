@@ -392,11 +392,11 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
                 numColors = 1;
                 break;
             case PYLONPixelConvertRGB8:
-                outputPixelType = Pylon::PixelType_RGB8planar;
+                outputPixelType = Pylon::PixelType_RGB8packed;
                 numColors = 3;
                 break;
             case PYLONPixelConvertRGB16:
-                outputPixelType = Pylon::PixelType_RGB16planar;
+                outputPixelType = Pylon::PixelType_RGB16packed;
                 numColors = 3;
                 break;
             default:
@@ -436,7 +436,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
             pixelSize = 1;
             break;
 
-        case Pylon::PixelType_RGB8planar:
+        case Pylon::PixelType_RGB8packed:
             dataType = NDUInt8;
             colorMode = NDColorModeRGB1;
             numColors = 3;
@@ -453,7 +453,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
             pixelSize = 2;
             break;
 
-        case Pylon::PixelType_RGB16planar:
+        case Pylon::PixelType_RGB16packed:
             dataType = NDUInt16;
             colorMode = NDColorModeRGB1;
             numColors = 3;
