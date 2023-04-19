@@ -115,6 +115,8 @@ specific to ADPylon.
      - GC_I_Statistic_Resend_Packet_Count
      - Number of emitted packet resend commands sent.
 
+If `Chunk data <https://docs.baslerweb.com/data-chunks>`_ is enabled, they are extracted as NDArray attributes.
+
 IOC startup script
 ------------------
 The command to configure an ADPylon camera in the startup script is::
