@@ -605,6 +605,24 @@ asynStatus ADPylon::extractChunkData(const GenApi::INodeMap &nodeMap, NDAttribut
     return asynSuccess;
 }
 
+asynStatus ADPylon::readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[],
+                               size_t nElements, size_t *nIn)
+{
+    int function = pasynUser->reason;
+    //static const char *functionName = "readEnum";
+
+    // Some GenICam enum features can become unavailable depending on other settings.
+    // If they happend to unavailable on startup, then EPICS records will stay with 0 choices
+    // even when later the features become available. So it is best to use the static
+    // list of choices from the EPICS database, which is created from the camera's GenICam XML specification.
+    GenICamFeature *pFeature = mGCFeatureSet.getByIndex(function);
+    if (pFeature && pFeature->getFeatureName() == "LineSource") {
+        return asynError;
+    }
+
+    return ADGenICam::readEnum(pasynUser, strings, values, severities, nElements, nIn);
+}
+
 asynStatus ADPylon::startCapture()
 {
     //static const char *functionName = "startCapture";
