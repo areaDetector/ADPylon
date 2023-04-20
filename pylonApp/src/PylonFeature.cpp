@@ -250,16 +250,45 @@ void PylonFeature::writeCommand() {
 }
 
 void PylonFeature::readEnumChoices(std::vector<std::string>& enumStrings, std::vector<int>& enumValues) {
+    const char *functionName = "readEnumChoices";
     if (!mIsImplemented) return;
     GenApi::IEnumeration *pValue = dynamic_cast<GenApi::IEnumeration *>(mFeaturePtr);
     if (!pValue) return;
 
     GenApi::NodeList_t entries;
     pValue->GetEntries(entries);
-    for (int i=0; i<(int)entries.size(); i++) {
-        GenApi::IEnumEntry *entry = dynamic_cast<GenApi::IEnumEntry*>(entries[i]);
-        enumStrings.push_back(entry->GetSymbolic().c_str());
-        enumValues.push_back((int)entry->GetValue());
+    if (entries.size() <= 16) {
+        for (size_t i=0; i<entries.size(); i++) {
+            GenApi::IEnumEntry *entry = dynamic_cast<GenApi::IEnumEntry*>(entries[i]);
+            enumStrings.push_back(entry->GetSymbolic().c_str());
+            enumValues.push_back((int)entry->GetValue());
+        }
+    } else {
+        asynPrint(mAsynUser, ASYN_TRACE_WARNING,
+            "%s::%s %s has more than 16 choices. Only the settable choices will be used.\n",
+            driverName, functionName, mFeatureName.c_str());
+
+        /* If there are more than 16 choices, then use the settable choices, which could be much less.
+           e.g. PixelFormat for a color camera contains all possible bayer patterns.
+           But only one set of bayer pattern is valid depending on ReverseX and ReverseY settings.*/
+        Pylon::CEnumParameter enumParameter(mFeaturePtr);
+        Pylon::StringList_t symbolics;
+        enumParameter.GetSettableValues(symbolics);
+        for (size_t i=0; i<symbolics.size(); i++) {
+            GenApi::IEnumEntry *entry = enumParameter.GetEntryByName(symbolics[i]);
+            enumStrings.push_back(entry->GetSymbolic().c_str());
+            enumValues.push_back((int)entry->GetValue());
+        }
+        /* Warn that choices more than 16 can be unreachable */
+        if (symbolics.size() > 16) {
+            std::string message = std::string(driverName) + "::" + functionName + " ";
+            message += mFeatureName + " has more than 16 settable choices, ";
+            for (size_t i=16; i<symbolics.size(); i++) {
+                message += symbolics[i] + " ";
+            }
+            message += "will be unreachable";
+            asynPrint(mAsynUser, ASYN_TRACE_ERROR, "%s\n", message.c_str());
+        }
     }
 }
 
