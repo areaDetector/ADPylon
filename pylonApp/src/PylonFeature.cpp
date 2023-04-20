@@ -76,20 +76,17 @@ bool PylonFeature::isImplemented() {
 bool PylonFeature::isAvailable() {
     // Pylon does not support isAvailable.  We simulate it by checking if it is readable or writable.
     if (!mIsImplemented) return false;
-    GenApi::EAccessMode mode = mFeaturePtr->GetAccessMode();
-    return (mode == GenApi::RO || mode == GenApi::WO || mode == GenApi::RW);
+    return GenApi::IsAvailable(mFeaturePtr);
 }
 
 bool PylonFeature::isReadable() {
     if (!mIsImplemented) return false;
-    GenApi::EAccessMode mode = mFeaturePtr->GetAccessMode();
-    return (mode == GenApi::RO || mode == GenApi::RW);
+    return GenApi::IsReadable(mFeaturePtr);
 }
 
 bool PylonFeature::isWritable() {
     if (!mIsImplemented) return false;
-    GenApi::EAccessMode mode = mFeaturePtr->GetAccessMode();
-    return (mode == GenApi::WO || mode == GenApi::RW);
+    return GenApi::IsWritable(mFeaturePtr);
 }
 
 epicsInt64 PylonFeature::readInteger() {
