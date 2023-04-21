@@ -115,7 +115,7 @@ specific to ADPylon.
      - GC_I_Statistic_Resend_Packet_Count
      - Number of emitted packet resend commands sent.
 
-If `Chunk data <https://docs.baslerweb.com/data-chunks>`_ is enabled, they are extracted as NDArray attributes.
+If `Chunk data <https://docs.baslerweb.com/data-chunks>`_ is enabled, they are extracted as NDArray attributes. If camera specific EPICS records are loaded, they are also set to EPICS records.
 
 IOC startup script
 ------------------

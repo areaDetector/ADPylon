@@ -515,7 +515,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     setIntegerParam(NDColorMode, colorMode);
     setIntegerParam(NDBayerPattern, bayerFormat);
 
-    // Extract chunk data as NDArray attributes
+    // Extract chunk data as NDArray attributes and optionally set to EPICS database.
     if (pGrabResult->IsChunkDataAvailable()) {
         extractChunkData(pGrabResult->GetChunkDataNodeMap(), pRaw->pAttributeList);
     }
@@ -567,29 +567,39 @@ asynStatus ADPylon::extractChunkData(const GenApi::INodeMap &nodeMap, NDAttribut
             continue;
 
         try {
+            PylonFeature *pFeature = dynamic_cast<PylonFeature *>(mGCFeatureSet.getByName(node->GetName().c_str()));
             switch (node->GetPrincipalInterfaceType()) {
             case GenApi::intfIInteger:
             {
                 epicsInt64 ival = dynamic_cast<GenApi::IInteger *>(node)->GetValue();
                 pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrInt64, &ival);
+                if (pFeature) {
+                    if (pFeature->getAsynType() == asynParamInt64)
+                        setInteger64Param(pFeature->getAsynIndex(), ival);
+                    else
+                        setIntegerParam(pFeature->getAsynIndex(), ival);
+                }
             }
             break;
             case GenApi::intfIFloat:
             {
                 epicsFloat64 fval = dynamic_cast<GenApi::IFloat *>(node)->GetValue();
                 pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrFloat64, &fval);
+                if (pFeature) setDoubleParam(pFeature->getAsynIndex(), fval);
             }
             break;
             case GenApi::intfIEnumeration:
             {
                 epicsInt64 ival = dynamic_cast<GenApi::IEnumeration *>(node)->GetIntValue();
                 pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrInt64, &ival);
+                if (pFeature) setIntegerParam(pFeature->getAsynIndex(), ival);
             }
             break;
             case GenApi::intfIBoolean:
             {
                 epicsUInt8 bval = dynamic_cast<GenApi::IBoolean *>(node)->GetValue();
                 pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrUInt8, &bval);
+                if (pFeature) setIntegerParam(pFeature->getAsynIndex(), bval);
             }
             break;
             default:
