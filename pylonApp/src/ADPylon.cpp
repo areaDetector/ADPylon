@@ -675,7 +675,7 @@ asynStatus ADPylon::readEnum(asynUser *pasynUser, char *strings[], int values[],
 
 asynStatus ADPylon::startCapture()
 {
-    //static const char *functionName = "startCapture";
+    static const char *functionName = "startCapture";
     int imageMode, numImages;
 
     // If we are already acquiring return immediately
@@ -693,14 +693,22 @@ asynStatus ADPylon::startCapture()
     // Start the camera transmission...
     setIntegerParam(ADNumImagesCounter, 0);
     setShutter(1);
-    if (imageMode == ADImageSingle)
-        camera_.StartGrabbing(1, Pylon::GrabStrategy_OneByOne, Pylon::GrabLoop_ProvidedByInstantCamera);
-    else if (imageMode == ADImageMultiple)
-        camera_.StartGrabbing(numImages, Pylon::GrabStrategy_OneByOne, Pylon::GrabLoop_ProvidedByInstantCamera);
-    else if (imageMode == ADImageContinuous)
-        camera_.StartGrabbing(Pylon::GrabStrategy_OneByOne, Pylon::GrabLoop_ProvidedByInstantCamera);
-    else
+    try {
+        if (imageMode == ADImageSingle)
+            camera_.StartGrabbing(1, Pylon::GrabStrategy_OneByOne, Pylon::GrabLoop_ProvidedByInstantCamera);
+        else if (imageMode == ADImageMultiple)
+            camera_.StartGrabbing(numImages, Pylon::GrabStrategy_OneByOne, Pylon::GrabLoop_ProvidedByInstantCamera);
+        else if (imageMode == ADImageContinuous)
+            camera_.StartGrabbing(Pylon::GrabStrategy_OneByOne, Pylon::GrabLoop_ProvidedByInstantCamera);
+        else
+            return asynError;
+    } catch (const Pylon::GenericException& e) {
+        setIntegerParam(ADAcquire, 0);
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s:%s: failed to start grabbing: %s\n",
+            driverName, functionName, e.what());
         return asynError;
+    }
 
     acquiring_ = true;
     epicsEventSignal(startEventId_);
