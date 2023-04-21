@@ -41,6 +41,7 @@ public:
     void imageGrabTask();
     asynStatus processFrame(const Pylon::CGrabResultPtr& pGrabResult);
     void cameraDisconnected();
+    int readFeatures (std::vector<std::string> const & params) { return mGCFeatureSet.readFeatures(params); }
 
 protected:
     asynStatus extractChunkData(const GenApi::INodeMap& nodeMap, NDAttributeList *pAttributeList);
@@ -68,6 +69,7 @@ private:
 
     std::vector<std::string> TLStatisticsFeatureNames_;
 
+    class ADPylonCameraEventHandler *pCameraEventHandler;
 };
 
 #endif
