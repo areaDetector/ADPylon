@@ -207,7 +207,7 @@ int PylonFeature::readEnumIndex() {
     if (!pValue) return 0;
     int value = 0;
     try {
-        value = pValue->GetIntValue();
+        value = (int)pValue->GetIntValue();
     } catch (const Pylon::GenericException& /*e*/) {
     }
     return value;

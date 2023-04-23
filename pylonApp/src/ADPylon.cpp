@@ -84,7 +84,7 @@ public:
     virtual void OnCameraEvent(Pylon::CInstantCamera& /*camera*/, intptr_t userProvidedId, GenApi::INode* /*pNode*/)
     {
         driver_->lock();
-        driver_->readEventData(userProvidedId);
+        driver_->readEventData((int)userProvidedId);
         driver_->unlock();
     }
 
@@ -636,7 +636,7 @@ asynStatus ADPylon::extractChunkData(const GenApi::INodeMap &nodeMap, NDAttribut
                     if (pFeature->getAsynType() == asynParamInt64)
                         setInteger64Param(pFeature->getAsynIndex(), ival);
                     else
-                        setIntegerParam(pFeature->getAsynIndex(), ival);
+                        setIntegerParam(pFeature->getAsynIndex(), (int)ival);
                 }
             }
             break;
@@ -651,7 +651,7 @@ asynStatus ADPylon::extractChunkData(const GenApi::INodeMap &nodeMap, NDAttribut
             {
                 epicsInt64 ival = dynamic_cast<GenApi::IEnumeration *>(node)->GetIntValue();
                 pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrInt64, &ival);
-                if (pFeature) setIntegerParam(pFeature->getAsynIndex(), ival);
+                if (pFeature) setIntegerParam(pFeature->getAsynIndex(), (int)ival);
             }
             break;
             case GenApi::intfIBoolean:
