@@ -72,13 +72,6 @@ struct {
     { Pylon::PixelType_RGB16packed, NDColorModeRGB1,  NDUInt16, NDBayerBGGR }
 };
 
-//Enumeration used for distinguishing different events.
-enum ADPylonCameraEvent
-{
-    ADPylonExposureEndEvent = 200,
-    ADPylonFrameStartEvent = 201
-};
-
 /** Pylon camera event handler */
 class ADPylonCameraEventHandler : public Pylon::CCameraEventHandler
 {
@@ -90,18 +83,9 @@ public:
     /* Called when a camera event has been received */
     virtual void OnCameraEvent(Pylon::CInstantCamera& /*camera*/, intptr_t userProvidedId, GenApi::INode* /*pNode*/)
     {
-        switch (userProvidedId) {
-            case ADPylonFrameStartEvent:
-                driver_->lock();
-                driver_->readFeatures({"EventFrameStart", "EventFrameStartTimestamp", "EventFrameStartFrameID"});
-                driver_->unlock();
-            break;
-            case ADPylonExposureEndEvent:
-                driver_->lock();
-                driver_->readFeatures({"EventExposureEnd", "EventExposureEndTimestamp", "EventExposureEndFrameID"});
-                driver_->unlock();
-            break;
-        }
+        driver_->lock();
+        driver_->readEventData(userProvidedId);
+        driver_->unlock();
     }
 
 private:
@@ -188,7 +172,7 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
     exiting_(false),
     acquiring_(false),
     uniqueId_(0),
-    pCameraEventHandler(new ADPylonCameraEventHandler(this))
+    pCameraEventHandler_(new ADPylonCameraEventHandler(this))
 {
     static const char *functionName = "ADPylon";
     asynStatus status;
@@ -280,6 +264,12 @@ void ADPylon::cameraDisconnected()
     camera_.Close();
 }
 
+void ADPylon::readEventData(int index)
+{
+    if (index >= 0 && index < (int)eventList_.size())
+        mGCFeatureSet.readFeatures(eventList_[index]);
+}
+
 asynStatus ADPylon::connectCamera(void)
 {
     static const char *functionName = "connectCamera";
@@ -305,9 +295,38 @@ asynStatus ADPylon::connectCamera(void)
         camera_.RegisterImageEventHandler(new ADPylonImageEventHandler(this), Pylon::RegistrationMode_Append, Pylon::Cleanup_Delete);
         camera_.RegisterConfiguration(new ADPylonConfigurationEventHandler(this), Pylon::RegistrationMode_Append, Pylon::Cleanup_Delete);
         camera_.GrabCameraEvents = true;
-        camera_.RegisterCameraEventHandler(pCameraEventHandler, "EventExposureEndData", ADPylonExposureEndEvent, Pylon::RegistrationMode_Append, Pylon::Cleanup_None);
-        camera_.RegisterCameraEventHandler(pCameraEventHandler, "EventFrameStartData", ADPylonFrameStartEvent, Pylon::RegistrationMode_Append, Pylon::Cleanup_None);
         camera_.Open();
+
+        /* Register event handler for all event sources. The handler updates event data Timestamp and FrameID.
+           See https://docs.baslerweb.com/event-notification
+         */
+        Pylon::CEnumParameter eventSelector(camera_.GetNodeMap(), "EventSelector");
+        if (eventSelector.IsValid()) {
+            Pylon::StringList_t sources;
+            eventSelector.GetAllValues(sources);
+            for (size_t i=0; i<sources.size(); i++) {
+                std::vector<std::string> eventData;
+                GenApi::INode *pFeature;
+                std::string name;
+
+                name = std::string("Event") + sources[i].c_str() + "Timestamp";
+                pFeature = camera_.GetNodeMap().GetNode(name.c_str());
+                if (pFeature) { eventData.push_back(name); }
+
+                name = std::string("Event") + sources[i].c_str() + "FrameID";
+                pFeature = camera_.GetNodeMap().GetNode(name.c_str());
+                if (pFeature) { eventData.push_back(name); }
+
+                camera_.RegisterCameraEventHandler(pCameraEventHandler_,
+                    Pylon::String_t("Event") + sources[i].c_str() + "Data",
+                    i,
+                    Pylon::RegistrationMode_Append,
+                    Pylon::Cleanup_None,
+                    Pylon::CameraEventAvailability_Optional);
+
+                eventList_.push_back(eventData);
+            }
+        }
     } catch (const Pylon::GenericException& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s::%s error opening camera %s: %s\n", driverName, functionName, cameraId_.c_str(), e.GetDescription());
