@@ -74,7 +74,6 @@ bool PylonFeature::isImplemented() {
 }
 
 bool PylonFeature::isAvailable() {
-    // Pylon does not support isAvailable.  We simulate it by checking if it is readable or writable.
     if (!mIsImplemented) return false;
     return GenApi::IsAvailable(mFeaturePtr);
 }
@@ -93,7 +92,12 @@ epicsInt64 PylonFeature::readInteger() {
     if (!mIsImplemented) return 0;
     GenApi::IInteger *pValue = dynamic_cast<GenApi::IInteger *>(mFeaturePtr);
     if (!pValue) return 0;
-    return pValue->GetValue();
+    epicsInt64 value = 0;
+    try {
+        value = pValue->GetValue();
+    } catch (const Pylon::GenericException& /*e*/) {
+    }
+    return value;
 }
 
 epicsInt64 PylonFeature::readIntegerMin() {
@@ -135,7 +139,12 @@ bool PylonFeature::readBoolean() {
     if (!mIsImplemented) return false;
     GenApi::IBoolean *pValue = dynamic_cast<GenApi::IBoolean *>(mFeaturePtr);
     if (!pValue) return false;
-    return pValue->GetValue();
+    bool value = false;
+    try {
+        value = pValue->GetValue();
+    } catch (const Pylon::GenericException& /*e*/) {
+    }
+    return value;
 }
 
 void PylonFeature::writeBoolean(bool value) {
@@ -156,7 +165,12 @@ double PylonFeature::readDouble() {
     if (!mIsImplemented) return 0.0;
     GenApi::IFloat *pValue = dynamic_cast<GenApi::IFloat *>(mFeaturePtr);
     if (!pValue) return 0.0;
-    return pValue->GetValue();
+    double value = 0.0;
+    try {
+        value = pValue->GetValue();
+    } catch (const Pylon::GenericException& /*e*/) {
+    }
+    return value;
 }
 
 void PylonFeature::writeDouble(double value) {
@@ -191,7 +205,12 @@ int PylonFeature::readEnumIndex() {
     if (!mIsImplemented) return 0;
     GenApi::IEnumeration *pValue = dynamic_cast<GenApi::IEnumeration *>(mFeaturePtr);
     if (!pValue) return 0;
-    return (int)pValue->GetIntValue();
+    int value = 0;
+    try {
+        value = pValue->GetIntValue();
+    } catch (const Pylon::GenericException& /*e*/) {
+    }
+    return value;
 }
 
 void PylonFeature::writeEnumIndex(int value) {
@@ -219,7 +238,12 @@ std::string PylonFeature::readString() {
     if (!mIsImplemented) return "";
     GenApi::IString *pValue = dynamic_cast<GenApi::IString *>(mFeaturePtr);
     if (!pValue) return 0;
-    return pValue->GetValue().c_str();
+    std::string value;
+    try {
+        value = pValue->GetValue().c_str();
+    } catch (const Pylon::GenericException& /*e*/) {
+    }
+    return value;
 }
 
 void PylonFeature::writeString(std::string const & value) {
