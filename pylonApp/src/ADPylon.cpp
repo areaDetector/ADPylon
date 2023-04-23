@@ -661,6 +661,13 @@ asynStatus ADPylon::extractChunkData(const GenApi::INodeMap &nodeMap, NDAttribut
                 if (pFeature) setIntegerParam(pFeature->getAsynIndex(), bval);
             }
             break;
+            case GenApi::intfIString:
+            {
+                const char *sval = dynamic_cast<GenApi::IString *>(node)->GetValue().c_str();
+                pAttributeList->add(node->GetName(), node->GetDisplayName(), NDAttrString, (void*)sval);
+                if (pFeature) setStringParam(pFeature->getAsynIndex(), sval);
+            }
+            break;
             default:
             break;
             }
