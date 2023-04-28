@@ -313,7 +313,7 @@ void PylonFeature::readEnumChoices(std::vector<std::string>& enumStrings, std::v
                 message += symbolics[i] + " ";
             }
             message += "will be unreachable";
-            asynPrint(mAsynUser, ASYN_TRACE_ERROR, "%s\n", message.c_str());
+            asynPrint(mAsynUser, ASYN_TRACE_WARNING, "%s\n", message.c_str());
         }
     }
 }
