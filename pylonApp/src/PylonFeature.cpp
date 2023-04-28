@@ -291,8 +291,8 @@ void PylonFeature::readEnumChoices(std::vector<std::string>& enumStrings, std::v
         }
     } else {
         asynPrint(mAsynUser, ASYN_TRACE_WARNING,
-            "%s::%s %s has more than 16 choices. Only the settable choices will be used.\n",
-            driverName, functionName, mFeatureName.c_str());
+            "%s::%s %s has more than %zu choices. Only the settable choices will be used.\n",
+            driverName, functionName, mFeatureName.c_str(), entries.size());
 
         /* If there are more than 16 choices, then use the settable choices, which could be much less.
            e.g. PixelFormat for a color camera contains all possible bayer patterns.
@@ -308,7 +308,7 @@ void PylonFeature::readEnumChoices(std::vector<std::string>& enumStrings, std::v
         /* Warn that choices more than 16 can be unreachable */
         if (symbolics.size() > 16) {
             std::string message = std::string(driverName) + "::" + functionName + " ";
-            message += mFeatureName + " has more than 16 settable choices, ";
+            message += mFeatureName + " has " + std::to_string(symbolics.size()) + " settable choices, ";
             for (size_t i=16; i<symbolics.size(); i++) {
                 message += symbolics[i] + " ";
             }
