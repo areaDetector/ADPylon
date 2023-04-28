@@ -309,16 +309,29 @@ asynStatus ADPylon::connectCamera(void)
                 GenApi::INode *pFeature;
                 std::string name;
 
-                name = std::string("Event") + sources[i].c_str() + "Timestamp";
+                if (camera_.GetSfncVersion() >= Pylon::Sfnc_2_0_0) {
+                    name = std::string("Event") + sources[i].c_str() + "Timestamp";
+                } else {
+                    name = std::string(sources[i].c_str()) + "EventTimestamp";
+                }
                 pFeature = camera_.GetNodeMap().GetNode(name.c_str());
                 if (pFeature) { eventData.push_back(name); }
 
-                name = std::string("Event") + sources[i].c_str() + "FrameID";
+                if (camera_.GetSfncVersion() >= Pylon::Sfnc_2_0_0) {
+                    name = std::string("Event") + sources[i].c_str() + "FrameID";
+                } else {
+                    name = std::string(sources[i].c_str()) + "EventFrameID";
+                }
                 pFeature = camera_.GetNodeMap().GetNode(name.c_str());
                 if (pFeature) { eventData.push_back(name); }
 
+                if (camera_.GetSfncVersion() >= Pylon::Sfnc_2_0_0) {
+                    name = std::string("Event") + sources[i].c_str() + "Data";
+                } else {
+                    name = std::string(sources[i].c_str()) + "EventData";
+                }
                 camera_.RegisterCameraEventHandler(pCameraEventHandler_,
-                    Pylon::String_t("Event") + sources[i].c_str() + "Data",
+                    name.c_str(),
                     i,
                     Pylon::RegistrationMode_Append,
                     Pylon::Cleanup_None,
