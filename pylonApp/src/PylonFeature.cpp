@@ -77,17 +77,29 @@ bool PylonFeature::isImplemented() {
 
 bool PylonFeature::isAvailable() {
     if (!mIsImplemented) return false;
-    return GenApi::IsAvailable(mFeaturePtr);
+    try {
+        return GenApi::IsAvailable(mFeaturePtr);
+    } catch (const Pylon::GenericException& /*e*/) {
+        return false;
+    }
 }
 
 bool PylonFeature::isReadable() {
     if (!mIsImplemented) return false;
-    return GenApi::IsReadable(mFeaturePtr);
+    try {
+       return GenApi::IsReadable(mFeaturePtr);
+    } catch (const Pylon::GenericException& /*e*/) {
+        return false;
+    }
 }
 
 bool PylonFeature::isWritable() {
     if (!mIsImplemented) return false;
-    return GenApi::IsWritable(mFeaturePtr);
+    try {
+        return GenApi::IsWritable(mFeaturePtr);
+    } catch (const Pylon::GenericException& /*e*/) {
+        return false;
+    }
 }
 
 epicsInt64 PylonFeature::readInteger() {
