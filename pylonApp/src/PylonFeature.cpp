@@ -54,12 +54,14 @@ PylonFeature::PylonFeature(GenICamFeatureSet *set,
             mFeatureType = GCFeatureType;
         } else {
             if (featureType != GCFeatureType) {
+                mIsImplemented = false;
                 asynPrint(mAsynUser, ASYN_TRACE_ERROR,
                     "%s::%s error input feature type=%d != Pylon feature type=%d for featurename=%s\n",
                     driverName, functionName, featureType, GCFeatureType, featureName.c_str());
             }
         }
         if (mFeatureType == GCFeatureTypeUnknown) {
+            mIsImplemented = false;
             asynPrint(mAsynUser, ASYN_TRACE_ERROR,
                 "%s::%s error unknown feature type for featureName=%s\n",
                 driverName, functionName, featureName.c_str());
