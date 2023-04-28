@@ -237,7 +237,7 @@ void PylonFeature::writeEnumString(std::string const &value) {
 std::string PylonFeature::readString() {
     if (!mIsImplemented) return "";
     GenApi::IString *pValue = dynamic_cast<GenApi::IString *>(mFeaturePtr);
-    if (!pValue) return 0;
+    if (!pValue) return "";
     std::string value;
     try {
         value = pValue->GetValue().c_str();
