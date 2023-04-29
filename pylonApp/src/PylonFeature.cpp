@@ -9,17 +9,22 @@ PylonFeature::PylonFeature(GenICamFeatureSet *set,
          : GenICamFeature(set, asynName, asynType, asynIndex, featureName, featureType),
          mAsynUser(set->getUser()),mFeaturePtr(nullptr),mIsImplemented(false)
 {
-    static const char *functionName = "PylonFeature";
+    initialize(nodeMap);
+}
+
+void PylonFeature::initialize(const GenApi::INodeMap* nodeMap)
+{
+    const char *functionName = "initialize";
 
     if (!nodeMap)
         return;
 
     try {
-        mFeaturePtr = nodeMap->GetNode(featureName.c_str());
+        mFeaturePtr = nodeMap->GetNode(mFeatureName.c_str());
     } catch (const Pylon::GenericException& e) {
         asynPrint(mAsynUser, ASYN_TRACE_ERROR,
                 "%s::%s error in get feature featurename=%s: %s\n",
-                driverName, functionName, featureName.c_str(), e.GetDescription());
+                driverName, functionName, mFeatureName.c_str(), e.GetDescription());
         mIsImplemented = false;
         return;
     }
@@ -53,18 +58,18 @@ PylonFeature::PylonFeature(GenICamFeatureSet *set,
         if (mFeatureType == GCFeatureTypeUnknown) {
             mFeatureType = GCFeatureType;
         } else {
-            if (featureType != GCFeatureType) {
+            if (mFeatureType != GCFeatureType) {
                 mIsImplemented = false;
                 asynPrint(mAsynUser, ASYN_TRACE_ERROR,
                     "%s::%s error input feature type=%d != Pylon feature type=%d for featurename=%s\n",
-                    driverName, functionName, featureType, GCFeatureType, featureName.c_str());
+                    driverName, functionName, mFeatureType, GCFeatureType, mFeatureName.c_str());
             }
         }
         if (mFeatureType == GCFeatureTypeUnknown) {
             mIsImplemented = false;
             asynPrint(mAsynUser, ASYN_TRACE_ERROR,
                 "%s::%s error unknown feature type for featureName=%s\n",
-                driverName, functionName, featureName.c_str());
+                driverName, functionName, mFeatureName.c_str());
         }
     } else {
         mIsImplemented = false;

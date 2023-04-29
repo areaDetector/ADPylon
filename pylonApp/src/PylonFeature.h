@@ -10,6 +10,7 @@ public:
     PylonFeature(GenICamFeatureSet *set,
                  std::string const & asynName, asynParamType asynType, int asynIndex,
                  std::string const & featureName, GCFeatureType_t featureType, const GenApi::INodeMap* nodeMap);
+    void initialize(const GenApi::INodeMap* nodeMap);
     virtual bool isImplemented(void);
     virtual bool isAvailable(void);
     virtual bool isReadable(void);
