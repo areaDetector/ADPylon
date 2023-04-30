@@ -36,6 +36,7 @@ public:
                                           std::string const & featureName, GCFeatureType_t featureType);
     virtual asynStatus startCapture();
     virtual asynStatus stopCapture();
+    virtual asynStatus connect(asynUser *pasynUser);
 
     /* These should be private but are called from C callback functions, must be public. */
     void imageGrabTask();
@@ -69,6 +70,7 @@ private:
 
     std::vector<std::string> TLStatisticsFeatureNames_;
 
+    std::vector<class PylonFeature*> featureList_;
     std::vector<std::vector<std::string>> eventList_;
     class ADPylonCameraEventHandler *pCameraEventHandler_;
 };

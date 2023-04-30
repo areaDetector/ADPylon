@@ -191,11 +191,8 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s:%s:  camera connection failed (%d)\n",
             driverName, functionName, status);
-        // Mark camera not reachable
-        cameraDisconnected();
         // Call report() to get a list of available cameras
         report(stdout, 1);
-        return;
     }
 
     createParam("PYLON_CONVERT_PIXEL_FORMAT",     asynParamInt32,   &PYLONConvertPixelFormat);
@@ -247,7 +244,10 @@ GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set,
         // It normally means the camera is not connected.
     }
 
-    return new PylonFeature(set, asynName, asynType, asynIndex, featureName, featureType, nodeMap);
+    PylonFeature *pFeature = new PylonFeature(set, asynName, asynType, asynIndex, featureName, featureType, nodeMap);
+    featureList_.push_back(pFeature);
+
+    return pFeature;
 }
 
 /** Called by Pylon when the camera is disconnected.
@@ -292,8 +292,8 @@ asynStatus ADPylon::connectCamera(void)
             deviceInfo.SetSerialNumber(cameraId_.c_str());
             camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(deviceInfo), Pylon::Cleanup_Delete);
         }
-        camera_.RegisterImageEventHandler(new ADPylonImageEventHandler(this), Pylon::RegistrationMode_Append, Pylon::Cleanup_Delete);
-        camera_.RegisterConfiguration(new ADPylonConfigurationEventHandler(this), Pylon::RegistrationMode_Append, Pylon::Cleanup_Delete);
+        camera_.RegisterImageEventHandler(new ADPylonImageEventHandler(this), Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
+        camera_.RegisterConfiguration(new ADPylonConfigurationEventHandler(this), Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
         camera_.GrabCameraEvents = true;
         camera_.Open();
 
@@ -333,18 +333,36 @@ asynStatus ADPylon::connectCamera(void)
                 camera_.RegisterCameraEventHandler(pCameraEventHandler_,
                     name.c_str(),
                     i,
-                    Pylon::RegistrationMode_Append,
+                    i == 0 ? Pylon::RegistrationMode_ReplaceAll : Pylon::RegistrationMode_Append,
                     Pylon::Cleanup_None,
                     Pylon::CameraEventAvailability_Optional);
 
                 eventList_.push_back(eventData);
             }
         }
+        /* Re-initialize Pylon features if they exist */
+        {
+            GenApi::INodeMap *cameraNodeMap = &camera_.GetNodeMap();
+            GenApi::INodeMap *streamNodeMap = &camera_.GetStreamGrabberNodeMap();
+            for (auto pFeature : featureList_) {
+                GenApi::INodeMap *nodeMap = cameraNodeMap;
+                // Statistics features are from StreamGrabber
+                if (std::find(TLStatisticsFeatureNames_.begin(), TLStatisticsFeatureNames_.end(), pFeature->getFeatureName()) != TLStatisticsFeatureNames_.end())
+                    nodeMap = streamNodeMap;
+                pFeature->initialize(nodeMap);
+            }
+        }
     } catch (const Pylon::GenericException& e) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s::%s error opening camera %s: %s\n", driverName, functionName, cameraId_.c_str(), e.GetDescription());
+        // Mark camera not reachable
+        cameraDisconnected();
        return asynError;
     }
+
+    this->deviceIsReachable = true;
+    setIntegerParam(ADStatus, ADStatusIdle);
+    setStringParam(ADStatusMessage, "");
 
     return asynSuccess;
 }
@@ -778,6 +796,30 @@ asynStatus ADPylon::stopCapture()
     return asynSuccess;
 }
 
+asynStatus ADPylon::connect(asynUser *pasynUser)
+{
+    const char *functionName = "connect";
+
+    /* Try to connect the camera if it is previously disconnected. */
+    if (!this->deviceIsReachable) {
+        asynStatus status = connectCamera();
+        if (status != asynSuccess) {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                "%s:%s:  camera connection failed (%d)\n",
+                driverName, functionName, status);
+            return status;
+        }
+
+        /* If this is the first successful connection, then create ADDriver specific features too. */
+        if (!mGCFeatureSet.getByIndex(ADModel))
+            addADDriverFeatures();
+
+        mGCFeatureSet.readAll();
+        callParamCallbacks();
+    }
+
+    return ADGenICam::connect(pasynUserSelf);
+}
 
 void ADPylon::report(FILE *fp, int details)
 {
