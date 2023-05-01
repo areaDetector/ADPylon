@@ -12,9 +12,9 @@ epicsEnvSet("NCHANS", "2048")
 epicsEnvSet("CBUFFS", "500")
 # The search path for database files
 # This is for Windows
-epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db;$(ADGENICAM)/db;$(ADPYLON)/db")
+#epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db;$(ADGENICAM)/db;$(ADPYLON)/db")
 # This is for Linux
-#epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db:$(ADGENICAM)/db:$(ADPYLON)/db")
+epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db:$(ADGENICAM)/db:$(ADPYLON)/db")
 
 # ADPylonConfig(const char *portName, const char *cameraName, size_t maxMemory, int priority, int stackSize)
 ADPylonConfig("$(PORT)", "$(CAMERA_ID)", 0, 0, 0)
