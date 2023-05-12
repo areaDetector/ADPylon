@@ -157,6 +157,14 @@ static void imageGrabTaskC(void *drvPvt)
     pPvt->imageGrabTask();
 }
 
+static void c_shutdown(void *drvPvt)
+{
+    ADPylon *pPvt = (ADPylon *)drvPvt;
+
+    pPvt->shutdown();
+}
+
+
 /** Constructor for the ADPylon class
  * \param[in] portName asyn port name to assign to the camera.
  * \param[in] cameraId The camera index or serial number; <1000 is assumed to be index, >=1000 is assumed to be serial number.
@@ -227,6 +235,9 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
                       epicsThreadGetStackSize(epicsThreadStackMedium),
                       imageGrabTaskC, this);
 
+    // shutdown on exit
+    epicsAtExit(c_shutdown, this);
+
     return;
 }
 
@@ -248,6 +259,18 @@ GenICamFeature *ADPylon::createFeature(GenICamFeatureSet *set,
     featureList_.push_back(pFeature);
 
     return pFeature;
+}
+
+/** Called by epicsAtExit.
+ *  Here we close the camera connection and terminate the Pylon system.
+*/
+void ADPylon::shutdown(void)
+{
+    lock();
+    exiting_ = true;
+    cameraDisconnected();
+    unlock();
+    Pylon::PylonTerminate();
 }
 
 /** Called by Pylon when the camera is disconnected.
@@ -801,7 +824,7 @@ asynStatus ADPylon::connect(asynUser *pasynUser)
     const char *functionName = "connect";
 
     /* Try to connect the camera if it is previously disconnected. */
-    if (!this->deviceIsReachable) {
+    if (!this->deviceIsReachable && !this->exiting_) {
         asynStatus status = connectCamera();
         if (status != asynSuccess) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,

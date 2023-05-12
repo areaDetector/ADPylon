@@ -40,6 +40,7 @@ public:
 
     /* These should be private but are called from C callback functions, must be public. */
     void imageGrabTask();
+    void shutdown();
     asynStatus processFrame(const Pylon::CGrabResultPtr& pGrabResult);
     void cameraDisconnected();
     void readEventData (int index);
