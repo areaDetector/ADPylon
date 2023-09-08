@@ -19,8 +19,8 @@ USR_INCLUDES_WIN32 += -I ../../../pylonSupport/include
 
 LIB_LIBS_WIN32  += GenApi_MD_VC141_v3_1_Basler_pylon
 LIB_LIBS_WIN32  += GCBase_MD_VC141_v3_1_Basler_pylon
-LIB_LIBS_WIN32  += PylonUtility_v7_2
-LIB_LIBS_WIN32  += PylonBase_v7_2
+LIB_LIBS_WIN32  += PylonUtility_v7_3
+LIB_LIBS_WIN32  += PylonBase_v7_3
 
 LIB_SRCS += PylonFeature.cpp
 LIB_SRCS += ADPylon.cpp

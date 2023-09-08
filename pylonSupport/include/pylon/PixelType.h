@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2022 Basler AG
+//  Copyright (c) 2006-2023 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Hartmut Nebelung, Edgar Katzer, AG
 //-----------------------------------------------------------------------------
@@ -285,6 +285,12 @@ namespace Pylon
     inline bool IsPlanar( EPixelType pixelType )
     {
         return PlaneCount( pixelType ) > 1;
+    }
+
+    /// Returns true if pixel type is YUV semiplanar.
+    inline bool IsYUVSemiplanar( EPixelType pixelType )
+    {
+        return ((pixelType == PixelType_YCbCr420_8_YY_CbCr_Semiplanar) || (pixelType == PixelType_YCbCr422_8_YY_CbCr_Semiplanar));
     }
 
     /// Lists the Bayer color filter types.

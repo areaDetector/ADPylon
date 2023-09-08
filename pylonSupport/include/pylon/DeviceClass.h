@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2008-2022 Basler AG
+//  Copyright (c) 2008-2023 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Thomas Koeller
 //-----------------------------------------------------------------------------
@@ -25,7 +25,6 @@ namespace Pylon
      * @{
      */
     // PYLON_WIN_BUILD only controls whether the DeviceClass is listed in the API reference guide
-    const char* const Basler1394DeviceClass = "Basler1394"; ///< This device class can be used to create the corresponding Transport Layer object or when creating Devices with the Transport Layer Factory.
     const char* const BaslerGigEDeviceClass = "BaslerGigE"; ///< This device class can be used to create the corresponding Transport Layer object or when creating Devices with the Transport Layer Factory.
     const char* const BaslerCamEmuDeviceClass = "BaslerCamEmu"; ///< This device class can be used to create the corresponding Transport Layer object or when creating Devices with the Transport Layer Factory.
     const char* const BaslerIpCamDeviceClass = "BaslerIPCam"; ///< This device class can be used to create the corresponding Transport Layer object or when creating Devices with the Transport Layer Factory.

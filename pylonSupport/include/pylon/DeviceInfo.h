@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2022 Basler AG
+//  Copyright (c) 2006-2023 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Hartmut Nebelung, AH
 //-----------------------------------------------------------------------------
@@ -85,10 +85,6 @@ namespace Pylon
         // Internal use only
         const char* const TransferModeKey = "TransferModeKey";
 
-        //1394
-        ///Identifies the name of the device used by the underlying device driver. Internal use only.
-        const char* const InternalNameKey = "InternalName";
-
         //CameraLink
         ///Identifies the ID of the serial port the device is connected to.
         const char* const PortIDKey = "PortID";
@@ -125,15 +121,15 @@ namespace Pylon
         {
         }
 
-             /*!
-             \brief Compares CDeviceInfo objects by device class and serial number.
-             \param[in]  rhs The right-hand side object of the comparison.
-             \return Returns true according to this rule: USB < GigE < CameraLink < 1394 < Less than compare of device class text < CamEmu.
-                     CDeviceInfo objects of the same transport layer are compared by serial number. Numeric serial numbers are less than alphanumeric
-                     serial numbers. Two alphanumeric serial numbers return the result of a less than text comparison.
-             \error
-             Does not throw C++ exceptions.
-             */
+        /*!
+            \brief Compares CDeviceInfo objects by device class and serial number.
+            \param[in]  rhs The right-hand side object of the comparison.
+            \return Returns true according to this rule: USB < GigE < CameraLink < GenTL (incl. CXP) < Less than compare of device class text < CamEmu.
+                    CDeviceInfo objects of the same transport layer are compared by serial number. Numeric serial numbers are less than alphanumeric
+                    serial numbers. Two alphanumeric serial numbers return the result of a less than text comparison.
+            \error
+            Does not throw C++ exceptions.
+        */
         bool operator<( const CDeviceInfo& rhs ) const;
 
         /* The underlying implementation does not need to support all the listed properties.
@@ -203,7 +199,7 @@ namespace Pylon
         ///This method overrides a method of a base class returning a reference to CDeviceInfo
         CDeviceInfo& SetVendorName( const String_t& VendorNameValue );
 
-        ///Sets the device class device, e.g. Basler1394.
+        ///Sets the device class device, e.g. BaslerUsb.
         ///This property is identified by Key::DeviceClassKey.
         ///This method overrides a method of a base class returning a reference to CDeviceInfo
         CDeviceInfo& SetDeviceClass( const String_t& DeviceClassValue );
@@ -393,17 +389,6 @@ namespace Pylon
         ///Applies to: Usb
         bool IsTransferModeAvailable() const;
 
-
-        ///Retrieves the name of the device used by the underlying device driver. Internal use only.
-        ///This property is identified by Key::InternalNameKey.
-        ///Applies to: 1394
-        String_t GetInternalName() const;
-        ///Sets the above property.
-        ///Applies to: 1394
-        CDeviceInfo& SetInternalName( const String_t& InternalNameValue );
-        ///Returns true if the above property is available.
-        ///Applies to: 1394
-        bool IsInternalNameAvailable() const;
 
         ///Retrieves the ID of the serial port the device is connected to.
         ///This property is identified by Key::PortIDKey.

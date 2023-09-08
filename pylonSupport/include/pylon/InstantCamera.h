@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2022 Basler AG
+//  Copyright (c) 2010-2023 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //------------------------------------------------------------------------------
@@ -801,8 +801,6 @@ namespace Pylon
         If the above mentioned nodes are not available and the 'SoftwareTrigger' node is readable,
         the implementation waits for SoftwareTrigger.IsDone().
 
-        The WaitForFrameTriggerReady method does not work for A600 Firewire cameras.
-
         \param[in]  timeoutMs The timeout in ms for active waiting.
         \param[in]  timeoutHandling  If timeoutHandling equals TimeoutHandling_ThrowException, a timeout exception is thrown on timeout.
         \return True if the camera can execute a frame trigger.
@@ -1025,26 +1023,6 @@ namespace Pylon
             This method is synchronized using the lock provided by GetLock().
         */
         virtual void SetBufferFactory( IBufferFactory* pFactory, ECleanup cleanupProcedure = Cleanup_Delete );
-
-
-        /*!
-        \brief Returns true if an IEEE 1394 %Pylon device is attached to the Instant Camera object.
-
-        This method is provided for convenience only. The device type can also be determined as shown in the following example.
-
-        \code
-        #include <pylon/DeviceClass.h>
-        ...
-        if (camera.GetDeviceInfo().GetDeviceClass() == Basler1394DeviceClass)
-        {
-            ...
-        }
-        \endcode
-
-        \threading
-        This method is synchronized using the lock provided by GetLock().
-        */
-        virtual bool Is1394() const;
 
 
         /*!

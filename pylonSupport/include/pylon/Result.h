@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2022 Basler AG
+//  Copyright (c) 2006-2023 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Hartmut Nebelung
 //-----------------------------------------------------------------------------
@@ -284,9 +284,6 @@ namespace Pylon
 
         ///////////////////////////////////////////////////////////////////////
         /// \brief Get the block ID of the grabbed frame (camera device specific).
-        ///
-        /// \par IEEE 1394 Camera Devices
-        /// The value of block ID is always UINT64_MAX.
         ///
         /// \par GigE Camera Devices
         /// If the Extended ID mode is disabled (default), the sequence number starts with 1

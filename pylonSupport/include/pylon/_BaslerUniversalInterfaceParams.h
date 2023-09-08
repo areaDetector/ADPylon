@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2019-2022 Basler AG
+//  Copyright (c) 2019-2023 Basler AG
 //  http://www.baslerweb.com
 //-----------------------------------------------------------------------------
 
@@ -214,12 +214,12 @@ namespace Basler_UniversalInterfaceParams
     
     
     //**************************************************************************************************
-    // Parameter class CUniversalInterfaceParams_Params_v7_2_0
+    // Parameter class CUniversalInterfaceParams_Params_v7_3_0
     //**************************************************************************************************
     
 
     //! A parameter class containing all parameters as members that are available for pylon interfaces
-    class PYLONBASE_API CUniversalInterfaceParams_Params_v7_2_0
+    class PYLONBASE_API CUniversalInterfaceParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -230,10 +230,10 @@ namespace Basler_UniversalInterfaceParams
     //! \cond HIDE_CLASS_METHODS
         
         //! Constructor
-        CUniversalInterfaceParams_Params_v7_2_0( void );
+        CUniversalInterfaceParams_Params_v7_3_0( void );
 
         //! Destructor
-        ~CUniversalInterfaceParams_Params_v7_2_0( void );
+        ~CUniversalInterfaceParams_Params_v7_3_0( void );
 
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* );
@@ -241,8 +241,8 @@ namespace Basler_UniversalInterfaceParams
     //! \endcond
 
     private:
-        class CUniversalInterfaceParams_Params_v7_2_0_Data;
-        CUniversalInterfaceParams_Params_v7_2_0_Data* m_pCUniversalInterfaceParams_Params_v7_2_0_Data;
+        class CUniversalInterfaceParams_Params_v7_3_0_Data;
+        CUniversalInterfaceParams_Params_v7_3_0_Data* m_pCUniversalInterfaceParams_Params_v7_3_0_Data;
 
 
     //----------------------------------------------------------------------------------------------------------------
@@ -2632,17 +2632,17 @@ namespace Basler_UniversalInterfaceParams
     //! \cond HIDE_CLASS_METHODS
 
         //! not implemented copy constructor
-        CUniversalInterfaceParams_Params_v7_2_0(CUniversalInterfaceParams_Params_v7_2_0&);
+        CUniversalInterfaceParams_Params_v7_3_0(CUniversalInterfaceParams_Params_v7_3_0&);
 
         //! not implemented assignment operator
-        CUniversalInterfaceParams_Params_v7_2_0& operator=(CUniversalInterfaceParams_Params_v7_2_0&);
+        CUniversalInterfaceParams_Params_v7_3_0& operator=(CUniversalInterfaceParams_Params_v7_3_0&);
 
     //! \endcond
     };
 
 
     //! A parameter class containing all parameters as members that are available for pylon interfaces
-    class CUniversalInterfaceParams_Params : public CUniversalInterfaceParams_Params_v7_2_0
+    class CUniversalInterfaceParams_Params : public CUniversalInterfaceParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -2665,7 +2665,7 @@ namespace Basler_UniversalInterfaceParams
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* pNodeMap )
         {
-            CUniversalInterfaceParams_Params_v7_2_0::_Initialize( pNodeMap );
+            CUniversalInterfaceParams_Params_v7_3_0::_Initialize( pNodeMap );
         }
         //! \endcond
     };

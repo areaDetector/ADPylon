@@ -1,7 +1,7 @@
 
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2022 Basler AG
+//  Copyright (c) 2010-2023 Basler AG
 //  http://www.baslerweb.com
 // \note include InstantCamera.h
 //------------------------------------------------------------------------------

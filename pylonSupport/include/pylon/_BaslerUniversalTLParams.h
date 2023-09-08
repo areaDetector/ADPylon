@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2019-2022 Basler AG
+//  Copyright (c) 2019-2023 Basler AG
 //  http://www.baslerweb.com
 //-----------------------------------------------------------------------------
 
@@ -193,8 +193,8 @@ namespace Basler_UniversalTLParams
     //! Valid values for LutEnable
     enum LutEnableEnums
     {
-        LutEnable_Off,  //!< Off - Applies to: CoaXPress
-        LutEnable_On  //!< On - Applies to: CoaXPress
+        LutEnable_Off,  //!< The trigger queue mode is disabled - Applies to: CoaXPress
+        LutEnable_On  //!< The trigger queue mode is enabled - Applies to: CoaXPress
     };
 
     //! Valid values for LutImplementationType
@@ -267,8 +267,8 @@ namespace Basler_UniversalTLParams
     //! Valid values for ProcessingInvert
     enum ProcessingInvertEnums
     {
-        ProcessingInvert_Off,  //!< Off - Applies to: CoaXPress
-        ProcessingInvert_On  //!< On - Applies to: CoaXPress
+        ProcessingInvert_Off,  //!< The trigger queue mode is disabled - Applies to: CoaXPress
+        ProcessingInvert_On  //!< The trigger queue mode is enabled - Applies to: CoaXPress
     };
 
     //! Valid values for SoftwareTriggerIsBusy
@@ -1200,7 +1200,7 @@ namespace Basler_UniversalTLParams
     
     
     //**************************************************************************************************
-    // Parameter class CUniversalTLParams_Params_v7_2_0
+    // Parameter class CUniversalTLParams_Params_v7_3_0
     //**************************************************************************************************
     
 
@@ -1210,7 +1210,7 @@ namespace Basler_UniversalTLParams
     The parameter class is used by the \c Pylon::CBaslerUniversalInstantCamera class.
     The \ref sample_ParametrizeCamera_NativeParameterAccess code sample shows how to access camera parameters via the \c Pylon::CBaslerUniversalInstantCamera class.
     */
-    class PYLONBASE_API CUniversalTLParams_Params_v7_2_0
+    class PYLONBASE_API CUniversalTLParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -1221,10 +1221,10 @@ namespace Basler_UniversalTLParams
     //! \cond HIDE_CLASS_METHODS
         
         //! Constructor
-        CUniversalTLParams_Params_v7_2_0( void );
+        CUniversalTLParams_Params_v7_3_0( void );
 
         //! Destructor
-        ~CUniversalTLParams_Params_v7_2_0( void );
+        ~CUniversalTLParams_Params_v7_3_0( void );
 
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* );
@@ -1232,8 +1232,8 @@ namespace Basler_UniversalTLParams
     //! \endcond
 
     private:
-        class CUniversalTLParams_Params_v7_2_0_Data;
-        CUniversalTLParams_Params_v7_2_0_Data* m_pCUniversalTLParams_Params_v7_2_0_Data;
+        class CUniversalTLParams_Params_v7_3_0_Data;
+        CUniversalTLParams_Params_v7_3_0_Data* m_pCUniversalTLParams_Params_v7_3_0_Data;
 
 
     //----------------------------------------------------------------------------------------------------------------
@@ -3953,7 +3953,7 @@ namespace Basler_UniversalTLParams
         //@}
 
 
-        //! \name Categories: OutputEvent
+        //! \name Categories: OutputEvents
         //@{
         /*!
             \brief Select the pulse form generator for event monitoring - Applies to: CoaXPress
@@ -4387,10 +4387,10 @@ namespace Basler_UniversalTLParams
     //! \cond HIDE_CLASS_METHODS
 
         //! not implemented copy constructor
-        CUniversalTLParams_Params_v7_2_0(CUniversalTLParams_Params_v7_2_0&);
+        CUniversalTLParams_Params_v7_3_0(CUniversalTLParams_Params_v7_3_0&);
 
         //! not implemented assignment operator
-        CUniversalTLParams_Params_v7_2_0& operator=(CUniversalTLParams_Params_v7_2_0&);
+        CUniversalTLParams_Params_v7_3_0& operator=(CUniversalTLParams_Params_v7_3_0&);
 
     //! \endcond
     };
@@ -4402,7 +4402,7 @@ namespace Basler_UniversalTLParams
     The parameter class is used by the \c Pylon::CBaslerUniversalInstantCamera class.
     The \ref sample_ParametrizeCamera_NativeParameterAccess code sample shows how to access camera parameters via the \c Pylon::CBaslerUniversalInstantCamera class.
     */
-    class CUniversalTLParams_Params : public CUniversalTLParams_Params_v7_2_0
+    class CUniversalTLParams_Params : public CUniversalTLParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -4425,7 +4425,7 @@ namespace Basler_UniversalTLParams
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* pNodeMap )
         {
-            CUniversalTLParams_Params_v7_2_0::_Initialize( pNodeMap );
+            CUniversalTLParams_Params_v7_3_0::_Initialize( pNodeMap );
         }
         //! \endcond
     };

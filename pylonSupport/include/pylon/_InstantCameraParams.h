@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2022 Basler AG
+//  Copyright (c) 2010-2023 Basler AG
 //  http://www.baslerweb.com
 //-----------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ namespace Basler_InstantCameraParams
     
     
     //**************************************************************************************************
-    // Parameter class CInstantCameraParams_Params_v7_2_0
+    // Parameter class CInstantCameraParams_Params_v7_3_0
     //**************************************************************************************************
     
 
@@ -45,7 +45,7 @@ namespace Basler_InstantCameraParams
     The parameter class is used by the \c Pylon::CInstantCamera class.
     The code sample \ref sample_Grab shows the usage by setting the MaxNumBuffer parameter.
     */
-    class PYLONBASE_API CInstantCameraParams_Params_v7_2_0
+    class PYLONBASE_API CInstantCameraParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -56,10 +56,10 @@ namespace Basler_InstantCameraParams
     //! \cond HIDE_CLASS_METHODS
         
         //! Constructor
-        CInstantCameraParams_Params_v7_2_0( void );
+        CInstantCameraParams_Params_v7_3_0( void );
 
         //! Destructor
-        ~CInstantCameraParams_Params_v7_2_0( void );
+        ~CInstantCameraParams_Params_v7_3_0( void );
 
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* );
@@ -67,8 +67,8 @@ namespace Basler_InstantCameraParams
     //! \endcond
 
     private:
-        class CInstantCameraParams_Params_v7_2_0_Data;
-        CInstantCameraParams_Params_v7_2_0_Data* m_pCInstantCameraParams_Params_v7_2_0_Data;
+        class CInstantCameraParams_Params_v7_3_0_Data;
+        CInstantCameraParams_Params_v7_3_0_Data* m_pCInstantCameraParams_Params_v7_3_0_Data;
 
 
     //----------------------------------------------------------------------------------------------------------------
@@ -388,10 +388,10 @@ namespace Basler_InstantCameraParams
     //! \cond HIDE_CLASS_METHODS
 
         //! not implemented copy constructor
-        CInstantCameraParams_Params_v7_2_0(CInstantCameraParams_Params_v7_2_0&);
+        CInstantCameraParams_Params_v7_3_0(CInstantCameraParams_Params_v7_3_0&);
 
         //! not implemented assignment operator
-        CInstantCameraParams_Params_v7_2_0& operator=(CInstantCameraParams_Params_v7_2_0&);
+        CInstantCameraParams_Params_v7_3_0& operator=(CInstantCameraParams_Params_v7_3_0&);
 
     //! \endcond
     };
@@ -403,7 +403,7 @@ namespace Basler_InstantCameraParams
     The parameter class is used by the \c Pylon::CInstantCamera class.
     The code sample \ref sample_Grab shows the usage by setting the MaxNumBuffer parameter.
     */
-    class CInstantCameraParams_Params : public CInstantCameraParams_Params_v7_2_0
+    class CInstantCameraParams_Params : public CInstantCameraParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -426,7 +426,7 @@ namespace Basler_InstantCameraParams
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* pNodeMap )
         {
-            CInstantCameraParams_Params_v7_2_0::_Initialize( pNodeMap );
+            CInstantCameraParams_Params_v7_3_0::_Initialize( pNodeMap );
         }
         //! \endcond
     };

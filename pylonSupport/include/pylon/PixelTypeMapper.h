@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2022 Basler AG
+//  Copyright (c) 2010-2023 Basler AG
 //  http://www.baslerweb.com
 //  Author:  JS
 //-----------------------------------------------------------------------------
@@ -144,7 +144,7 @@ namespace Pylon
     When passing the symbolic name of the pixeltype you can use the static version GetPylonPixelTypeByName. This function will do the lookup everytime you call it.
     The non-static member function GetPylonPixelTypeFromPixelFormatEnum uses caching to speed up subsequent calls.
 
-    The template parameter EnumT is the enumeration type from the camera class (typically Basler_GigECamera::PixelFormatEnums for GigE cameras or Basler_IIDC1394CameraParams::PixelFormatEnums for 1394 cameras)
+    The template parameter EnumT is the enumeration type from the camera class (typically Basler_GigECamera::PixelFormatEnums for GigE cameras)
     */
     template <typename EnumT>
     class CCameraPixelTypeMapperT : protected CPixelTypeMapper

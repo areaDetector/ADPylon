@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2019-2022 Basler AG
+//  Copyright (c) 2019-2023 Basler AG
 //  http://www.baslerweb.com
 //-----------------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ namespace Basler_UniversalChunkDataParams
     
     
     //**************************************************************************************************
-    // Parameter class CUniversalChunkDataParams_Params_v7_2_0
+    // Parameter class CUniversalChunkDataParams_Params_v7_3_0
     //**************************************************************************************************
     
 
@@ -139,7 +139,7 @@ namespace Basler_UniversalChunkDataParams
     The parameter class is used by the \link Pylon::CBaslerUniversalGrabResultPtr \c CBaslerUniversalGrabResultPtr \endlink class.
     More information can be found in the code of the \ref sample_Grab_ChunkImage sample.
     */
-    class PYLONBASE_API CUniversalChunkDataParams_Params_v7_2_0
+    class PYLONBASE_API CUniversalChunkDataParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -150,10 +150,10 @@ namespace Basler_UniversalChunkDataParams
     //! \cond HIDE_CLASS_METHODS
         
         //! Constructor
-        CUniversalChunkDataParams_Params_v7_2_0( void );
+        CUniversalChunkDataParams_Params_v7_3_0( void );
 
         //! Destructor
-        ~CUniversalChunkDataParams_Params_v7_2_0( void );
+        ~CUniversalChunkDataParams_Params_v7_3_0( void );
 
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* );
@@ -161,8 +161,8 @@ namespace Basler_UniversalChunkDataParams
     //! \endcond
 
     private:
-        class CUniversalChunkDataParams_Params_v7_2_0_Data;
-        CUniversalChunkDataParams_Params_v7_2_0_Data* m_pCUniversalChunkDataParams_Params_v7_2_0_Data;
+        class CUniversalChunkDataParams_Params_v7_3_0_Data;
+        CUniversalChunkDataParams_Params_v7_3_0_Data* m_pCUniversalChunkDataParams_Params_v7_3_0_Data;
 
 
     //----------------------------------------------------------------------------------------------------------------
@@ -622,7 +622,7 @@ namespace Basler_UniversalChunkDataParams
         //! \name Categories: Root
         //@{
         /*!
-            \brief Index of the active sequencer set - Applies to: ace USB
+            \brief Index of the active sequencer set - Applies to: ace 2 GigE, ace 2 USB and ace USB
 
 
             Visibility: Beginner
@@ -721,10 +721,10 @@ namespace Basler_UniversalChunkDataParams
     //! \cond HIDE_CLASS_METHODS
 
         //! not implemented copy constructor
-        CUniversalChunkDataParams_Params_v7_2_0(CUniversalChunkDataParams_Params_v7_2_0&);
+        CUniversalChunkDataParams_Params_v7_3_0(CUniversalChunkDataParams_Params_v7_3_0&);
 
         //! not implemented assignment operator
-        CUniversalChunkDataParams_Params_v7_2_0& operator=(CUniversalChunkDataParams_Params_v7_2_0&);
+        CUniversalChunkDataParams_Params_v7_3_0& operator=(CUniversalChunkDataParams_Params_v7_3_0&);
 
     //! \endcond
     };
@@ -736,7 +736,7 @@ namespace Basler_UniversalChunkDataParams
     The parameter class is used by the \link Pylon::CBaslerUniversalGrabResultPtr \c CBaslerUniversalGrabResultPtr \endlink class.
     More information can be found in the code of the \ref sample_Grab_ChunkImage sample.
     */
-    class CUniversalChunkDataParams_Params : public CUniversalChunkDataParams_Params_v7_2_0
+    class CUniversalChunkDataParams_Params : public CUniversalChunkDataParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -759,7 +759,7 @@ namespace Basler_UniversalChunkDataParams
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* pNodeMap )
         {
-            CUniversalChunkDataParams_Params_v7_2_0::_Initialize( pNodeMap );
+            CUniversalChunkDataParams_Params_v7_3_0::_Initialize( pNodeMap );
         }
         //! \endcond
     };

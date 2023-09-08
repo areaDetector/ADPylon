@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2019-2022 Basler AG
+//  Copyright (c) 2019-2023 Basler AG
 //  http://www.baslerweb.com
 //-----------------------------------------------------------------------------
 
@@ -180,7 +180,7 @@ namespace Basler_UniversalCameraParams
     {
         BalanceWhiteAuto_Continuous,  //!< White balance is adjusted continuously while images are being acquired - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress, dart 2 USB, dart MIPI, dart USB and pulse USB
         BalanceWhiteAuto_Off,  //!< The Balance White Auto auto function is disabled - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress, dart 2 USB, dart MIPI, dart USB and pulse USB
-        BalanceWhiteAuto_Once  //!< White balance is adjusted automatically to reach the specified target value - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress, dart 2 USB, dart USB and pulse USB
+        BalanceWhiteAuto_Once  //!< White balance is adjusted automatically to reach the specified target value - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress, dart 2 USB, dart MIPI, dart USB and pulse USB
     };
 
     //! Valid values for BandwidthReserveMode
@@ -320,8 +320,8 @@ namespace Basler_UniversalCameraParams
     //! Valid values for BslDefectPixelCorrectionMode
     enum BslDefectPixelCorrectionModeEnums
     {
-        BslDefectPixelCorrectionMode_Off,  //!< Defect pixel correction is disabled - Applies to: dart 2 USB
-        BslDefectPixelCorrectionMode_On,  //!< Defect pixel correction is enabled - Applies to: dart 2 USB
+        BslDefectPixelCorrectionMode_Off,  //!< Defect pixel correction is disabled - Applies to: dart 2 USB and dart MIPI
+        BslDefectPixelCorrectionMode_On,  //!< Defect pixel correction is enabled - Applies to: dart 2 USB and dart MIPI
         BslDefectPixelCorrectionMode_StaticOnly  //!< Only static defect pixel correction is enabled - Applies to: dart 2 USB
     };
 
@@ -331,6 +331,20 @@ namespace Basler_UniversalCameraParams
         BslExposureTimeMode_Short,  //!< The exposure time mode is set to Short - Applies to: boost CoaXPress
         BslExposureTimeMode_Standard,  //!< The exposure time mode is set to Standard - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
         BslExposureTimeMode_UltraShort  //!< The exposure time mode is set to Ultra Short - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+    };
+
+    //! Valid values for BslFlareRemovalAuto
+    enum BslFlareRemovalAutoEnums
+    {
+        BslFlareRemovalAuto_Continuous,  //!< Automatic flare removal is enabled - Applies to: dart MIPI
+        BslFlareRemovalAuto_Off  //!< Automatic flare removal is disabled - Applies to: dart MIPI
+    };
+
+    //! Valid values for BslFocusAutoROIMode
+    enum BslFocusAutoROIModeEnums
+    {
+        BslFocusAutoROIMode_Auto,  //!< Applies to: dart MIPI
+        BslFocusAutoROIMode_Manual  //!< Applies to: dart MIPI
     };
 
     //! Valid values for BslImmediateTriggerMode
@@ -599,6 +613,28 @@ namespace Basler_UniversalCameraParams
         BslSerialRxSource_SerialTx  //!< The source of the Rx serial input is set to Serial Tx - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
     };
 
+    //! Valid values for BslStaticDefectPixelCorrectionFileStatus
+    enum BslStaticDefectPixelCorrectionFileStatusEnums
+    {
+        BslStaticDefectPixelCorrectionFileStatus_FileEmpty,  //!< The defect pixel correction file has no entries - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionFileStatus_FileNotFound,  //!< The defect pixel correction file can't be found - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionFileStatus_FileOk,  //!< The defect pixel correction file is valid - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionFileStatus_FileStatusUnknown,  //!< The status of the defect pixel correction file is unknown   - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionFileStatus_InvalidClustering,  //!< An invalid cluster has been found - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionFileStatus_InvalidFileEntry,  //!< At least one entry in the defect pixel correction file has an invalid size - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionFileStatus_InvalidHeader,  //!< The defect pixel correction file header is invalid - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionFileStatus_InvalidSize,  //!< The defect pixel correction file size is invalid - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionFileStatus_InvalidSorting  //!< The sorting of entries in the defect pixel correction file is invalid - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+    };
+
+    //! Valid values for BslStaticDefectPixelCorrectionMode
+    enum BslStaticDefectPixelCorrectionModeEnums
+    {
+        BslStaticDefectPixelCorrectionMode_Factory,  //!< Static defect pixel correction is based on the defect pixels stored in the factory correction file - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionMode_Off,  //!< Static defect pixel correction is disabled - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        BslStaticDefectPixelCorrectionMode_User  //!< Static defect pixel correction is based on the defect pixels stored in the user correction file - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+    };
+
     //! Valid values for BslTemperatureStatus
     enum BslTemperatureStatusEnums
     {
@@ -661,8 +697,8 @@ namespace Basler_UniversalCameraParams
     //! Valid values for BslVignettingCorrectionMode
     enum BslVignettingCorrectionModeEnums
     {
-        BslVignettingCorrectionMode_Off,  //!< The vignetting correction is disabled - Applies to: boost CoaXPress
-        BslVignettingCorrectionMode_On  //!< The vignetting correction is enabled - Applies to: boost CoaXPress
+        BslVignettingCorrectionMode_Off,  //!< The vignetting correction is disabled - Applies to: boost CoaXPress and dart MIPI
+        BslVignettingCorrectionMode_On  //!< The vignetting correction is enabled - Applies to: boost CoaXPress and dart MIPI
     };
 
     //! Valid values for CameraOperationMode
@@ -778,7 +814,7 @@ namespace Basler_UniversalCameraParams
         ChunkSelector_PayloadCRC16,  //!< The CRC Checksum chunk can be enabled - Applies to: GigE, ace 2 GigE, ace 2 USB, ace USB and dart 2 USB
         ChunkSelector_PixelFormat,  //!< The Pixel Format chunk can be enabled - Applies to: GigE
         ChunkSelector_SequenceSetIndex,  //!< The Sequence Set Index chunk can be enabled - Applies to: GigE
-        ChunkSelector_SequencerSetActive,  //!< The Sequencer Set Active chunk can be enabled - Applies to: ace USB
+        ChunkSelector_SequencerSetActive,  //!< The Sequencer Set Active chunk can be enabled - Applies to: ace 2 GigE, ace 2 USB and ace USB
         ChunkSelector_ShaftEncoderCounter,  //!< The Shaft Encoder Counter chunk can be enabled - Applies to: GigE
         ChunkSelector_Stride,  //!< The Stride chunk can be enabled - Applies to: GigE
         ChunkSelector_Timestamp,  //!< The Timestamp chunk can be enabled - Applies to: GigE, ace 2 GigE, ace 2 USB, ace USB and dart 2 USB
@@ -1404,10 +1440,12 @@ namespace Basler_UniversalCameraParams
         FileSelector_BootUpdate,  //!< The Boot Firmware Update file is selected - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         FileSelector_BootUpdatePackage,  //!< The Boot Firmware Update Package file is selected - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         FileSelector_ExpertFeature7File,  //!< The Expert Feature 7 File file is selected - Applies to: CameraLink, GigE and ace USB
+        FileSelector_FactoryDefectPixelCorrection,  //!< The factory defect pixel correction file is selected - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
         FileSelector_FirmwareUpdate,  //!< The Firmware Update file is selected - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         FileSelector_FirmwareUpdatePackage,  //!< The Firmware Update Package file is selected - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         FileSelector_None,  //!< No file is selected - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         FileSelector_UserData,  //!< The User Data file is selected - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress and dart 2 USB
+        FileSelector_UserDefectPixelCorrection,  //!< The user defect pixel correction file is selected - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
         FileSelector_UserGainShading1,  //!< The User Gain Shading 1 file is selected - Applies to: CameraLink, GigE and ace USB
         FileSelector_UserGainShading2,  //!< The User Gain Shading 2 file is selected - Applies to: CameraLink, GigE and ace USB
         FileSelector_UserOffsetShading1,  //!< The User Offset Shading 1 file is selected - Applies to: CameraLink, GigE and ace USB
@@ -1416,6 +1454,21 @@ namespace Basler_UniversalCameraParams
         FileSelector_UserSet2,  //!< The User Set 2 file is selected - Applies to: CameraLink, GigE and ace USB
         FileSelector_UserSet3,  //!< The User Set 3 file is selected - Applies to: CameraLink, GigE and ace USB
         FileSelector_VignettingCorrection  //!< The Vignetting Correction file is selected - Applies to: GigE, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress and dart 2 USB
+    };
+
+    //! Valid values for FocusAuto
+    enum FocusAutoEnums
+    {
+        FocusAuto_Continuous,  //!< The autofocus is adjusted continuously while images are being acquired - Applies to: dart MIPI
+        FocusAuto_Off,  //!< Automatic autofocus adjustment is disabled - Applies to: dart MIPI
+        FocusAuto_Once  //!< The autofocus is adjusted automatically once while images are being acquired - Applies to: dart MIPI
+    };
+
+    //! Valid values for FocusStatus
+    enum FocusStatusEnums
+    {
+        FocusStatus_Busy,  //!< The focus controller is executing a command - Applies to: dart MIPI
+        FocusStatus_Ready  //!< The focus controller is ready to use - Applies to: dart MIPI
     };
 
     //! Valid values for FrequencyConverterInputSource
@@ -1737,6 +1790,12 @@ namespace Basler_UniversalCameraParams
     {
         OperatingMode_LongRange,  //!< The operating mode is set to Long Range - Applies to: blaze
         OperatingMode_ShortRange  //!< The operating mode is set to Short Range - Applies to: blaze
+    };
+
+    //! Valid values for OpticControllerSelector
+    enum OpticControllerSelectorEnums
+    {
+        OpticControllerSelector_OpticController1  //!< Selects Optic Controller 1 - Applies to: dart MIPI
     };
 
     //! Valid values for OverlapMode
@@ -2123,42 +2182,63 @@ namespace Basler_UniversalCameraParams
     //! Valid values for SequencerConfigurationMode
     enum SequencerConfigurationModeEnums
     {
-        SequencerConfigurationMode_Off,  //!< The sequencer can't be configured - Applies to: ace USB
-        SequencerConfigurationMode_On  //!< The sequencer can be configured - Applies to: ace USB
+        SequencerConfigurationMode_Off,  //!< The sequencer can't be configured - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerConfigurationMode_On  //!< The sequencer can be configured - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
     };
 
     //! Valid values for SequencerMode
     enum SequencerModeEnums
     {
-        SequencerMode_Off,  //!< The sequencer can't be used for image acquisition - Applies to: ace USB
-        SequencerMode_On  //!< The sequencer can be used for image acquisition - Applies to: ace USB
+        SequencerMode_Off,  //!< The sequencer can't be used for image acquisition - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerMode_On  //!< The sequencer can be used for image acquisition - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
     };
 
     //! Valid values for SequencerTriggerActivation
     enum SequencerTriggerActivationEnums
     {
-        SequencerTriggerActivation_AnyEdge,  //!< The sequencer advances when the source signal falls or rises - Applies to: ace USB
-        SequencerTriggerActivation_FallingEdge,  //!< The sequencer advances when the source signal falls - Applies to: ace USB
-        SequencerTriggerActivation_LevelHigh,  //!< The sequencer advances when the source signal is high - Applies to: ace USB
-        SequencerTriggerActivation_LevelLow,  //!< The sequencer advances when the source signal is low - Applies to: ace USB
-        SequencerTriggerActivation_RisingEdge  //!< The sequencer advances when the source signal rises - Applies to: ace USB
+        SequencerTriggerActivation_AnyEdge,  //!< The sequencer advances when the source signal falls or rises - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerActivation_FallingEdge,  //!< The sequencer advances when the source signal falls - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerActivation_LevelHigh,  //!< The sequencer advances when the source signal is high - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerActivation_LevelLow,  //!< The sequencer advances when the source signal is low - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerActivation_RisingEdge  //!< The sequencer advances when the source signal rises - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
     };
 
     //! Valid values for SequencerTriggerSource
     enum SequencerTriggerSourceEnums
     {
-        SequencerTriggerSource_Counter1End,  //!< Counter 1 End signals can be used to advance to the next sequence set - Applies to: ace USB
-        SequencerTriggerSource_Counter2End,  //!< Counter 2 End signals can be used to advance to the next sequence set - Applies to: ace USB
+        SequencerTriggerSource_AcquisitionActive,  //!< Acquisition Active signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_Action1,  //!< Action 1 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE
+        SequencerTriggerSource_Action2,  //!< Action 2 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE
+        SequencerTriggerSource_Counter1Active,  //!< Counter 1 Active signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_Counter1End,  //!< Counter 1 End signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerSource_Counter1Start,  //!< Counter 1 Start signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_Counter2Active,  //!< Counter 2 Active signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_Counter2End,  //!< Counter 2 End signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerSource_Counter2Start,  //!< Counter 2 Start signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
         SequencerTriggerSource_Counter3End,  //!< Counter 3 End is selected as the trigger source for sequencer set advance - Applies to: ace USB
+        SequencerTriggerSource_CxpTrigger0,  //!< CXP Trigger 0 signals can be used to advance to the next sequence set - Applies to: boost CoaXPress
+        SequencerTriggerSource_CxpTrigger1,  //!< CXP Trigger 1 signals can be used to advance to the next sequence set - Applies to: boost CoaXPress
+        SequencerTriggerSource_ExposureActive,  //!< Exposure Active signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_ExposureStart,  //!< Exposure Start signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_ExposureTriggerWait,  //!< Exposure Trigger Wait signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_FrameBurstActive,  //!< Frame Burst Active signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_FrameBurstTriggerWait,  //!< Frame Burst Trigger Wait signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
         SequencerTriggerSource_FrameEnd,  //!< Frame End is selected as the trigger source for sequencer set advance - Applies to: ace USB
         SequencerTriggerSource_FrameStart,  //!< Frame Start signals can be used to advance to the next sequence set - Applies to: ace USB
-        SequencerTriggerSource_Line1,  //!< Line 1 signals can be used to advance to the next sequence set - Applies to: ace USB
-        SequencerTriggerSource_Line2,  //!< Line 2 signals can be used to advance to the next sequence set - Applies to: ace USB
-        SequencerTriggerSource_Line3,  //!< Line 3 signals can be used to advance to the next sequence set - Applies to: ace USB
+        SequencerTriggerSource_FrameTriggerWait,  //!< Frame Trigger Wait signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_Line1,  //!< Line 1 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerSource_Line2,  //!< Line 2 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerSource_Line3,  //!< Line 3 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
         SequencerTriggerSource_Line4,  //!< Line 4 signals can be used to advance to the next sequence set - Applies to: ace USB
-        SequencerTriggerSource_SoftwareSignal1,  //!< Software Signal 1 signals can be used to advance to the next sequence set - Applies to: ace USB
-        SequencerTriggerSource_SoftwareSignal2,  //!< Software Signal 2 signals can be used to advance to the next sequence set - Applies to: ace USB
-        SequencerTriggerSource_SoftwareSignal3  //!< Software Signal 3 signals can be used to advance to the next sequence set - Applies to: ace USB
+        SequencerTriggerSource_Off,  //!< The sequencer can't be triggered - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_PeriodicSignal1,  //!< Periodic Signal 1 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE
+        SequencerTriggerSource_SoftwareSignal1,  //!< Software Signal 1 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerSource_SoftwareSignal2,  //!< Software Signal 2 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerSource_SoftwareSignal3,  //!< Software Signal 3 signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
+        SequencerTriggerSource_Timer1Active,  //!< Timer 1 Active signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_Timer1End,  //!< Timer 1 End signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_Timer2Active,  //!< Timer 2 Active signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+        SequencerTriggerSource_Timer2End  //!< Timer 2 End signals can be used to advance to the next sequence set - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
     };
 
     //! Valid values for ShadingSelector
@@ -2391,8 +2471,8 @@ namespace Basler_UniversalCameraParams
     {
         TimerTriggerActivation_AnyEdge,  //!< Trigger on the rising or falling edge of the selected source - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         TimerTriggerActivation_FallingEdge,  //!< The timer will start at a falling edge signal change - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
-        TimerTriggerActivation_LevelHigh,  //!< Trigger is active as long as the selected source signal is on a logic high level - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
-        TimerTriggerActivation_LevelLow,  //!< Trigger is active as long as the selected source signal is on a logic low level - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
+        TimerTriggerActivation_LevelHigh,  //!< Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
+        TimerTriggerActivation_LevelLow,  //!< Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         TimerTriggerActivation_RisingEdge  //!< The timer will start at a rising edge signal change - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
     };
 
@@ -2413,7 +2493,7 @@ namespace Basler_UniversalCameraParams
         TimerTriggerSource_ExposureActive,  //!< The selected timer can be started by an Exposure Active signal - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         TimerTriggerSource_ExposureStart,  //!< The selected timer can be started by an Exposure Start signal - Applies to: CameraLink, GigE, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress and dart 2 USB
         TimerTriggerSource_ExposureTriggerWait,  //!< The selected timer can be started by an Exposure Trigger Wait signal - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
-        TimerTriggerSource_FlashWindowStart,  //!< The selected timer can be started by a Flash Window Start signal - Applies to: GigE and ace USB
+        TimerTriggerSource_FlashWindowStart,  //!< Starts with the reception of the flash window start - Applies to: GigE and ace USB
         TimerTriggerSource_FrameBurstActive,  //!< The selected timer can be started by a Frame Burst Active signal - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         TimerTriggerSource_FrameBurstTriggerWait,  //!< The selected timer can be started by a Frame Burst Trigger Wait signal - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
         TimerTriggerSource_FrameTriggerWait,  //!< The selected timer can be started by a Frame Trigger Wait signal - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
@@ -2666,7 +2746,7 @@ namespace Basler_UniversalCameraParams
     
     
     //**************************************************************************************************
-    // Parameter class CUniversalCameraParams_Params_v7_2_0
+    // Parameter class CUniversalCameraParams_Params_v7_3_0
     //**************************************************************************************************
     
 
@@ -2676,7 +2756,7 @@ namespace Basler_UniversalCameraParams
     The parameter class is used by the \c Pylon::CBaslerUniversalInstantCamera class.
     The \ref sample_ParametrizeCamera_NativeParameterAccess code sample shows how to access camera parameters via the \c Pylon::CBaslerUniversalInstantCamera class.
     */
-    class PYLONBASE_API CUniversalCameraParams_Params_v7_2_0
+    class PYLONBASE_API CUniversalCameraParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -2687,10 +2767,10 @@ namespace Basler_UniversalCameraParams
     //! \cond HIDE_CLASS_METHODS
         
         //! Constructor
-        CUniversalCameraParams_Params_v7_2_0( void );
+        CUniversalCameraParams_Params_v7_3_0( void );
 
         //! Destructor
-        ~CUniversalCameraParams_Params_v7_2_0( void );
+        ~CUniversalCameraParams_Params_v7_3_0( void );
 
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* );
@@ -2698,8 +2778,8 @@ namespace Basler_UniversalCameraParams
     //! \endcond
 
     private:
-        class CUniversalCameraParams_Params_v7_2_0_Data;
-        CUniversalCameraParams_Params_v7_2_0_Data* m_pCUniversalCameraParams_Params_v7_2_0_Data;
+        class CUniversalCameraParams_Params_v7_3_0_Data;
+        CUniversalCameraParams_Params_v7_3_0_Data* m_pCUniversalCameraParams_Params_v7_3_0_Data;
 
 
     //----------------------------------------------------------------------------------------------------------------
@@ -4350,7 +4430,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: AnalogControl
         //@{
         /*!
-            \brief Black level value to be applied to the currently selected sensor tap - Applies to: CamEmu, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress, dart 2 USB, dart USB and pulse USB
+            \brief Black level value to be applied to the currently selected sensor tap - Applies to: CamEmu, ace 2 GigE, ace 2 USB, ace USB, boost CoaXPress, dart 2 USB, dart MIPI, dart USB and pulse USB
 
 
             Visibility: Beginner
@@ -4736,7 +4816,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: ImageProcessingControl
         //@{
         /*!
-            \brief Identifies outlier pixels and adjusts their intensity value - Applies to: dart 2 USB
+            \brief Identifies outlier pixels and adjusts their intensity value - Applies to: dart 2 USB and dart MIPI
 
             Pixels that have a significantly higher or lower intensity value than the neighboring pixels are called outlier pixels. This feature identifies them and adjusts their intensity value.
 
@@ -4783,9 +4863,9 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: ErrorReportControl
         //@{
         /*!
-            \brief Indicates whether an internal error occured on the device - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
+            \brief Indicates whether an internal error occurred on the device - Applies to: ace 2 GigE, ace 2 USB, boost CoaXPress and dart 2 USB
 
-            Indicates whether an internal error occured on the device. If an error occured, you can use the Error Report Next command to determine the error code.
+            Indicates whether an internal error occurred on the device. If an error occurred, you can use the Error Report Next command to determine the error code.
 
             Visibility: Guru
 
@@ -4854,6 +4934,96 @@ namespace Basler_UniversalCameraParams
             The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslExposureTimeMode" target="_blank">feature documentation</a> may provide more information.
         */
         Pylon::IEnumParameterT<BslExposureTimeModeEnums>& BslExposureTimeMode;
+
+        //@}
+
+
+        //! \name Categories: ImageProcessingControl
+        //@{
+        /*!
+            \brief Sets FLARE control to continuous or off - Applies to: dart MIPI
+
+
+            Visibility: Beginner
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslFlareRemovalAuto" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IEnumParameterT<BslFlareRemovalAutoEnums>& BslFlareRemovalAuto;
+
+        //@}
+
+
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief Height of focus auto ROI - Applies to: dart MIPI
+
+
+            Visibility: Beginner
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslFocusAutoROIHeight" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IIntegerEx& BslFocusAutoROIHeight;
+
+        //@}
+
+
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief Sets the mode that determines the focus auto ROI - Applies to: dart MIPI
+
+
+            Visibility: Beginner
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslFocusAutoROIMode" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IEnumParameterT<BslFocusAutoROIModeEnums>& BslFocusAutoROIMode;
+
+        //@}
+
+
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief OffsetX of focus auto ROI - Applies to: dart MIPI
+
+
+            Visibility: Beginner
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslFocusAutoROIOffsetX" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IIntegerEx& BslFocusAutoROIOffsetX;
+
+        //@}
+
+
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief OffsetY of focus auto ROI - Applies to: dart MIPI
+
+
+            Visibility: Beginner
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslFocusAutoROIOffsetY" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IIntegerEx& BslFocusAutoROIOffsetY;
+
+        //@}
+
+
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief Width of focus auto ROI - Applies to: dart MIPI
+
+
+            Visibility: Beginner
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslFocusAutoROIWidth" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IIntegerEx& BslFocusAutoROIWidth;
 
         //@}
 
@@ -5037,7 +5207,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: BslLightControl
         //@{
         /*!
-            \brief Enables/disables the light control features - Applies to: GigE and ace USB
+            \brief Enables or disables the light control features - Applies to: GigE and ace USB
 
 
             Visibility: Expert
@@ -6277,6 +6447,67 @@ namespace Basler_UniversalCameraParams
         //@}
 
 
+        //! \name Categories: BslStaticDefectPixelCorrection
+        //@{
+        /*!
+            \brief Returns the file status of the defect pixel correction file - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+
+
+            Visibility: Guru
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslStaticDefectPixelCorrectionFileStatus" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IEnumParameterT<BslStaticDefectPixelCorrectionFileStatusEnums>& BslStaticDefectPixelCorrectionFileStatus;
+
+        //@}
+
+
+        //! \name Categories: BslStaticDefectPixelCorrection
+        //@{
+        /*!
+            \brief Maximum number of defect pixels that the factory or user correction file can contain - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+
+
+            Visibility: Guru
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslStaticDefectPixelCorrectionMaxDefects" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IIntegerEx& BslStaticDefectPixelCorrectionMaxDefects;
+
+        //@}
+
+
+        //! \name Categories: BslStaticDefectPixelCorrection
+        //@{
+        /*!
+            \brief Sets the static defect pixel correction mode - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+
+
+            Visibility: Beginner
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslStaticDefectPixelCorrectionMode" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IEnumParameterT<BslStaticDefectPixelCorrectionModeEnums>& BslStaticDefectPixelCorrectionMode;
+
+        //@}
+
+
+        //! \name Categories: BslStaticDefectPixelCorrection
+        //@{
+        /*!
+            \brief Reloads the user defect pixel correction file - Applies to: ace 2 GigE, ace 2 USB and boost CoaXPress
+
+            Reloads the user defect pixel correction file. This command must be executed if the user defect pixel correction file has been uploaded for the first time or has been updated.
+
+            Visibility: Guru
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslStaticDefectPixelCorrectionReload" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::ICommandEx& BslStaticDefectPixelCorrectionReload;
+
+        //@}
+
+
         //! \name Categories: DeviceControl
         //@{
         /*!
@@ -6570,11 +6801,11 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: VignettingCorrection
         //@{
         /*!
-            \brief Enables the vignetting correction - Applies to: boost CoaXPress
+            \brief Enables the vignetting correction - Applies to: boost CoaXPress and dart MIPI
 
             Enables the vignetting correction. This feature allows you to remove vignetting artifacts from your images. To do this, you first have to create vignetting correction data. For more information, see the Basler Product Documentation.
 
-            Visibility: Guru
+            Visibility: Beginner
 
             The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=BslVignettingCorrectionMode" target="_blank">feature documentation</a> may provide more information.
         */
@@ -7113,7 +7344,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: ChunkData and ChunkDataControl
         //@{
         /*!
-            \brief Index of the active sequencer set - Applies to: ace USB
+            \brief Index of the active sequencer set - Applies to: ace 2 GigE, ace 2 USB and ace USB
 
 
             Visibility: Beginner
@@ -10305,6 +10536,58 @@ namespace Basler_UniversalCameraParams
         //@}
 
 
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief Sets the operation mode of the Autofocus function - Applies to: dart MIPI
+
+            Sets the operation mode of the Autofocus function. The Continuous mode automatically adjusts the focus within an image area until the focus has been reached. The Once mode does it only one time. The Off mode enables the user to manually set the focus.
+
+            Visibility: Beginner
+
+            Selected by: OpticControllerSelector
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=FocusAuto" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IEnumParameterT<FocusAutoEnums>& FocusAuto;
+
+        //@}
+
+
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief Displays the status of the focus - Applies to: dart MIPI
+
+
+            Visibility: Beginner
+
+            Selected by: OpticControllerSelector
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=FocusStatus" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IEnumParameterT<FocusStatusEnums>& FocusStatus;
+
+        //@}
+
+
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief Stepper value of the focus lens actuator - Applies to: dart MIPI
+
+
+            Visibility: Expert
+
+            Selected by: OpticControllerSelector
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=FocusStepper" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IIntegerEx& FocusStepper;
+
+        //@}
+
+
         //! \name Categories: TransportLayerControl
         //@{
         /*!
@@ -11421,7 +11704,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: GigEVision and TransportLayer
         //@{
         /*!
-            \brief Percentage of the Ethernet bandwidth assigned to the camera to be held in reserve - Applies to: GigE and ace 2 GigE
+            \brief Percentage of the Ethernet bandwidth assigned to the camera to be held in reserve - Applies to: CamEmu, GigE and ace 2 GigE
 
             Percentage of the Ethernet bandwidth assigned to the camera to be held in reserve for packet resends and for the transmission of control data between the camera and the host computer. The setting is expressed as a percentage of the Bandwidth Assigned parameter. For example, if the Bandwidth Assigned parameter indicates that 30 MBytes/s have been assigned to the camera and the Bandwidth Reserve parameter is set to 5 %, the bandwidth reserve will be 1.5 MBytes/s.
 
@@ -11439,7 +11722,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: GigEVision and TransportLayer
         //@{
         /*!
-            \brief Multiplier for the Bandwidth Reserve parameter   - Applies to: GigE and ace 2 GigE
+            \brief Multiplier for the Bandwidth Reserve parameter   - Applies to: CamEmu, GigE and ace 2 GigE
 
             Multiplier for the Bandwidth Reserve parameter. The multiplier is used to establish an extra pool of reserved bandwidth that can be used if an unusually large burst of packet resends is needed.
 
@@ -11529,7 +11812,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: GigEVision and TransportLayer
         //@{
         /*!
-            \brief Frame transmission delay on the selected stream channel - Applies to: GigE and ace 2 GigE
+            \brief Frame transmission delay on the selected stream channel - Applies to: CamEmu, GigE and ace 2 GigE
 
             Frame transmission delay on the selected stream channel (in ticks). This value sets a delay before transmitting the acquired image.
 
@@ -11547,7 +11830,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: GigEVision and TransportLayer
         //@{
         /*!
-            \brief Delay between the transmission of each packet on the selected stream channel - Applies to: GigE and ace 2 GigE
+            \brief Delay between the transmission of each packet on the selected stream channel - Applies to: CamEmu, GigE and ace 2 GigE
 
             Delay between the transmission of each packet on the selected stream channel. The delay is measured in ticks.
 
@@ -11653,7 +11936,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: GigEVision and TransportLayer
         //@{
         /*!
-            \brief Packet size in bytes on the selected stream channel  Excludes data leader and data trailer - Applies to: GigE, ace 2 GigE and blaze
+            \brief Packet size in bytes on the selected stream channel  Excludes data leader and data trailer - Applies to: CamEmu, GigE, ace 2 GigE and blaze
 
             Packet size in bytes on the selected stream channel. Excludes data leader and data trailer. (The last packet may be smaller because the packet size is not necessarily a multiple of the block size of the stream channel.)
 
@@ -12901,6 +13184,23 @@ namespace Basler_UniversalCameraParams
             The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=OperatingMode" target="_blank">feature documentation</a> may provide more information.
         */
         Pylon::IEnumParameterT<OperatingModeEnums>& OperatingMode;
+
+        //@}
+
+
+        //! \name Categories: OpticControl
+        //@{
+        /*!
+            \brief Select which optic controller to configure - Applies to: dart MIPI
+
+
+            Visibility: Beginner
+
+            Selecting Parameters: FocusAuto, FocusStatus and FocusStepper
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=OpticControllerSelector" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IEnumParameterT<OpticControllerSelectorEnums>& OpticControllerSelector;
 
         //@}
 
@@ -14434,7 +14734,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Sets whether the sequencer can be configured - Applies to: ace USB
+            \brief Sets whether the sequencer can be configured - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
 
             Visibility: Expert
@@ -14449,7 +14749,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Sets whether the sequencer can be used for image acquisition - Applies to: ace USB
+            \brief Sets whether the sequencer can be used for image acquisition - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
 
             Visibility: Expert
@@ -14464,7 +14764,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Sets which path can be configured - Applies to: ace USB
+            \brief Sets which path can be configured - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
             Sets which path can be configured. By configuring multiple paths, you can define different conditions and settings for sequencer set advance. For example, you can define that the camera should advance to set 0 when a trigger signal on Line 1 is received, and advance to set 3 when a trigger signal on Line 2 is received.
 
@@ -14484,7 +14784,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Index number of the currently active sequencer set - Applies to: ace USB
+            \brief Index number of the currently active sequencer set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
             Index number of the current sequencer set, i.e., of the sequencer set that will be used for image acquisition.
 
@@ -14500,7 +14800,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Loads the parameter values of the currently selected sequencer set for configuration - Applies to: ace USB
+            \brief Loads the parameter values of the currently selected sequencer set for configuration - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
 
             Visibility: Expert
@@ -14517,7 +14817,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Next sequencer set that the sequencer will advance to when the configured trigger signal is received - Applies to: ace USB
+            \brief Next sequencer set that the sequencer will advance to when the configured trigger signal is received - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
 
             Visibility: Expert
@@ -14534,7 +14834,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Saves the sequencer parameter values in the currently selected sequencer set - Applies to: ace USB
+            \brief Saves the sequencer parameter values in the currently selected sequencer set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
 
             Visibility: Expert
@@ -14551,7 +14851,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief The sequencer set to be configured - Applies to: ace USB
+            \brief The sequencer set to be configured - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
             The sequencer set to be configured. Sequencer sets are identified by their sequencer set index numbers.
 
@@ -14569,7 +14869,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief First sequencer set to be used after the Sequencer Mode parameter is set to On - Applies to: ace USB
+            \brief First sequencer set to be used after the Sequencer Mode parameter is set to On - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
 
             Visibility: Expert
@@ -14584,7 +14884,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Sets the logical state that makes the sequencer advance to the next set - Applies to: ace USB
+            \brief Sets the logical state that makes the sequencer advance to the next set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
 
             Visibility: Expert
@@ -14601,7 +14901,7 @@ namespace Basler_UniversalCameraParams
         //! \name Categories: SequencerControl
         //@{
         /*!
-            \brief Sets the source signal to be used to advance to the next set - Applies to: ace USB
+            \brief Sets the source signal to be used to advance to the next set - Applies to: ace 2 GigE, ace 2 USB, ace USB and boost CoaXPress
 
 
             Visibility: Expert
@@ -16707,10 +17007,10 @@ namespace Basler_UniversalCameraParams
     //! \cond HIDE_CLASS_METHODS
 
         //! not implemented copy constructor
-        CUniversalCameraParams_Params_v7_2_0(CUniversalCameraParams_Params_v7_2_0&);
+        CUniversalCameraParams_Params_v7_3_0(CUniversalCameraParams_Params_v7_3_0&);
 
         //! not implemented assignment operator
-        CUniversalCameraParams_Params_v7_2_0& operator=(CUniversalCameraParams_Params_v7_2_0&);
+        CUniversalCameraParams_Params_v7_3_0& operator=(CUniversalCameraParams_Params_v7_3_0&);
 
     //! \endcond
     };
@@ -16722,7 +17022,7 @@ namespace Basler_UniversalCameraParams
     The parameter class is used by the \c Pylon::CBaslerUniversalInstantCamera class.
     The \ref sample_ParametrizeCamera_NativeParameterAccess code sample shows how to access camera parameters via the \c Pylon::CBaslerUniversalInstantCamera class.
     */
-    class CUniversalCameraParams_Params : public CUniversalCameraParams_Params_v7_2_0
+    class CUniversalCameraParams_Params : public CUniversalCameraParams_Params_v7_3_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -16745,7 +17045,7 @@ namespace Basler_UniversalCameraParams
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* pNodeMap )
         {
-            CUniversalCameraParams_Params_v7_2_0::_Initialize( pNodeMap );
+            CUniversalCameraParams_Params_v7_3_0::_Initialize( pNodeMap );
         }
         //! \endcond
     };

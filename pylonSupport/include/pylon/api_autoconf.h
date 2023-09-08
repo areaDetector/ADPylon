@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-//  Copyright (c) 2008-2022 Basler AG
+//  Copyright (c) 2008-2023 Basler AG
 //  Section: Basler Components
 //  Project: PYLON
 //  Author:  Thomas Koeller

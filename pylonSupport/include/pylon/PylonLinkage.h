@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2008-2022 Basler AG
+//  Copyright (c) 2008-2023 Basler AG
 //  http://www.baslerweb.com
 //  Author:  JS
 //-----------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 
 #if defined(PYLON_WIN_BUILD)
 
-#define PYLON_VERSION_SUFFIX "_v7_2"
+#define PYLON_VERSION_SUFFIX "_v7_3"
 
 #if !defined(PYLON_BUILD_DEBUG)
 #   if !defined(GENICAM_USER_ALWAYS_LINK_RELEASE)
