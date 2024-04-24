@@ -5,13 +5,13 @@ include $(TOP)/configure/CONFIG
 
 LIBRARY_IOC_WIN32 += ADPylon
 
-# External Python Linux SDK
+# External Pylon Linux SDK
 ifeq ($(WITH_PYLON), YES)
   LIBRARY_IOC_Linux += ADPylon
 
   USR_CPPFLAGS_Linux += -I $(PYLON_INCLUDE)
   USR_LDFLAGS_Linux += -L $(PYLON_LIB) -Wl,-rpath,$(PYLON_LIB)
-  LIB_SYS_LIBS_Linux  += pylonbase pylonutility
+  LIB_SYS_LIBS_Linux  += pylonbase pylonutility GenApi_gcc_v3_1_Basler_pylon GCBase_gcc_v3_1_Basler_pylon
 endif
 
 # Pylon Windows SDK
