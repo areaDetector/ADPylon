@@ -7,6 +7,8 @@ PROD_NAME = pylonApp
 PROD_IOC_WIN32 += $(PROD_NAME)
 ifeq ($(WITH_PYLON), YES)
 PROD_IOC_Linux += $(PROD_NAME)
+USR_LDFLAGS_Linux += -L $(PYLON_LIB) -Wl,-rpath,$(PYLON_LIB)
+PROD_SYS_LIBS_Linux  += GenApi_gcc_v3_1_Basler_pylon GCBase_gcc_v3_1_Basler_pylon pylonbase pylonutility 
 endif
 
 # <name>.dbd will be created from <name>Include.dbd
