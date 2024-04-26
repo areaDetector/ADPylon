@@ -5,8 +5,23 @@ include $(TOP)/configure/CONFIG
 
 PROD_NAME = pylonApp
 PROD_IOC_WIN32 += $(PROD_NAME)
+
+ifeq ($(STATIC_BUILD), YES)
+  PROD_LIBS_WIN32 += PylonUtility_v7_3
+  PROD_LIBS_WIN32 += PylonBase_v7_3
+  PROD_LIBS_WIN32 += GenApi_MD_VC141_v3_1_Basler_pylon
+  PROD_LIBS_WIN32 += GCBase_MD_VC141_v3_1_Basler_pylon
+endif
+
 ifeq ($(WITH_PYLON), YES)
-PROD_IOC_Linux += $(PROD_NAME)
+  PROD_IOC_Linux += $(PROD_NAME)
+    ifeq ($(STATIC_BUILD), YES)
+      PROD_LDFLAGS_Linux += -L $(PYLON_LIB) -Wl,-rpath,$(PYLON_LIB)
+      PROD_SYS_LIBS_Linux += pylonutility
+      PROD_SYS_LIBS_Linux += pylonbase
+      PROD_SYS_LIBS_Linux += GenApi_gcc_v3_1_Basler_pylon
+      PROD_SYS_LIBS_Linux += GCBase_gcc_v3_1_Basler_pylon
+    endif
 endif
 
 # <name>.dbd will be created from <name>Include.dbd
