@@ -469,6 +469,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     int convertShiftBits;
     size_t dims[3];
     int nDims;
+    int xDim=0, yDim=1, binX, binY;
     int uniqueIdMode;
     int timeStampMode;
     int imageCounter;
@@ -571,10 +572,14 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
 
     if (colorMode == NDColorModeMono || colorMode == NDColorModeBayer) {
         nDims = 2;
+        xDim = 0;
+        yDim = 1;
         dims[0] = nCols;
         dims[1] = nRows;
     } else {
         nDims = 3;
+        xDim = 1;
+        yDim = 2;
         dims[0] = 3;
         dims[1] = nCols;
         dims[2] = nRows;
@@ -603,6 +608,16 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         goto done;
     }
 
+    /* The buffer structure does not contain the binning, get that from param lib,
+     * but it could be wrong for this frame if recently changed */
+    getIntegerParam(ADBinX, &binX);
+    getIntegerParam(ADBinY, &binY);
+
+    // Update the ROI information
+    pRaw->dims[xDim].offset = pGrabResult->GetOffsetX();
+    pRaw->dims[xDim].binning = binX;
+    pRaw->dims[yDim].offset = pGrabResult->GetOffsetY();
+    pRaw->dims[yDim].binning = binY;
     // Put the frame number into the buffer
     getIntegerParam(PYLONUniqueIdMode, &uniqueIdMode);
     if (uniqueIdMode == UniqueIdCamera) {
