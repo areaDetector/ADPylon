@@ -488,6 +488,9 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         status = asynError;
         goto done;
     }
+    // Update attributes before possible data processing, so that they reflect the current values
+    this->pAttributeList->updateValues();
+
     nCols = pGrabResult->GetWidth();
     nRows = pGrabResult->GetHeight();
     pixelType = pGrabResult->GetPixelType();
@@ -648,8 +651,8 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         extractChunkData(pGrabResult->GetChunkDataNodeMap(), pRaw->pAttributeList);
     }
 
-    // Get any attributes that have been defined for this driver
-    getAttributes(pRaw->pAttributeList);
+    // Copy any attributes that have been defined for this driver
+    this->pAttributeList->copy(pRaw->pAttributeList);
     pRaw->pAttributeList->add("ColorMode", "Color mode", NDAttrInt32, &colorMode);
     pRaw->pAttributeList->add("BayerPattern", "Bayer Pattern", NDAttrInt32, &bayerFormat);
     getIntegerParam(NDArrayCounter, &imageCounter);
