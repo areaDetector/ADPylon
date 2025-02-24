@@ -177,6 +177,7 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
                          size_t maxMemory, int priority, int stackSize )
     : ADGenICam(portName, maxMemory, priority, stackSize),
     cameraId_(cameraId),
+    ticksPerSecond_(1e9),
     exiting_(false),
     acquiring_(false),
     uniqueId_(0),
@@ -633,7 +634,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     getIntegerParam(PYLONTimeStampMode, &timeStampMode);
     // Set the timestamps in the buffer
     if (timeStampMode == TimeStampCamera) {
-        pRaw->timeStamp = pGrabResult->GetTimeStamp() / 1e9;
+        pRaw->timeStamp = pGrabResult->GetTimeStamp() / ticksPerSecond_;
     } else {
         pRaw->timeStamp = pRaw->epicsTS.secPastEpoch + pRaw->epicsTS.nsec/1e9;
     }
@@ -783,6 +784,14 @@ asynStatus ADPylon::startCapture()
     try {
         decompressor_.SetCompressionDescriptor(camera_.GetNodeMap());
     } catch (const Pylon::GenericException& /*e*/) {
+    }
+
+    // Get camera tick frequency. For older GigE cameras, it can change based on whether PTP is enabled.
+    GenICamFeature *pFearue = mGCFeatureSet.getByName("GevTimestampTickFrequency");
+    if (pFearue) {
+        epicsInt64 value = pFearue->readInteger();
+        if (value)
+            ticksPerSecond_ = (double)value;
     }
 
     getIntegerParam(ADImageMode, &imageMode);
