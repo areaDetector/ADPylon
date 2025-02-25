@@ -646,6 +646,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     setIntegerParam(NDDataType, dataType);
     setIntegerParam(NDColorMode, colorMode);
     setIntegerParam(NDBayerPattern, bayerFormat);
+    setDoubleParam(NDTimeStamp, pRaw->timeStamp);
 
     // Extract chunk data as NDArray attributes and optionally set to EPICS database.
     if (pGrabResult->IsChunkDataAvailable()) {
