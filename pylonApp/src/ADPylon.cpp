@@ -479,6 +479,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     Pylon::CompressionInfo_t compressionInfo;
     Pylon::CPylonImage outputImage;
     NDArray *pRaw = NULL;
+    epicsTimeStamp epicsTS;
     static const char *functionName = "processFrame";
 
     lock();
@@ -491,6 +492,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     }
     // Update attributes before possible data processing, so that they reflect the current values
     this->pAttributeList->updateValues();
+    updateTimeStamp(&epicsTS);
 
     nCols = pGrabResult->GetWidth();
     nRows = pGrabResult->GetHeight();
@@ -630,7 +632,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         pRaw->uniqueId = uniqueId_;
     }
     uniqueId_++;
-    updateTimeStamp(&pRaw->epicsTS);
+    pRaw->epicsTS = epicsTS;
     getIntegerParam(PYLONTimeStampMode, &timeStampMode);
     // Set the timestamps in the buffer
     if (timeStampMode == TimeStampCamera) {
