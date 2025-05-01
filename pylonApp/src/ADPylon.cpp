@@ -281,8 +281,10 @@ void ADPylon::cameraDisconnected()
 {
     this->deviceIsReachable = false;
     this->disconnect(pasynUserSelf);
+    setIntegerParam(ADAcquire, 0);
     setIntegerParam(ADStatus, ADStatusDisconnected);
     setStringParam(ADStatusMessage, "Camera disconnected");
+    callParamCallbacks();
 
     // Detach and close Pylon device
     camera_.Close();
