@@ -301,11 +301,12 @@ asynStatus ADPylon::connectCamera(void)
     static const char *functionName = "connectCamera";
 
     try {
+        Pylon::DeviceInfoList devices;
+        Pylon::CTlFactory::GetInstance().EnumerateDevices(devices);
+
         // If cameraId_ is a number < 1000, use it as the index
         if (cameraId_.size()<4 && std::all_of(cameraId_.begin(), cameraId_.end(), isdigit)) {
             size_t index = std::stoi(cameraId_);
-            Pylon::DeviceInfoList devices;
-            Pylon::CTlFactory::GetInstance().EnumerateDevices(devices);
             if (index < devices.size()) {
                 camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(devices[index]), Pylon::Cleanup_Delete);
             } else {
@@ -314,9 +315,19 @@ asynStatus ADPylon::connectCamera(void)
                 return asynError;
             }
         } else {
-            Pylon::CDeviceInfo deviceInfo;
-            deviceInfo.SetSerialNumber(cameraId_.c_str());
-            camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(deviceInfo), Pylon::Cleanup_Delete);
+            bool found = false;
+            for (auto &device : devices) {
+                if (device.GetSerialNumber() == cameraId_.c_str()) {
+                    camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(device), Pylon::Cleanup_Delete);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                    "%s::%s camera %s not found\n", driverName, functionName, cameraId_.c_str());
+                return asynError;
+            }
         }
         camera_.RegisterImageEventHandler(new ADPylonImageEventHandler(this), Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
         camera_.RegisterConfiguration(new ADPylonConfigurationEventHandler(this), Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
