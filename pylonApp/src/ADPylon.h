@@ -45,6 +45,9 @@ public:
     void cameraDisconnected();
     void readEventData (int index);
 
+    void cameraDisconnectTask();
+    epicsEventId disconnectEventId_;
+
 protected:
     asynStatus extractChunkData(const GenApi::INodeMap& nodeMap, NDAttributeList *pAttributeList);
 

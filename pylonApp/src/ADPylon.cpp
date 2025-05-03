@@ -108,9 +108,13 @@ public:
     /** Called when a camera device removal from the PC has been detected. */
     virtual void OnCameraDeviceRemoved( Pylon::CInstantCamera& /*camera*/ )
     {
-        driver_->lock();
-        driver_->cameraDisconnected();
-        driver_->unlock();
+        /** Notify the PylonCameraTask thread, instead of calling cameraDisconnected directly.
+         * Because this method is invoked with camera object locked.
+         * calling cameraDisconnected will acquire asyn port lock.
+         * However a normal camera interaction acquires the locks in the reverse order.
+         * This could cause a deadlock.
+         */
+        epicsEventSignal(driver_->disconnectEventId_);
     }
 private:
     ADPylon *driver_;
@@ -165,6 +169,13 @@ static void imageGrabTaskC(void *drvPvt)
     ADPylon *pPvt = (ADPylon *)drvPvt;
 
     pPvt->imageGrabTask();
+}
+
+static void cameraDisconnectTaskC(void *drvPvt)
+{
+    ADPylon *pPvt = (ADPylon *)drvPvt;
+
+    pPvt->cameraDisconnectTask();
 }
 
 static void c_shutdown(void *drvPvt)
@@ -231,6 +242,7 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
 
     startEventId_ = epicsEventCreate(epicsEventEmpty);
     newFrameEventId_ = epicsEventCreate(epicsEventEmpty);
+    disconnectEventId_ = epicsEventCreate(epicsEventEmpty);
 
     TLStatisticsFeatureNames_.push_back("Statistic_Total_Buffer_Count");
     TLStatisticsFeatureNames_.push_back("Statistic_Failed_Buffer_Count");
@@ -245,6 +257,12 @@ ADPylon::ADPylon(const char *portName, const char *cameraId,
                       epicsThreadPriorityMedium,
                       epicsThreadGetStackSize(epicsThreadStackMedium),
                       imageGrabTaskC, this);
+
+    // launch image read task
+    epicsThreadCreate("PylonCameraTask",
+                      epicsThreadPriorityMedium,
+                      epicsThreadGetStackSize(epicsThreadStackMedium),
+                      cameraDisconnectTaskC, this);
 
     // shutdown on exit
     epicsAtExit(c_shutdown, this);
@@ -291,13 +309,36 @@ void ADPylon::cameraDisconnected()
 {
     this->deviceIsReachable = false;
     this->disconnect(pasynUserSelf);
+    this->acquiring_ = false;
     setIntegerParam(ADAcquire, 0);
     setIntegerParam(ADStatus, ADStatusDisconnected);
     setStringParam(ADStatusMessage, "Camera disconnected");
     callParamCallbacks();
 
-    // Detach and close Pylon device
-    camera_.Close();
+    // Close camera and ignore any exceptions
+    try {
+        camera_.StopGrabbing();
+        camera_.Close();
+    } catch (const Pylon::GenericException& /*e*/) {
+    }
+}
+
+/**
+ * Handle the camera disconnection event.
+ */
+void ADPylon::cameraDisconnectTask()
+{
+    static const char *functionName = "cameraDisconnectTask";
+
+    while (!exiting_) {
+        epicsEventWait(disconnectEventId_);
+        lock();
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s:%s:  camera disconnected\n",
+            driverName, functionName);
+        cameraDisconnected();
+        unlock();
+    }
 }
 
 void ADPylon::readEventData(int index)
