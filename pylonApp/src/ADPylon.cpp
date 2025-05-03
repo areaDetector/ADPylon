@@ -775,7 +775,8 @@ asynStatus ADPylon::extractChunkData(const GenApi::INodeMap &nodeMap, NDAttribut
     {
         /* Assume chunk parameter with "Chunk" prefix */
         if (node->GetAccessMode() != GenApi::RO ||
-            epicsStrGlobMatch(node->GetName(), "Chunk*") != 1)
+            (epicsStrGlobMatch(node->GetName(), "Chunk*") != 1 &&
+             epicsStrGlobMatch(node->GetName(), "BslChunk*") != 1))
             continue;
 
         try {
