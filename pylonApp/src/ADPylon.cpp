@@ -84,7 +84,11 @@ public:
     virtual void OnCameraEvent(Pylon::CInstantCamera& /*camera*/, intptr_t userProvidedId, GenApi::INode* /*pNode*/)
     {
         driver_->lock();
-        driver_->readEventData((int)userProvidedId);
+        try {
+            driver_->readEventData((int)userProvidedId);
+        } catch (const GenICam::GenericException &e) {
+            fprintf(stderr, "OnCameraEvent %s", e.GetDescription());
+        }
         driver_->unlock();
     }
 
@@ -124,7 +128,13 @@ public:
     /** Called when an image has been grabbed. */
     virtual void OnImageGrabbed( Pylon::CInstantCamera& /*camera*/, const Pylon::CGrabResultPtr& ptrGrabResult )
     {
-        driver_->processFrame(ptrGrabResult);
+        driver_->lock();
+        try {
+            driver_->processFrame(ptrGrabResult);
+        } catch (const GenICam::GenericException &e) {
+            fprintf(stderr, "OnImageGrabbed %s", e.GetDescription());
+        }
+        driver_->unlock();
     }
 
 private:
@@ -495,11 +505,10 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     epicsTimeStamp epicsTS;
     static const char *functionName = "processFrame";
 
-    lock();
     if (!pGrabResult->GrabSucceeded()) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-            "%s::%s error in grabbing\n",
-            driverName, functionName);
+            "%s::%s error in grabbing: %s\n",
+            driverName, functionName, pGrabResult->GetErrorDescription().c_str());
         status = asynError;
         goto done;
     }
@@ -510,7 +519,15 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     nCols = pGrabResult->GetWidth();
     nRows = pGrabResult->GetHeight();
     pixelType = pGrabResult->GetPixelType();
-    outputImage.AttachGrabResultBuffer(pGrabResult);
+    try {
+        outputImage.AttachGrabResultBuffer(pGrabResult);
+    } catch (const Pylon::GenericException& e) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s::%s error attaching image buffer: %s\n",
+            driverName, functionName, e.GetDescription());
+        status = asynError;
+        goto done;
+    }
 
     // Check whether the image was compressed by the camera and is still compressed (could have been decompressed by a transport layer).
     if (decompressor_.GetCompressionInfo(compressionInfo, pGrabResult) && compressionInfo.hasCompressedImage) {
@@ -697,7 +714,6 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     if (pRaw) pRaw->release();
     //pGrabResult.Release();
     epicsEventSignal(newFrameEventId_);
-    unlock();
     return status;
 }
 
