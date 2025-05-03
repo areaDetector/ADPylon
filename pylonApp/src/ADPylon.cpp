@@ -535,6 +535,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     size_t dims[3];
     int nDims;
     int xDim=0, yDim=1, binX, binY;
+    size_t offsetX, offsetY;
     int uniqueIdMode;
     int timeStampMode;
     int imageCounter;
@@ -557,28 +558,34 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     this->pAttributeList->updateValues();
     updateTimeStamp(&epicsTS);
 
-    nCols = pGrabResult->GetWidth();
-    nRows = pGrabResult->GetHeight();
-    pixelType = pGrabResult->GetPixelType();
-    try {
-        outputImage.AttachGrabResultBuffer(pGrabResult);
-    } catch (const Pylon::GenericException& e) {
-        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-            "%s::%s error attaching image buffer: %s\n",
-            driverName, functionName, e.GetDescription());
-        status = asynError;
-        goto done;
-    }
-
     // Check whether the image was compressed by the camera and is still compressed (could have been decompressed by a transport layer).
     if (decompressor_.GetCompressionInfo(compressionInfo, pGrabResult) && compressionInfo.hasCompressedImage) {
         if (compressionInfo.compressionStatus == Pylon::CompressionStatus_Ok) {
-            outputImage.Release();
+            nCols = compressionInfo.width;
+            nRows = compressionInfo.height;
+            pixelType = compressionInfo.pixelType;
+            offsetX = compressionInfo.offsetX;
+            offsetY = compressionInfo.offsetY;
             decompressor_.DecompressImage(outputImage, pGrabResult);
         } else {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                 "%s::%s error in decompression\n",
                 driverName, functionName);
+            status = asynError;
+            goto done;
+        }
+    } else {
+        try {
+            nCols = pGrabResult->GetWidth();
+            nRows = pGrabResult->GetHeight();
+            pixelType = pGrabResult->GetPixelType();
+            offsetX = pGrabResult->GetOffsetX();
+            offsetY = pGrabResult->GetOffsetY();
+            outputImage.AttachGrabResultBuffer(pGrabResult);
+        } catch (const Pylon::GenericException& e) {
+            asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                "%s::%s error attaching image buffer: %s\n",
+                driverName, functionName, e.GetDescription());
             status = asynError;
             goto done;
         }
@@ -691,9 +698,9 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     getIntegerParam(ADBinY, &binY);
 
     // Update the ROI information
-    pRaw->dims[xDim].offset = pGrabResult->GetOffsetX();
+    pRaw->dims[xDim].offset = offsetX;
     pRaw->dims[xDim].binning = binX;
-    pRaw->dims[yDim].offset = pGrabResult->GetOffsetY();
+    pRaw->dims[yDim].offset = offsetY;
     pRaw->dims[yDim].binning = binY;
     // Put the frame number into the buffer
     getIntegerParam(PYLONUniqueIdMode, &uniqueIdMode);
