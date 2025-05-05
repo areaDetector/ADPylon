@@ -532,7 +532,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     int convertPixelFormat;
     int convertBitAlignment;
     int convertShiftBits;
-    size_t dims[3];
+    size_t dims[3], dataSize;
     int nDims;
     int xDim=0, yDim=1, binX, binY;
     size_t offsetX, offsetY;
@@ -659,6 +659,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         yDim = 1;
         dims[0] = nCols;
         dims[1] = nRows;
+        dataSize = nCols * nRows * (dataType == NDUInt8 ? 1 : 2);
     } else {
         nDims = 3;
         xDim = 1;
@@ -666,6 +667,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         dims[0] = 3;
         dims[1] = nCols;
         dims[2] = nRows;
+        dataSize = 3 * nCols * nRows * (dataType == NDUInt8 ? 1 : 2);
     }
 
     pRaw = pNDArrayPool->alloc(nDims, dims, dataType, 0, NULL);
@@ -682,7 +684,7 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
         goto done;
     }
     if (outputImage.IsValid()) {
-        memcpy(pRaw->pData, outputImage.GetBuffer(), pRaw->dataSize);
+        memcpy(pRaw->pData, outputImage.GetBuffer(), dataSize);
     } else {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
             "%s::%s [%s] ERROR: image is invalid!\n",
@@ -759,7 +761,6 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
     // Release the NDArray buffer now that we are done with it.
     // After the callback just above we don't need it anymore
     if (pRaw) pRaw->release();
-    //pGrabResult.Release();
     epicsEventSignal(newFrameEventId_);
     return status;
 }
