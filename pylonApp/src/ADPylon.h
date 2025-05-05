@@ -65,6 +65,7 @@ private:
     std::string cameraId_;
     Pylon::CInstantCamera camera_;
     Pylon::CImageDecompressor decompressor_;
+    Pylon::CImageFormatConverter converter_;
     double ticksPerSecond_;
 
     bool exiting_;

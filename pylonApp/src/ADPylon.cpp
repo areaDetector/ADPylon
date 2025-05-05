@@ -617,16 +617,15 @@ asynStatus ADPylon::processFrame(const Pylon::CGrabResultPtr& pGrabResult)
                 outputPixelType = Pylon::PixelType_Mono8;
                 break;
         }
-        Pylon::CImageFormatConverter converter;
-        converter.OutputPixelFormat = outputPixelType;
-        converter.OutputBitAlignment = (Pylon::OutputBitAlignmentEnums) convertBitAlignment;
-        converter.MonoConversionMethod = Pylon::MonoConversionMethod_Truncate;
-        converter.AdditionalLeftShift = convertShiftBits;
+        converter_.OutputPixelFormat = outputPixelType;
+        converter_.OutputBitAlignment = (Pylon::OutputBitAlignmentEnums) convertBitAlignment;
+        converter_.MonoConversionMethod = Pylon::MonoConversionMethod_Truncate;
+        converter_.AdditionalLeftShift = convertShiftBits;
 
         try {
             /* Convert to a temporary image object and reference outputImage to it */
             Pylon::CPylonImage tempImage;
-            converter.Convert(tempImage, outputImage);
+            converter_.Convert(tempImage, outputImage);
             pixelType = outputPixelType;
             outputImage = tempImage;
         } catch (const Pylon::GenericException& e) {
