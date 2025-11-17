@@ -60,6 +60,7 @@ private:
     int PYLONUniqueIdMode;
 
     /* Local methods to this class */
+    asynStatus findCamera(const std::string &cameraId, Pylon::CDeviceInfo &deviceInfo);
     asynStatus connectCamera();
 
     std::string cameraId_;

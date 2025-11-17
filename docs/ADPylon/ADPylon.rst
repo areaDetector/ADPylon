@@ -126,7 +126,7 @@ The command to configure an ADPylon camera in the startup script is::
 
 ``portName`` is the name for the ADPylon port driver
 
-``cameraId`` is the either the serial number of the camera or the camera index number in the system. The serial number is normally printed on the camera,
+``cameraId`` is the either the serial number of the camera, the IP address for GigE camera, the user defined name or the camera index number in the system. The serial number is normally printed on the camera,
 and it is also the last part of the camera name returned by arv-tool, for example for ``"Basler-23524298"``, it would be 23524298.
 If cameraId is less than 1000 it is assumed to be the system index number, if 1000 or greater it is assumed to be a serial number.
 
