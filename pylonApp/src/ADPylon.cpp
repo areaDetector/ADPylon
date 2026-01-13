@@ -502,7 +502,7 @@ void ADPylon::imageGrabTask()
         }
 
         // We are now waiting for an image
-        setIntegerParam(ADStatus, ADStatusWaiting);
+        setIntegerParam(ADStatus, ADStatusAcquire);
         // Call the callbacks to update any changes
         callParamCallbacks();
 
