@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Hartmut Nebelung
 //-----------------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace Pylon
         \note Basler recommends using one of the Instant Camera classes CBaslerUniversalInstantCamera or CInstantCamera for new projects.
               If you want to control which buffers are used for grabbing, you can use the Pylon::IBufferFactory.
     */
-    interface IStreamGrabber
+    PYLON_INTERFACE IStreamGrabber
     {
         /*!
         \brief Opens the stream grabber.

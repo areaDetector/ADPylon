@@ -1,1 +1,1 @@
-Pylon SDK 7.3.0
+Pylon SDK 25.11

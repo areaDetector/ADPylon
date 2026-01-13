@@ -132,6 +132,15 @@ namespace GENAPI_NAMESPACE
         //! Retrieves the node from the central map by name
         virtual INode* _GetNode(const GENICAM_NAMESPACE::gcstring& key) const;
 
+        //! Set suppress callback mode
+        virtual void _SetSuppressCallbackMode(ECallbackSuppressMode) const;
+
+        //! Create a new write concatenator object
+        virtual CNodeWriteConcatenator *_NewNodeWriteConcatenator() const;
+
+        //! Execute the transaction
+        virtual bool _ConcatenatedWrite(CNodeWriteConcatenator*, bool featureStreaming = true, GENICAM_NAMESPACE::gcstring_vector* pErrorList = NULL);
+
         //! Invalidates all nodes
         virtual void _InvalidateNodes() const;
 
@@ -143,6 +152,12 @@ namespace GENAPI_NAMESPACE
 
         //! Parse all Swissknife equations
         virtual bool _ParseSwissKnifes( GENICAM_NAMESPACE::gcstring_vector *pErrorList = NULL ) const;
+        //! Connects a port to a port node with given name
+        virtual bool _Connect(IPortStacked* pPort, const GENICAM_NAMESPACE::gcstring& PortName) const;
+
+        //! Connects a port to the standard port "Device"
+        virtual bool _Connect(IPortStacked* pPort) const;
+
         //! Pointer to the NodeMap
         INodeMap *_Ptr;
 
@@ -304,7 +319,10 @@ namespace GENAPI_NAMESPACE
 
         // Load the XML file
         CNodeMapFactory nodeMapData(ContentType_Xml, FileName);
-        Attach(nodeMapData.CreateNodeMap(_DeviceName), _DeviceName, new int(0));
+
+        // First create node map then the reference counter. This prevents a leak in case of bad node map
+        INodeMap* pNodeMap = nodeMapData.CreateNodeMap( _DeviceName );
+        Attach( pNodeMap, _DeviceName, new int( 0 ) );
     }
 
     template<class TCameraParams>
@@ -318,7 +336,10 @@ namespace GENAPI_NAMESPACE
 
         // Load the XML file
         CNodeMapFactory nodeMapData(ContentType_ZippedXml, ZipFileName);
-        Attach(nodeMapData.CreateNodeMap(), _DeviceName, new int(0));
+
+        // First create node map then the reference counter. This prevents a leak in case of bad node map
+        INodeMap* pNodeMap = nodeMapData.CreateNodeMap();
+        Attach( pNodeMap, _DeviceName, new int(0));
     }
 
     template<class TCameraParams>
@@ -334,7 +355,10 @@ namespace GENAPI_NAMESPACE
         CNodeMapFactory nodeMapData(ContentType_Xml, TargetFileName);
         CNodeMapFactory injectNodeMapData(ContentType_Xml, InjectFileName);
         nodeMapData.AddInjectionData(injectNodeMapData);
-        Attach(nodeMapData.CreateNodeMap(), _DeviceName, new int(0));
+
+        // First create node map then the reference counter. This prevents a leak in case of bad node map
+        INodeMap* pNodeMap = nodeMapData.CreateNodeMap(_DeviceName);
+        Attach( pNodeMap, _DeviceName, new int( 0 ) );
     }
 
     template<class TCameraParams>
@@ -346,7 +370,10 @@ namespace GENAPI_NAMESPACE
 
         // Load the XML file
         CNodeMapFactory nodeMapData(ContentType_Xml, XMLData.c_str(), XMLData.size()); //avoid string copy
-        Attach(nodeMapData.CreateNodeMap(_DeviceName), _DeviceName, new int(0));
+
+        // First create node map then the reference counter. This prevents a leak in case of bad node map
+        INodeMap* pNodeMap = nodeMapData.CreateNodeMap(_DeviceName);
+        Attach( pNodeMap, _DeviceName, new int( 0 ) );
     }
 
 
@@ -359,7 +386,10 @@ namespace GENAPI_NAMESPACE
 
         // Load the XML file
         CNodeMapFactory nodeMapData(ContentType_ZippedXml, zipData, zipSize);
-        Attach(nodeMapData.CreateNodeMap(), _DeviceName, new int(0));
+
+        // First create node map then the reference counter. This prevents a leak in case of bad node map
+        INodeMap* pNodeMap = nodeMapData.CreateNodeMap();
+        Attach( pNodeMap, _DeviceName, new int( 0 ) );
     }
 
     template<class TCameraParams>
@@ -373,7 +403,10 @@ namespace GENAPI_NAMESPACE
         CNodeMapFactory nodeMapData(ContentType_Xml, TargetXMLData.c_str(), TargetXMLData.size()); //avoid string copy
         CNodeMapFactory injectNodeMapData(ContentType_Xml, InjectXMLData.c_str(), InjectXMLData.size()); //avoid string copy
         nodeMapData.AddInjectionData(injectNodeMapData);
-        Attach(nodeMapData.CreateNodeMap(), _DeviceName, new int(0));
+
+        // First create node map then the reference counter. This prevents a leak in case of bad node map
+        INodeMap* pNodeMap = nodeMapData.CreateNodeMap();
+        Attach( pNodeMap, _DeviceName, new int( 0 ) );
     }
 
     template<class TCameraParams>
@@ -387,8 +420,7 @@ namespace GENAPI_NAMESPACE
     {
         if(_Ptr)
             return _Ptr->GetDeviceName();
-        else
-            throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
     }
 
     template<class TCameraParams>
@@ -396,8 +428,7 @@ namespace GENAPI_NAMESPACE
     {
         if(_Ptr)
             return _Ptr->Poll(ElapsedTime);
-        else
-            throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
     }
 
     template<class TCameraParams>
@@ -405,8 +436,33 @@ namespace GENAPI_NAMESPACE
     {
         if(_Ptr)
             return _Ptr->GetNodes(Nodes);
-        else
-            throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+    }
+
+    
+    template<class TCameraParams>
+    inline void CNodeMapRefT<TCameraParams>::_SetSuppressCallbackMode(ECallbackSuppressMode mode) const
+    {
+        if (_Ptr)
+            return _Ptr->SetSuppressCallbackMode(mode);
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+    }
+
+
+    template<class TCameraParams>
+    inline CNodeWriteConcatenator  *CNodeMapRefT<TCameraParams>::_NewNodeWriteConcatenator() const
+    {
+        if (_Ptr)
+            return _Ptr->NewNodeWriteConcatenator();
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+    }
+
+    template<class TCameraParams>
+    inline bool CNodeMapRefT<TCameraParams>::_ConcatenatedWrite(CNodeWriteConcatenator* pConcatenatedWrite, bool featureStreaming, GENICAM_NAMESPACE::gcstring_vector* pErrorList)
+    {
+        if (_Ptr)
+            return _Ptr->ConcatenatedWrite(pConcatenatedWrite, featureStreaming, pErrorList);
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
     }
 
     template<class TCameraParams>
@@ -414,8 +470,7 @@ namespace GENAPI_NAMESPACE
     {
         if(_Ptr)
             return _Ptr->GetNode(key);
-        else
-            throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
     }
 
     template<class TCameraParams>
@@ -423,19 +478,15 @@ namespace GENAPI_NAMESPACE
     {
         if(_Ptr)
             return _Ptr->InvalidateNodes();
-        else
-            throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
     }
 
     template<class TCameraParams>
     inline bool CNodeMapRefT<TCameraParams>::_ParseSwissKnifes( GENICAM_NAMESPACE::gcstring_vector *pErrorList ) const
     {
-        bool ret = false;
         if (_Ptr)
-            ret = _Ptr->ParseSwissKnifes(pErrorList);
-        else
-            throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
-        return ret;
+            return _Ptr->ParseSwissKnifes(pErrorList);
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
     }
 
     template<class TCameraParams>
@@ -443,8 +494,7 @@ namespace GENAPI_NAMESPACE
     {
         if(_Ptr)
             return _Ptr->Connect(pPort, PortName);
-        else
-            throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
     }
 
     template<class TCameraParams>
@@ -452,10 +502,24 @@ namespace GENAPI_NAMESPACE
     {
         if(_Ptr)
             return _Ptr->Connect(pPort);
-        else
-            throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
     }
 
+    template<class TCameraParams>
+    inline bool CNodeMapRefT<TCameraParams>::_Connect(IPortStacked* pPort, const GENICAM_NAMESPACE::gcstring& PortName) const
+    {
+        if (_Ptr)
+            return _Ptr->Connect(pPort, PortName);
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+    }
+
+    template<class TCameraParams>
+    inline bool CNodeMapRefT<TCameraParams>::_Connect(IPortStacked* pPort) const
+    {
+        if (_Ptr)
+            return _Ptr->Connect(pPort);
+        throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+    }
 
     template<class TCameraParams>
     inline bool CNodeMapRefT<TCameraParams>::_ClearXMLCache()
@@ -471,6 +535,10 @@ namespace GENAPI_NAMESPACE
     {
     protected:
         virtual void _Initialize(GENAPI_NAMESPACE::INodeMap*) {}
+        virtual ~CGeneric_XMLLoaderParams()
+        {
+            // ensure to release all ressources
+        }
     };
 
 

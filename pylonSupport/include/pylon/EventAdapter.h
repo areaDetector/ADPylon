@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  HN
 //-----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ namespace Pylon
         \brief Low Level API: IEventAdapter delivers event messages to ports
         \ingroup Pylon_LowLevelApi
     */
-    interface PUBLIC_INTERFACE IEventAdapter
+    PYLON_INTERFACE PUBLIC_INTERFACE IEventAdapter
     {
         //! Deliver message
         virtual void DeliverMessage( const uint8_t msg[], uint32_t numBytes ) = 0;

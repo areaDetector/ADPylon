@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2007-2023 Basler AG
+//  Copyright (c) 2007-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -30,8 +30,7 @@
 
 //! Macro to define a custom camera class
 #define PYLON_DEFINE_CAMERA(ClassName, BaseClass) \
-    PYLON_6_0_DEPRECATED("Use CBaslerUniversalInstantCamera") \
-    class ClassName : public BaseClass \
+    class PYLON_DEPRECATED("Use CBaslerUniversalInstantCamera") ClassName : public BaseClass \
     { \
     public: \
         /** \name Construction */ \

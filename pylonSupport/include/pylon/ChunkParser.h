@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Lutz Koschorreck
 //-----------------------------------------------------------------------------
@@ -79,7 +79,7 @@ namespace Pylon
         \endcode
 
     */
-    interface PUBLIC_INTERFACE IChunkParser
+    PYLON_INTERFACE PUBLIC_INTERFACE IChunkParser
     {
     public:
         /// Pass in a buffer and let the chunk parser analyze it.
@@ -130,7 +130,7 @@ namespace Pylon
 
         \ingroup Pylon_LowLevelApi
     */
-    interface ISelfReliantChunkParser : public IChunkParser
+    PYLON_INTERFACE ISelfReliantChunkParser : public IChunkParser
     {
         /// Provides access to the chunk data node map that the parser updates.
         /*!

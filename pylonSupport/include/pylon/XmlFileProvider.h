@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace Pylon
     /**
     \internal
     */
-    interface PUBLIC_INTERFACE IXmlFileProvider
+    PYLON_INTERFACE PUBLIC_INTERFACE IXmlFileProvider
     {
         virtual bool CanProvideXmlFile( const CDeviceInfo& ) = 0;
         virtual void ProvideXmlFile(

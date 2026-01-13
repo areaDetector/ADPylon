@@ -57,7 +57,10 @@ namespace GENAPI_NAMESPACE
 
         //! Destructor; detaches from the port
         virtual ~CChunkPort();
-
+    private:
+        CChunkPort(const CChunkPort&);             // copy constructor is not implemented
+        CChunkPort& operator =(const CChunkPort&); // assignment operator is not implemented
+    public:
         //-------------------------------------------------------------
         // IPortConstruct implementation
         //-------------------------------------------------------------
@@ -76,6 +79,9 @@ namespace GENAPI_NAMESPACE
 
         //! Called from the port node to give the chunk port a pointer to itself
         virtual void SetPortImpl(GENAPI_NAMESPACE::IPort* pPort);
+
+        //! Called from the port node to give the chunk port a pointer to itself
+        virtual void SetPortImpl(GENAPI_NAMESPACE::IPortStacked* pPort);
 
         //! Determines if the port adapter must perform an endianess swap
         virtual EYesNo GetSwapEndianess()

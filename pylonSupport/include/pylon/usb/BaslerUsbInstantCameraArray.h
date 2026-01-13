@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2012-2023 Basler AG
+//  Copyright (c) 2012-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //-----------------------------------------------------------------------------
@@ -29,8 +29,7 @@ namespace Pylon
 
     \deprecated This class is deprecated in pylon 6.0. Please consider using CBaslerUniversalInstantCameraArray instead.
     */
-    PYLON_6_0_DEPRECATED( "Use CBaslerUniversalInstantCameraArray" )
-        class CBaslerUsbInstantCameraArray : public CDeviceSpecificInstantCameraArrayT<CBaslerUsbInstantCamera>
+    class PYLON_DEPRECATED("Use CBaslerUniversalInstantCameraArray") CBaslerUsbInstantCameraArray : public CDeviceSpecificInstantCameraArrayT<CBaslerUsbInstantCamera>
     {
     public:
         /*!

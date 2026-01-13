@@ -32,6 +32,7 @@
 #define GENAPI_DEVICEINFO_H
 
 #include <Base/GCBase.h>
+#include <GenApi/Types.h>
 
 #ifdef _MSC_VER
 #   pragma warning ( push )
@@ -49,7 +50,7 @@ namespace GENAPI_NAMESPACE
     \brief Interface to get information about the device (= nodemap)
     \ingroup GenApi_PublicInterface
     */
-    interface GENAPI_DECL_ABSTRACT IDeviceInfo
+    GENICAM_INTERFACE GENAPI_DECL_ABSTRACT IDeviceInfo
     {
         //! Get the model name
         virtual GENICAM_NAMESPACE::gcstring GetModelName() = 0;

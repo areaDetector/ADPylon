@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //-----------------------------------------------------------------------------
@@ -22,8 +22,7 @@
 
 //! Macro for defining a custom instant camera class.
 #define PYLON_DEFINE_INSTANT_CAMERA(ClassName, BaseClass) \
-    PYLON_6_0_DEPRECATED("Use CBaslerUniversalInstantCamera") \
-    class ClassName : public BaseClass \
+    class PYLON_DEPRECATED("Use CBaslerUniversalInstantCamera") ClassName : public BaseClass \
     { \
     public: \
         /*! \copybrief CInstantCamera::CInstantCamera()
@@ -307,9 +306,9 @@
             // Check whether device type matches camera type.
             if (pDevice)
             {
-                if ( (dynamic_cast<typename CameraTraitsT::IPylonDevice_t*>(pDevice) == NULL)
+                if (    (dynamic_cast<typename CameraTraitsT::IPylonDevice_t*>(pDevice) == NULL)
                      || (this->HasSpecificDeviceClass() && (pDevice->GetDeviceInfo().GetDeviceClass() != this->DeviceClass()))
-                     )
+                   )
                 {
                     throw LOGICAL_ERROR_EXCEPTION( "The attached pylon device type cannot be used with this type of camera class." );
                 }

@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -29,7 +29,7 @@
 
 namespace Pylon
 {
-    interface IPylonDevice;
+    PYLON_INTERFACE IPylonDevice;
 
 
     // --------------------------------------------------------------------------
@@ -59,7 +59,7 @@ namespace Pylon
     \ingroup Pylon_TransportLayer
     */
 
-    interface PUBLIC_INTERFACE IDeviceFactory
+    PYLON_INTERFACE PUBLIC_INTERFACE IDeviceFactory
     {
         /// Retrieves a list of available devices.
         /**
@@ -153,12 +153,6 @@ namespace Pylon
         */
         virtual bool IsDeviceAccessible( const CDeviceInfo& deviceInfo, AccessModeSet mode = Control, EDeviceAccessiblityInfo* pAccessibilityInfo = NULL ) = 0;
     };
-
-
-
-
-
-
 
 } // namespace PYLON
 

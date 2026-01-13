@@ -85,6 +85,8 @@
 #       error Unknown Platform
 #      endif
 #   endif
+#elif defined (__clang__)
+#   error Unexpected Compiler
 #else
 #   error Unknown Platform
 #endif
@@ -114,6 +116,21 @@ namespace GENICAM_NAMESPACE
     {
         return INTEGRAL_CAST2<T, int64_t>( ll );
     }
+
+    //! Returns the directory where cache files are located
+    GCBASE_API bool GetCacheFileDirectory(gcstring &CacheFileDirectory);
+
+    //! Returns the truth value for the proposition: The given file name has the valid length
+    GCBASE_API bool HasValidLength(const gcstring &FileName);
+
+    //! Returns the truth value for the proposition: The given file has the valid file extension
+    GCBASE_API bool HasValidExtension(const gcstring &FileName);
+
+    // Returns the cache file names in the given cache directory
+    GCBASE_API void GetCandidateCacheFilePaths(gcstring_vector &CacheFileNames, const gcstring &CacheFileDirectory);  //
+
+    // Returns the message that corresponds to the last error
+    GCBASE_API void GetLastErrorMessage(gcstring &Message);
 
     //! Returns true if an environment variable exists
     GCBASE_API bool DoesEnvironmentVariableExist( const gcstring &VariableName );
@@ -197,7 +214,7 @@ namespace GENICAM_NAMESPACE
 #define GENICAM_UNUSED(unused_var)    ((void)(unused_var))
 
 #if !defined(GENICAM_DEPRECATED)
-#   if defined(__GNUC__) && (__GNUC__ >= 3) && defined(__GNUC_MINOR__) && (__GNUC_MINOR__ >= 1) // is at least GCC 3.1 compiler?
+#   if defined(__GNUC__) && (((__GNUC__ * 100) + __GNUC_MINOR__ ) >= 301) // is at least GCC 3.1 compiler?
 #       define GENICAM_DEPRECATED(FUNCTION) FUNCTION __attribute__ ((deprecated))
 #   elif defined(_MSC_VER) && (_MSC_VER >= 1300) // is at least VC 2003 compiler?
 #       define GENICAM_DEPRECATED(FUNCTION) __declspec(deprecated) FUNCTION

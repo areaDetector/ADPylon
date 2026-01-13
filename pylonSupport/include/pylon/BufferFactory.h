@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace Pylon
     \brief  Usable to create a custom buffer factory when needed.
     \ingroup Pylon_InstantCameraApiGeneric
     */
-    interface IBufferFactory
+    PYLON_INTERFACE IBufferFactory
     {
     public:
         /// Ensure proper destruction by using a virtual destructor.

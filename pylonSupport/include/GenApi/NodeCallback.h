@@ -70,11 +70,11 @@ namespace GENAPI_NAMESPACE
         //! destroys the object
         virtual void Destroy() = 0;
 
-        //! returns the node the callback is registered to      
-        INode* GetNode()      
-        {      
-            return m_pNode;      
-        }  
+        //! returns the node the callback is registered to
+        INode* GetNode()
+        {
+            return m_pNode;
+        }
 
     protected:
         //! the node were the callback is installed

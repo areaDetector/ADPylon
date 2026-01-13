@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2007-2023 Basler AG
+//  Copyright (c) 2007-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ namespace Pylon
     */
 
 
-    interface PUBLIC_INTERFACE IPylonGigEDevice : public IPylonDevice
+    PYLON_INTERFACE PUBLIC_INTERFACE IPylonGigEDevice : public IPylonDevice
     {
         //! Enables/disables use of persistent IP address and DHCP usage
         virtual void ChangeIpConfiguration( bool EnablePersistentIp, bool EnableDhcp ) = 0;

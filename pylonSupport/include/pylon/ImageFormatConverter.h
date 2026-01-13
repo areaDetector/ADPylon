@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //------------------------------------------------------------------------------
@@ -101,11 +101,30 @@ namespace Pylon
     <li> PixelType_RGB16planar
     </ul>
     <ul>
+    <li> PixelType_BiColorRGBG8
+    <li> PixelType_BiColorBGRG8
+    <li> PixelType_BiColorRGBG10
+    <li> PixelType_BiColorBGRG10
+    <li> PixelType_BiColorRGBG10p
+    <li> PixelType_BiColorBGRG10p
+    <li> PixelType_BiColorRGBG12
+    <li> PixelType_BiColorBGRG12
+    <li> PixelType_BiColorRGBG12p
+    <li> PixelType_BiColorBGRG12p
+    </ul>
+    <ul>
     <li> PixelType_YUV422packed
     <li> PixelType_YUV422_YUYV_Packed
     <li> PixelType_YCbCr422_8_YY_CbCr_Semiplanar
     <li> PixelType_YCbCr420_8_YY_CbCr_Semiplanar
     </ul>
+    <ul>
+    <li> PixelType_Confidence8
+    <li> PixelType_Coord3D_C8
+    <li> PixelType_Confidence16
+    <li> PixelType_Coord3D_C16
+    <li> PixelType_Error8
+    </ul><br>
 
     Supported output image formats defined by the pixel type:
 
@@ -121,9 +140,8 @@ namespace Pylon
     <li> PixelType_YUV444planar
     <li> PixelType_YUV422planar
     <li> PixelType_YUV420planar
-    </ul>
-
-
+    </ul><br>
+    
     All input image formats can be converted to all output image formats.
 
     RGB, BGR and Bayer image formats are converted to monochrome formats by using the following formula:

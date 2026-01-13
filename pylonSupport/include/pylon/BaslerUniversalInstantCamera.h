@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //-----------------------------------------------------------------------------
@@ -22,7 +22,17 @@
 #include <pylon/BaslerUniversalImageEventHandler.h>
 #include <pylon/BaslerUniversalCameraEventHandler.h>
 #include <pylon/BaslerUniversalGrabResultPtr.h>
+#ifdef PYLON_WIN_BUILD
+// Suppress the unreachable code warning for MSVC > 14.16 (Visual Studio 2019)
+// compilers, as it occurs due to DeviceClass() throwing an intentional exception
+// in the CBaslerUniversalInstantCamera case.
+#  pragma warning(push)
+#  pragma warning(disable : 4702)
+#endif
 #include <pylon/private/DeviceSpecificInstantCamera.h>
+#ifdef PYLON_WIN_BUILD
+#  pragma warning(pop)
+#endif
 #include <pylon/gige/PylonGigEDevice.h>
 #include <pylon/DeviceClass.h>
 #include <pylon/NodeMapProxy.h>

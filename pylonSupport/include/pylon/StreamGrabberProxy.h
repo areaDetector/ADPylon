@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2007-2023 Basler AG
+//  Copyright (c) 2007-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -83,6 +83,8 @@
 
 
         private:
+            using CNodeMapProxyT<TParams>::Attach;
+
             //! \name Assignment and copying is not supported
             // \{
             CStreamGrabberProxyT( const CStreamGrabberProxyT& );
@@ -262,7 +264,7 @@
 
             \copydetails Pylon::IStreamGrabber::GetNodeMap()
             */
-            GenApi::INodeMap* GetNodeMap()
+            GenApi::INodeMap* GetNodeMap() const
             {
                 CheckPtr();
                 return m_pStreamGrabber->GetNodeMap();

@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2007-2023 Basler AG
+//  Copyright (c) 2007-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -28,6 +28,7 @@
 #include <Base/GCException.h>
 #include <GenApi/INodeMap.h>
 #include <GenApi/INode.h>
+
 
 //! Macro to define a custom Node map proxy
 #define PYLON_DEFINE_NODEMAP(ClassName, BaseClass) \

@@ -43,7 +43,7 @@ namespace GENAPI_NAMESPACE
     \brief Interface for groups of features selected by a single one
     \ingroup GenApi_PublicImpl
     */
-    interface GENAPI_DECL_ABSTRACT ISelector : virtual public IBase
+    GENICAM_INTERFACE GENAPI_DECL_ABSTRACT ISelector : virtual public IBase
     {
         //! true iff this feature selects a group of features
         virtual bool IsSelector() const = 0;
@@ -77,28 +77,35 @@ namespace GENAPI_NAMESPACE
         //! Get all features of the Selector
         virtual void GetSelectedFeatures(FeatureList_t &Features) const
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->GetSelectedFeatures( Features );
+            if (ref::m_Ptr)
+            {
+                ref::m_Ptr->GetSelectedFeatures(Features);
+            }
             else
+            {
                 throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            }
         }
 
         //! retrieve the group of features selecting this node
         virtual void GetSelectingFeatures( FeatureList_t& Features) const
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->GetSelectingFeatures( Features );
+            if (ref::m_Ptr)
+            {
+                ref::m_Ptr->GetSelectingFeatures(Features);
+            }
             else
+            {
                 throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            }
         }
 
         //! true iff this feature selects a group of features
         virtual bool IsSelector() const
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->IsSelector();
-            else
+            if(!ref::m_Ptr)
                 throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            return ref::m_Ptr->IsSelector();
         }
     };
 

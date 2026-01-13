@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Hartmut Nebelung
 //-----------------------------------------------------------------------------
@@ -36,11 +36,11 @@
 namespace Pylon
 {
 
-    interface IStreamGrabber;
-    interface IEventGrabber;
-    interface IChunkParser;
-    interface ISelfReliantChunkParser;
-    interface IPylonDevice;
+    PYLON_INTERFACE IStreamGrabber;
+    PYLON_INTERFACE IEventGrabber;
+    PYLON_INTERFACE IChunkParser;
+    PYLON_INTERFACE ISelfReliantChunkParser;
+    PYLON_INTERFACE IPylonDevice;
 
     /// callback type with a IPylonDevice as parameter
     typedef Pylon::Callback1<IPylonDevice*> DeviceCallback;
@@ -55,7 +55,7 @@ namespace Pylon
         \brief Low Level API: The interface implemented by all device objects
         \ingroup Pylon_LowLevelApi
     */
-    interface PUBLIC_INTERFACE IDevice
+    PYLON_INTERFACE PUBLIC_INTERFACE IDevice
     {
 
         /// Opens a device
@@ -104,7 +104,7 @@ namespace Pylon
         \brief Low Level API: Interface for camera objects
         \ingroup Pylon_LowLevelApi
     */
-    interface PUBLIC_INTERFACE IPylonDevice : public IDevice
+    PYLON_INTERFACE PUBLIC_INTERFACE IPylonDevice : public IDevice
     {
     public:
 

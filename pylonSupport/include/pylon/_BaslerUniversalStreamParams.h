@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2019-2023 Basler AG
+//  Copyright (c) 2019-2025 Basler AG
 //  http://www.baslerweb.com
 //-----------------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ namespace Basler_UniversalStreamParams
     enum TransmissionTypeEnums
     {
         TransmissionType_LimitedBroadcast,  //!< The stream data is sent to all devices in the local area network (255 255 255 255) - Applies to: GigE
-        TransmissionType_Multicast,  //!< The stream data is sent to selected devices in the local network   - Applies to: GigE
+        TransmissionType_Multicast,  //!< The stream data is sent to selected devices in the local network - Applies to: GigE
         TransmissionType_SubnetDirectedBroadcast,  //!< The stream data is sent to all devices in the same subnet as the camera - Applies to: GigE
         TransmissionType_Unicast,  //!< The stream data is sent to a single device in the local network - Applies to: GigE and blaze
         TransmissionType_UseCameraConfig  //!< The stream transmission configuration is read from the camera - Applies to: GigE and blaze
@@ -87,6 +87,7 @@ namespace Basler_UniversalStreamParams
     //! Valid values for Type
     enum TypeEnums
     {
+        Type_GigEAccelerator,  //!< The GigE Accelerator - Applies to: GigE
         Type_NoDriverAvailable,  //!< No suitable driver is installed - Applies to: GigE and blaze
         Type_SocketDriver,  //!< The socket driver is used - Applies to: GigE and blaze
         Type_WindowsFilterDriver,  //!< The pylon GigE Vision Filter Driver is used - Applies to: GigE and blaze
@@ -97,7 +98,7 @@ namespace Basler_UniversalStreamParams
     
     
     //**************************************************************************************************
-    // Parameter class CUniversalStreamParams_Params_v7_3_0
+    // Parameter class CUniversalStreamParams_Params_v11_0_0
     //**************************************************************************************************
     
 
@@ -107,7 +108,7 @@ namespace Basler_UniversalStreamParams
     The parameter class is used by the \c Pylon::CBaslerUniversalInstantCamera class.
     The \ref sample_ParametrizeCamera_NativeParameterAccess code sample shows how to access camera parameters via the \c Pylon::CBaslerUniversalInstantCamera class.
     */
-    class PYLONBASE_API CUniversalStreamParams_Params_v7_3_0
+    class PYLONBASE_API CUniversalStreamParams_Params_v11_0_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -118,10 +119,10 @@ namespace Basler_UniversalStreamParams
     //! \cond HIDE_CLASS_METHODS
         
         //! Constructor
-        CUniversalStreamParams_Params_v7_3_0( void );
+        CUniversalStreamParams_Params_v11_0_0( void );
 
         //! Destructor
-        ~CUniversalStreamParams_Params_v7_3_0( void );
+        ~CUniversalStreamParams_Params_v11_0_0( void );
 
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* );
@@ -129,8 +130,8 @@ namespace Basler_UniversalStreamParams
     //! \endcond
 
     private:
-        class CUniversalStreamParams_Params_v7_3_0_Data;
-        CUniversalStreamParams_Params_v7_3_0_Data* m_pCUniversalStreamParams_Params_v7_3_0_Data;
+        class CUniversalStreamParams_Params_v11_0_0_Data;
+        CUniversalStreamParams_Params_v11_0_0_Data* m_pCUniversalStreamParams_Params_v11_0_0_Data;
 
 
     //----------------------------------------------------------------------------------------------------------------
@@ -969,6 +970,21 @@ namespace Basler_UniversalStreamParams
         //! \name Categories: Debug
         //@{
         /*!
+            \brief Indicates whether the GigE Accelerator is currently available - Applies to: GigE
+
+
+            Visibility: Guru
+
+            The <a href="https://docs.baslerweb.com/?rhcsh=1&rhmapid=TypeIsGigEAcceleratorAvailable" target="_blank">feature documentation</a> may provide more information.
+        */
+        Pylon::IIntegerEx& TypeIsGigEAcceleratorAvailable;
+
+        //@}
+
+
+        //! \name Categories: Debug
+        //@{
+        /*!
             \brief Indicates whether the socket driver is currently available - Applies to: GigE and blaze
 
 
@@ -1036,10 +1052,10 @@ namespace Basler_UniversalStreamParams
     //! \cond HIDE_CLASS_METHODS
 
         //! not implemented copy constructor
-        CUniversalStreamParams_Params_v7_3_0(CUniversalStreamParams_Params_v7_3_0&);
+        CUniversalStreamParams_Params_v11_0_0(CUniversalStreamParams_Params_v11_0_0&);
 
         //! not implemented assignment operator
-        CUniversalStreamParams_Params_v7_3_0& operator=(CUniversalStreamParams_Params_v7_3_0&);
+        CUniversalStreamParams_Params_v11_0_0& operator=(CUniversalStreamParams_Params_v11_0_0&);
 
     //! \endcond
     };
@@ -1051,7 +1067,7 @@ namespace Basler_UniversalStreamParams
     The parameter class is used by the \c Pylon::CBaslerUniversalInstantCamera class.
     The \ref sample_ParametrizeCamera_NativeParameterAccess code sample shows how to access camera parameters via the \c Pylon::CBaslerUniversalInstantCamera class.
     */
-    class CUniversalStreamParams_Params : public CUniversalStreamParams_Params_v7_3_0
+    class CUniversalStreamParams_Params : public CUniversalStreamParams_Params_v11_0_0
     {
     //----------------------------------------------------------------------------------------------------------------
     // Implementation
@@ -1074,7 +1090,7 @@ namespace Basler_UniversalStreamParams
         //! Initializes the references
         void _Initialize( GENAPI_NAMESPACE::INodeMap* pNodeMap )
         {
-            CUniversalStreamParams_Params_v7_3_0::_Initialize( pNodeMap );
+            CUniversalStreamParams_Params_v11_0_0::_Initialize( pNodeMap );
         }
         //! \endcond
     };

@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //------------------------------------------------------------------------------
@@ -450,7 +450,7 @@ namespace Pylon
         <li> The image event OnImagesSkipped is fired if grab results have been skipped according to the strategy. The notification of event handlers stops when an event call triggers an exception.
         <li> The image event OnImageGrabbed is fired if a grab result becomes available. The notification of event handlers stops when an event call triggers an exception.
         <li> Stops the grabbing by calling StopGrabbing() if the maximum number of images has been grabbed.
-        </ul>
+        </ul><br>
 
         It needs to be checked whether the grab represented by the grab result has been successful, see CGrabResultData::GrabSucceeded().
 

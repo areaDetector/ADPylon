@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ namespace Pylon
     \interface  IImage
     \brief  Usable to access image properties and image buffer.
     */
-    interface IImage
+    PYLON_INTERFACE IImage
     {
     public:
         /// Ensure proper destruction by using a virtual destructor.

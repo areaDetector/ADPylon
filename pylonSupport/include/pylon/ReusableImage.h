@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ namespace Pylon
     \interface  IReusableImage
     \brief  Extends the IImage interface to be able to reuse the image's resources to represent a different image.
     */
-    interface IReusableImage : public IImage
+    PYLON_INTERFACE IReusableImage : public IImage
     {
     public:
         /// Ensure proper destruction by using a virtual destructor.

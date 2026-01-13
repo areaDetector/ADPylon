@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Hartmut Nebelung
 //-----------------------------------------------------------------------------
@@ -20,9 +20,9 @@
 #endif /* _MSC_VER */
 
 
-#ifdef PYLON_WIN_BUILD
-#   include <objbase.h>     // for definition of type 'interface'
-#endif
+#ifndef PYLON_INTERFACE
+#define PYLON_INTERFACE struct
+#endif // !PYLON_INTERFACE
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Hartmut Nebelung, AH
 //-----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ namespace Pylon
 
     With RetrieveEvent() the first event message is copied into a user buffer.
     */
-    interface PUBLIC_INTERFACE IEventGrabber
+    PYLON_INTERFACE PUBLIC_INTERFACE IEventGrabber
     {
         /// Open the event grabber
         virtual void Open() = 0;

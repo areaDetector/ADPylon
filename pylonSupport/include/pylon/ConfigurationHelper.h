@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Arne Wischmann
 //-----------------------------------------------------------------------------
@@ -53,22 +53,26 @@ namespace Pylon
 
                 if (triggerSelector.IsWritable())
                 {
-                    // Get all settable enumeration entries of trigger selector.
+                    // Get all enumeration entries of trigger selector.
                     GenApi::StringList_t triggerSelectorEntries;
-                    triggerSelector.GetSettableValues( triggerSelectorEntries );
+                    // For some camera models the list of available triggers can change while turning trigger mode off, e.g., boost V.
+                    triggerSelector.GetAllValues( triggerSelectorEntries );
 
                     const String_t originalSelectorValue = triggerSelector.GetValue();
 
                     // Turn trigger mode off for all trigger selector entries.
                     for (GenApi::StringList_t::const_iterator it = triggerSelectorEntries.begin(); it != triggerSelectorEntries.end(); ++it)
                     {
-                       // Set trigger mode to off if the trigger is available.
-                       triggerSelector.SetValue( *it );
-                       triggerMode.TrySetValue( "Off" );
+                        // Try to set trigger mode to off if the trigger is available.
+                        // It may not work on some models so just try it.
+                        if (triggerSelector.TrySetValue( *it ))
+                        {
+                            triggerMode.TrySetValue( "Off" );
+                        }
                     }
 
                     // reset to original value
-                    triggerSelector.SetValue( originalSelectorValue );
+                    triggerSelector.TrySetValue( originalSelectorValue ); // It may not work on some models so just try it.
                 }
             }
         }
@@ -98,7 +102,7 @@ namespace Pylon
         /*!
         \brief Select the 'Range' component.
 
-        Some cameras, such as Basler blaze, provide multiple components.
+        Some cameras, such as Basler blaze and stereo ace, provide multiple components.
         Default is component 'Range' with pixel format 'Mono16' respective 'Mono8'.
         */
         static void SelectRangeComponent( GenApi::INodeMap& nodemap )
@@ -121,6 +125,7 @@ namespace Pylon
                     componentSelector.SetValue( entry );
 
                     // if Range is selected enable it set pixel format to Mono16 of Mono8
+                    // for Basler 3D blaze
                     if (entry.compare( "Range" ) == 0)
                     {
                         enableComponent.TrySetValue( true );
@@ -128,6 +133,13 @@ namespace Pylon
                         {
                             pixelFormat.TrySetValue( "Mono8" );
                         }
+                    }
+                    else if(    entry.compare( "Intensity" ) == 0
+                            ||  entry.compare( "Disparity" ) == 0
+                            ||  entry.compare( "Confidence" ) == 0
+                            ||  entry.compare( "Error" ) == 0)
+                    {
+                       // do not change default values for stereo ace
                     }
                     else
                     {   // disable other components

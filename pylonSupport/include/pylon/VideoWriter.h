@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2018-2023 Basler AG
+//  Copyright (c) 2018-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  DV
 //------------------------------------------------------------------------------
@@ -8,8 +8,8 @@
 \file
 \brief  Contains support for writing video files in MP4 format, provided by a supplementary software package.
 */
-#ifndef INCLUDED_VIDEOWRITER_H_3842348390
-#define INCLUDED_VIDEOWRITER_H_3842348390
+
+#pragma once
 
 #include <pylon/Platform.h>
 
@@ -27,6 +27,7 @@
 #include <pylon/Image.h>
 #include <pylon/_VideoWriterParams.h>
 #include <GenApi/INodeMap.h>
+
 
 
 
@@ -99,26 +100,26 @@ namespace Pylon
             uint32_t quality
             );
 
-            /*!
-            \brief Opens a video file for writing.
+        /*!
+        \brief Opens a video file for writing.
 
-            If a file with the same \c filename already exists, it will be overwritten.
+        If a file with the same \c filename already exists, it will be overwritten.
 
-            \param[in]  filename  Name and path of the video file.
+        \param[in]  filename  Name and path of the video file.
 
-            \pre
-            <ul>
-            <li> The VideoWriter ist closed.
-            <li> The width and height parameters are larger than 1.
-            </ul>
+        \pre
+        <ul>
+        <li> The VideoWriter ist closed.
+        <li> The width and height parameters are larger than 1.
+        </ul>
 
-            \error
-            Throws an exception if the video file cannot be opened.
-            Throws an exception if the current parameters do not meet codec requirements.
+        \error
+        Throws a RuntimeException if the video file cannot be opened.
+        Throws a RuntimeException if the current parameters do not meet codec requirements.
 
-            \threading
-            This method is synchronized using the lock provided by GetLock().
-            */
+        \threading
+        This method is synchronized using the lock provided by GetLock().
+        */
         virtual void Open( const Pylon::String_t& filename );
 
         /*!
@@ -170,7 +171,10 @@ namespace Pylon
         </ul>
 
         \error
-        Throws an exception if the image cannot be added.
+        Throws an InvalidArgumentException exception if the image does not match the requirements like size or pixelformat.
+        The InvalidArgumentException does not invalidate the VideoWriter.
+        Throws a RuntimeException in case of an internal error. When throwing a RuntimeException all internal resources are freed
+        and the VideoWriter must be closed.
 
         \threading
         This method is synchronized using the lock provided by GetLock().
@@ -197,7 +201,10 @@ namespace Pylon
         </ul>
 
         \error
-        Throws an exception if the image cannot be added.
+        Throws an InvalidArgumentException exception if the image does not match the requirements like size or pixelformat.
+        The InvalidArgumentException does not invalidate the VideoWriter.
+        Throws a RuntimeException in case of an internal error. When throwing a RuntimeException all internal resources are freed
+        and the VideoWriter must be closed.
 
         \threading
         This method is synchronized using the lock provided by GetLock().
@@ -251,7 +258,7 @@ namespace Pylon
         CLock& GetLock();
 
     private:
-        CVideoWriterImpl* m_pImpl;
+        CVideoWriterImpl* m_pImpl {nullptr};
     };
 }
 
@@ -263,4 +270,3 @@ namespace Pylon
 #   pragma pack(pop)
 #endif /* _MSC_VER */
 
-#endif // INCLUDED_VIDEOWRITER_H_3842348390

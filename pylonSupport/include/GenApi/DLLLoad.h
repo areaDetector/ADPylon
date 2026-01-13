@@ -24,7 +24,7 @@
 //-----------------------------------------------------------------------------
 /*!
 \file
-\brief    Definition of function for laoding a DLL dynamically
+\brief    Definition of function for loading a DLL dynamically
 \ingroup GenApi_PublicImpl
 */
 

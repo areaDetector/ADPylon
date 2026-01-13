@@ -2,7 +2,7 @@
 
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //-----------------------------------------------------------------------------
 /**
@@ -78,12 +78,15 @@
 #define PYLON_VERSIONSTRING_COMMENT ""
 #endif
 
+#ifndef PYLON_VERSIONSTRING_STRING
+#define PYLON_VERSIONSTRING_STRING(value) #value
+#endif
 
-#define PYLON_VERSION(name, priv) \
+#define PYLON_VERSION_FULL(name, priv, major, minor, subminor) \
     LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL \
       VS_VERSION_INFO VERSIONINFO \
-      FILEVERSION PYLON_VERSION_MAJOR, PYLON_VERSION_MINOR, PYLON_VERSION_SUBMINOR, PYLON_VERSION_BUILD \
-      PRODUCTVERSION PYLON_VERSION_MAJOR, PYLON_VERSION_MINOR, PYLON_VERSION_SUBMINOR, PYLON_VERSION_BUILD \
+      FILEVERSION major, minor, subminor, PYLON_VERSION_BUILD \
+      PRODUCTVERSION major, minor, subminor, PYLON_VERSION_BUILD \
       FILEFLAGSMASK VS_FFI_FILEFLAGSMASK \
       FILEFLAGS PYLON_FILE_FLAGS \
       FILEOS VOS_NT_WINDOWS32 \
@@ -97,15 +100,15 @@
                 VALUE "Comments", PYLON_VERSIONSTRING_COMMENT "\0" \
                 VALUE "CompanyName", "Basler\0" \
                 VALUE "FileDescription", PYLON_FILE_DESCRIPTION(name) "\0" \
-                VALUE "FileVersion", PYLON_VERSIONSTRING_MAJOR "." PYLON_VERSIONSTRING_MINOR "." PYLON_VERSIONSTRING_SUBMINOR "." PYLON_VERSIONSTRING_BUILD PYLON_DEBUGSTRING "\0" \
+                VALUE "FileVersion", PYLON_VERSIONSTRING_STRING(major) "." PYLON_VERSIONSTRING_STRING(minor) "." PYLON_VERSIONSTRING_STRING(subminor) "." PYLON_VERSIONSTRING_BUILD PYLON_DEBUGSTRING "\0" \
                 VALUE "InternalName", #name "\0" \
-                VALUE "LegalCopyright", "Copyright (c) 2006-2023 Basler AG\0" \
+                VALUE "LegalCopyright", "Copyright (c) 2006-2025 Basler AG\0" \
                 VALUE "LegalTrademarks", "\0" \
                 VALUE "OLESelfRegister", "\0" \
                 VALUE "OriginalFilename", PYLON_ORIGINAL_FILENAME(name) \
                 VALUE "PrivateBuild", "\0" \
                 VALUE "ProductName", "Basler pylon\0" \
-                VALUE "ProductVersion", PYLON_VERSIONSTRING_MAJOR "." PYLON_VERSIONSTRING_MINOR "." PYLON_VERSIONSTRING_SUBMINOR "." PYLON_VERSIONSTRING_BUILD " " PYLON_VERSIONSTRING_EXTENSION PYLON_DEBUGSTRING "\0" \
+                VALUE "ProductVersion", PYLON_VERSIONSTRING_STRING(major) "." PYLON_VERSIONSTRING_STRING(minor) "." PYLON_VERSIONSTRING_STRING(subminor) "." PYLON_VERSIONSTRING_BUILD " " PYLON_VERSIONSTRING_EXTENSION PYLON_DEBUGSTRING "\0" \
                 VALUE "SpecialBuild", #priv \
             END \
         END \
@@ -114,3 +117,6 @@
             VALUE "Translation", 0x0000, 0x04b0 \
         END \
     END
+
+// Define the macro for 2 arguments that expands to 5
+#define PYLON_VERSION(name, priv) PYLON_VERSION_FULL(name, priv, PYLON_VERSION_MAJOR, PYLON_VERSION_MINOR, PYLON_VERSION_SUBMINOR)

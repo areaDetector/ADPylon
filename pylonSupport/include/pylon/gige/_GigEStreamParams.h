@@ -1,7 +1,7 @@
 
 
 //-----------------------------------------------------------------------------
-//  Copyright (c) 2004-2023 Basler AG
+//  Copyright (c) 2004-2025 Basler AG
 //  Section: Vision Components
 //  Project: GenApi
 //-----------------------------------------------------------------------------
@@ -83,6 +83,7 @@ namespace Basler_GigEStreamParams
         Type_WindowsFilterDriver,  //!<The pylon GigE Vision Filter Driver is used.
         Type_WindowsIntelPerformanceDriver,  //!<The pylon GigE Vision Performance Driver is used.
         Type_SocketDriver,  //!<The socket driver is used.
+        Type_GigEAccelerator,  //!<The GigE Accelerator is used.
         Type_NoDriverAvailable   //!<No suitable driver is installed.
 
     };
@@ -510,6 +511,48 @@ namespace Basler_GigEStreamParams
         //@}
 
 
+        //! \name Debug - Contains parameters for debugging purposes.
+        //@{
+        /*!
+            \brief Indicates whether the GigE Accelerator is currently available.
+
+
+
+            \b Visibility = Guru
+
+        */
+        GENAPI_NAMESPACE::IInteger& TypeIsGigEAcceleratorAvailable;
+        //@}
+
+
+        //! \name Debug - Contains parameters for debugging purposes.
+        //@{
+        /*!
+            \brief Indicates whether the Feature Resend Request Threshold is currently available.
+
+
+
+            \b Visibility = Guru
+
+        */
+        GENAPI_NAMESPACE::IInteger& DriverFeatureResendRequestThresholdAvailable;
+        //@}
+
+
+        //! \name Debug - Contains parameters for debugging purposes.
+        //@{
+        /*!
+            \brief Indicates whether the Feature Maximum Number Resend Requests is currently available.
+
+
+
+            \b Visibility = Guru
+
+        */
+        GENAPI_NAMESPACE::IInteger& DriverFeatureMaximumNumberResendRequestsAvailable;
+        //@}
+
+
         //! \name Statistic - Contains parameters for displaying statistical data.
         //@{
         /*!
@@ -810,6 +853,9 @@ namespace Basler_GigEStreamParams
         , TypeIsWindowsIntelPerformanceDriverAvailable( *new GENAPI_NAMESPACE::CIntegerRef() )
         , TypeIsWindowsFilterDriverAvailable( *new GENAPI_NAMESPACE::CIntegerRef() )
         , TypeIsSocketDriverAvailable( *new GENAPI_NAMESPACE::CIntegerRef() )
+        , TypeIsGigEAcceleratorAvailable( *new GENAPI_NAMESPACE::CIntegerRef() )
+        , DriverFeatureResendRequestThresholdAvailable( *new GENAPI_NAMESPACE::CIntegerRef() )
+        , DriverFeatureMaximumNumberResendRequestsAvailable( *new GENAPI_NAMESPACE::CIntegerRef() )
         , Statistic_Total_Buffer_Count( *new GENAPI_NAMESPACE::CIntegerRef() )
         , Statistic_Failed_Buffer_Count( *new GENAPI_NAMESPACE::CIntegerRef() )
         , Statistic_Buffer_Underrun_Count( *new GENAPI_NAMESPACE::CIntegerRef() )
@@ -848,6 +894,9 @@ namespace Basler_GigEStreamParams
         delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsWindowsIntelPerformanceDriverAvailable);
         delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsWindowsFilterDriverAvailable);
         delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsSocketDriverAvailable);
+        delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsGigEAcceleratorAvailable);
+        delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&DriverFeatureResendRequestThresholdAvailable);
+        delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&DriverFeatureMaximumNumberResendRequestsAvailable);
         delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&Statistic_Total_Buffer_Count);
         delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&Statistic_Failed_Buffer_Count);
         delete static_cast <GENAPI_NAMESPACE::CIntegerRef*> (&Statistic_Buffer_Underrun_Count);
@@ -864,8 +913,13 @@ namespace Basler_GigEStreamParams
     inline void CGigEStreamParams_Params::_Initialize( GENAPI_NAMESPACE::INodeMap* _Ptr )
     {
         static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetReference( _Ptr->GetNode( "Type" ) );
-        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetNumEnums( 4 );
-        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_WindowsFilterDriver, "WindowsFilterDriver" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_WindowsIntelPerformanceDriver, "WindowsIntelPerformanceDriver" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_SocketDriver, "SocketDriver" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_NoDriverAvailable, "NoDriverAvailable" );        static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&MaxNumBuffer)->SetReference( _Ptr->GetNode( "MaxNumBuffer" ) );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetNumEnums( 5 );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_WindowsFilterDriver, "WindowsFilterDriver" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_WindowsIntelPerformanceDriver, "WindowsIntelPerformanceDriver" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_SocketDriver, "SocketDriver" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_GigEAccelerator, "GigEAccelerator" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TypeEnums>*> (&Type)->SetEnumReference( Type_NoDriverAvailable, "NoDriverAvailable" );
+        static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&MaxNumBuffer)->SetReference( _Ptr->GetNode( "MaxNumBuffer" ) );
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&MaxBufferSize)->SetReference( _Ptr->GetNode( "MaxBufferSize" ) );
         static_cast<GENAPI_NAMESPACE::CBooleanRef*> (&EnableResend)->SetReference( _Ptr->GetNode( "EnableResend" ) );
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&PacketTimeout)->SetReference( _Ptr->GetNode( "PacketTimeout" ) );
@@ -883,11 +937,22 @@ namespace Basler_GigEStreamParams
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&SocketBufferSize)->SetReference( _Ptr->GetNode( "SocketBufferSize" ) );
         static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetReference( _Ptr->GetNode( "Status" ) );
         static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetNumEnums( 4 );
-        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetEnumReference( Status_NotInitialized, "NotInitialized" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetEnumReference( Status_Closed, "Closed" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetEnumReference( Status_Open, "Open" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetEnumReference( Status_Locked, "Locked" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetReference( _Ptr->GetNode( "AccessMode" ) );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetEnumReference( Status_NotInitialized, "NotInitialized" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetEnumReference( Status_Closed, "Closed" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetEnumReference( Status_Open, "Open" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<StatusEnums>*> (&Status)->SetEnumReference( Status_Locked, "Locked" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetReference( _Ptr->GetNode( "AccessMode" ) );
         static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetNumEnums( 4 );
-        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetEnumReference( AccessMode_NotInitialized, "NotInitialized" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetEnumReference( AccessMode_Monitor, "Monitor" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetEnumReference( AccessMode_Control, "Control" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetEnumReference( AccessMode_Exclusive, "Exclusive" );        static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsWindowsIntelPerformanceDriverAvailable)->SetReference( _Ptr->GetNode( "TypeIsWindowsIntelPerformanceDriverAvailable" ) );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetEnumReference( AccessMode_NotInitialized, "NotInitialized" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetEnumReference( AccessMode_Monitor, "Monitor" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetEnumReference( AccessMode_Control, "Control" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<AccessModeEnums>*> (&AccessMode)->SetEnumReference( AccessMode_Exclusive, "Exclusive" );
+        static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsWindowsIntelPerformanceDriverAvailable)->SetReference( _Ptr->GetNode( "TypeIsWindowsIntelPerformanceDriverAvailable" ) );
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsWindowsFilterDriverAvailable)->SetReference( _Ptr->GetNode( "TypeIsWindowsFilterDriverAvailable" ) );
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsSocketDriverAvailable)->SetReference( _Ptr->GetNode( "TypeIsSocketDriverAvailable" ) );
+        static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&TypeIsGigEAcceleratorAvailable)->SetReference( _Ptr->GetNode( "TypeIsGigEAcceleratorAvailable" ) );
+        static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&DriverFeatureResendRequestThresholdAvailable)->SetReference( _Ptr->GetNode( "DriverFeatureResendRequestThresholdAvailable" ) );
+        static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&DriverFeatureMaximumNumberResendRequestsAvailable)->SetReference( _Ptr->GetNode( "DriverFeatureMaximumNumberResendRequestsAvailable" ) );
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&Statistic_Total_Buffer_Count)->SetReference( _Ptr->GetNode( "Statistic_Total_Buffer_Count" ) );
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&Statistic_Failed_Buffer_Count)->SetReference( _Ptr->GetNode( "Statistic_Failed_Buffer_Count" ) );
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&Statistic_Buffer_Underrun_Count)->SetReference( _Ptr->GetNode( "Statistic_Buffer_Underrun_Count" ) );
@@ -897,9 +962,13 @@ namespace Basler_GigEStreamParams
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&Statistic_Resend_Packet_Count)->SetReference( _Ptr->GetNode( "Statistic_Resend_Packet_Count" ) );
         static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetReference( _Ptr->GetNode( "TransmissionType" ) );
         static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetNumEnums( 5 );
-        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_UseCameraConfig, "UseCameraConfig" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_Unicast, "Unicast" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_Multicast, "Multicast" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_LimitedBroadcast, "LimitedBroadcast" );        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_SubnetDirectedBroadcast, "SubnetDirectedBroadcast" );        static_cast<GENAPI_NAMESPACE::CStringRef*> (&DestinationAddr)->SetReference( _Ptr->GetNode( "DestinationAddr" ) );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_UseCameraConfig, "UseCameraConfig" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_Unicast, "Unicast" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_Multicast, "Multicast" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_LimitedBroadcast, "LimitedBroadcast" );
+        static_cast<GENAPI_NAMESPACE::CEnumerationTRef<TransmissionTypeEnums>*> (&TransmissionType)->SetEnumReference( TransmissionType_SubnetDirectedBroadcast, "SubnetDirectedBroadcast" );
+        static_cast<GENAPI_NAMESPACE::CStringRef*> (&DestinationAddr)->SetReference( _Ptr->GetNode( "DestinationAddr" ) );
         static_cast<GENAPI_NAMESPACE::CIntegerRef*> (&DestinationPort)->SetReference( _Ptr->GetNode( "DestinationPort" ) );
-
     }
 
     inline const char* CGigEStreamParams_Params::_GetVendorName( void )

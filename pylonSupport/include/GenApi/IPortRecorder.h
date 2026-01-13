@@ -41,7 +41,7 @@
 namespace GENAPI_NAMESPACE
 {
 
-    interface GENAPI_DECL_ABSTRACT IPortWriteList
+    GENICAM_INTERFACE GENAPI_DECL_ABSTRACT IPortWriteList
     {
         //! Writes a chunk of bytes to the port
         virtual void Write(const void *pBuffer, int64_t Address, int64_t Length) = 0;
@@ -61,7 +61,7 @@ namespace GENAPI_NAMESPACE
     \brief Interface for replaying write commands on a port
     \ingroup GenApi_PublicInterface
     */
-    interface GENAPI_DECL_ABSTRACT IPortReplay : virtual public IPort
+    GENICAM_INTERFACE GENAPI_DECL_ABSTRACT IPortReplay : virtual public IPort
     {
         //! sends the commands to the camera.
         /*! the default implementation just walks the list and issues each command
@@ -69,17 +69,17 @@ namespace GENAPI_NAMESPACE
             the transport layer the implementation can however use a special command
             which sends all register write commands as one package.
         */
-        virtual void Replay( IPortWriteList *pPortRecorder, bool Invalidate = true ) = 0;
+        virtual void Replay(IPortWriteList *pPortRecorder, bool Invalidate = true) = 0;
     };
 
     /**
     \brief Interface for recording write commands on a port
     \ingroup GenApi_PublicInterface
     */
-    interface GENAPI_DECL_ABSTRACT IPortRecorder : public IPortReplay
+    GENICAM_INTERFACE GENAPI_DECL_ABSTRACT IPortRecorder : public IPortReplay
     {
         //! starts logging all WriteRegister commands to a list
-        virtual void StartRecording( IPortWriteList *pPortRecorder ) = 0;
+        virtual void StartRecording(IPortWriteList *pPortRecorder) = 0;
 
         //! stops recording
         virtual void StopRecording() = 0;
@@ -110,32 +110,43 @@ namespace GENAPI_NAMESPACE
         the transport layer the implementation can however use a special command
         which sends all register write commands as one package.
         */
-        virtual void Replay( IPortWriteList *pPortRecorder, bool Invalidate = true )
+        virtual void Replay(IPortWriteList *pPortRecorder, bool Invalidate = true)
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->Replay(pPortRecorder, Invalidate);
+            if (ref::m_Ptr)
+            {
+                ref::m_Ptr->Replay(pPortRecorder, Invalidate);
+            }
             else
-                throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            {
+                throw ACCESS_EXCEPTION( "Feature not present (reference not valid)" );
+            }
         }
 
         //! starts logging all WriteRegister commands to a list
-        virtual void StartRecording( IPortWriteList *pPortRecorder )
+        virtual void StartRecording(IPortWriteList *pPortRecorder)
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->StartRecording(pPortRecorder);
+            if (ref::m_Ptr)
+            {
+                ref::m_Ptr->StartRecording(pPortRecorder);
+            }
             else
-                throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            {
+                throw ACCESS_EXCEPTION( "Feature not present (reference not valid)" );
+            }
         }
 
         //! stops recording
         virtual void StopRecording()
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->StopRecording();
+            if (ref::m_Ptr)
+            {
+                ref::m_Ptr->StopRecording();
+            }
             else
-                throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            {
+                throw ACCESS_EXCEPTION( "Feature not present (reference not valid)" );
+            }
         }
-
     };
 
     //! Reference to an IPortRecorder pointer

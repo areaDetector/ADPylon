@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2018-2023 Basler AG
+//  Copyright (c) 2018-2025 Basler AG
 //  http://www.baslerweb.com
 //------------------------------------------------------------------------------
 /*!
@@ -21,10 +21,18 @@
 #   pragma pack(push, PYLON_PACKING)
 #endif /* _MSC_VER */
 
-#ifdef _MSC_VER
+#if defined(PYLON_WIN_BUILD)
 #   pragma warning( push )
 #   pragma warning( disable : 4275 ) // Class needs to have a dll interface to be used by clients of the class.
 #   pragma warning( disable : 4250 ) // warning C4250: 'Pylon::CXYZParameter': inherits 'Pylon::CParameter::Pylon::CParameter::ZYX' via dominance
+#elif defined(PYLON_UNIX_BUILD)
+#   if defined(__clang__)
+#       pragma clang diagnostic push
+#       pragma clang diagnostic ignored "-Woverloaded-virtual"
+#   else
+#       pragma GCC diagnostic push
+#       pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#   endif
 #endif
 
 namespace Pylon
@@ -32,7 +40,7 @@ namespace Pylon
     /*!
     \brief Extends the GenApi::IRegister interface with convenience methods.
     */
-    interface IRegisterEx : virtual public GenApi::IRegister, virtual public IValueEx
+    PYLON_INTERFACE IRegisterEx : virtual public GenApi::IRegister, virtual public IValueEx
     {
         using GenApi::IRegister::operator=;
 
@@ -251,19 +259,24 @@ namespace Pylon
         virtual void Get( uint8_t* pBuffer, int64_t length, bool verify = false, bool ignoreCache = false );
 
         // Implements GenApi::IRegister
-        virtual int64_t GetLength();
+        virtual int64_t GetLength( bool Verify = false );
 
         // Implements GenApi::IRegister
-        virtual int64_t GetAddress();
-
-
+        virtual int64_t GetAddress( bool Verify = false );
 
     protected:
         GenApi::IRegister* m_pFeature;
     };
 }
-#ifdef _MSC_VER
+
+#if defined(PYLON_WIN_BUILD)
 #   pragma warning( pop )
+#elif defined(PYLON_UNIX_BUILD)
+#   if defined(__clang__)
+#       pragma clang diagnostic pop
+#   else
+#       pragma GCC diagnostic pop
+#   endif
 #endif
 
 #ifdef _MSC_VER

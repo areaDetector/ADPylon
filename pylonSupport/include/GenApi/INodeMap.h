@@ -34,7 +34,9 @@
 #include <Base/GCBase.h>
 #include <GenApi/INode.h>
 #include <GenApi/IPort.h>
+#include <GenApi/IPortStacked.h>
 #include <GenApi/Synch.h>
+#include <GenApi/ConcatenatedWrite.h>
 
 #ifdef _MSC_VER
 #   pragma warning ( push )
@@ -52,7 +54,7 @@ namespace GENAPI_NAMESPACE
     \brief Interface to access the node map
     \ingroup GenApi_PublicInterface
     */
-    interface GENAPI_DECL_ABSTRACT INodeMap
+    GENICAM_INTERFACE GENAPI_DECL_ABSTRACT INodeMap
     {
         //! Retrieves all nodes in the node map
         virtual void GetNodes(NodeList_t &Nodes) const =  0;
@@ -68,6 +70,12 @@ namespace GENAPI_NAMESPACE
 
         //! Connects a port to the standard port "Device"
         virtual bool Connect( IPort* pPort) const = 0;
+
+        //! Connects a port to a port node with given name
+        virtual bool Connect(IPortStacked* pPort, const GENICAM_NAMESPACE::gcstring& PortName) = 0;
+
+        //! Connects a port to the standard port "Device"
+        virtual bool Connect(IPortStacked* pPort) = 0;
 
         //! Get device name
         /*! The device name identifies a device instance, e.g. for debugging purposes.
@@ -85,6 +93,16 @@ namespace GENAPI_NAMESPACE
 
         //! Parse all Swissknife equations
         virtual bool ParseSwissKnifes( GENICAM_NAMESPACE::gcstring_vector *pErrorList = NULL ) const = 0;
+
+        //! Create a new write concatenator object
+        virtual CNodeWriteConcatenator *NewNodeWriteConcatenator() const = 0;
+
+        //! Execute the transaction
+        virtual bool ConcatenatedWrite(CNodeWriteConcatenator *, bool featureStreaming = true, GENICAM_NAMESPACE::gcstring_vector *pErrorList = NULL) = 0;
+
+        //! Set suppress callback mode
+        virtual void SetSuppressCallbackMode(ECallbackSuppressMode) = 0;
+
     };
 }
 

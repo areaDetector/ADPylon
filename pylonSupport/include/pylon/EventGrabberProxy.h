@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2007-2023 Basler AG
+//  Copyright (c) 2007-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -22,6 +22,19 @@
 #ifdef _MSC_VER
 #   pragma pack(push, PYLON_PACKING)
 #endif /* _MSC_VER */
+
+#ifdef _MSC_VER
+#   pragma warning( push )
+#   pragma warning( disable : 4250 ) // warning C4250: 'Pylon::CXYZParameter': inherits 'Pylon::CParameter::Pylon::CParameter::ZYX' via dominance
+#elif defined(PYLON_UNIX_BUILD)
+#   if defined(__clang__)
+#       pragma clang diagnostic push
+#       pragma clang diagnostic ignored "-Woverloaded-virtual"
+#   else
+#       pragma GCC diagnostic push
+#       pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#   endif
+#endif
 
 
 #include <Base/GCException.h>
@@ -83,6 +96,8 @@
             //\}
 
         private:
+
+            using CNodeMapProxyT<TParams>::Attach;
             //! \name Assignment and copying is not supported
             // \{
             CEventGrabberProxyT( const CEventGrabberProxyT& );
@@ -166,7 +181,7 @@
 
                 \copydetails Pylon::IEventGrabber::GetNodeMap()
             */
-            GenApi::INodeMap* GetNodeMap()
+            GenApi::INodeMap* GetNodeMap() const
             {
                 CheckPtr();
                 return m_pEventGrabber->GetNodeMap();
@@ -240,6 +255,16 @@
         }
 
     } // namespace Pylon
+
+#ifdef _MSC_VER
+#   pragma warning( pop )
+#elif defined(PYLON_UNIX_BUILD)
+#   if defined(__clang__)
+#       pragma clang diagnostic pop
+#   else
+#       pragma GCC diagnostic pop
+#   endif
+#endif
 
 #ifdef _MSC_VER
 #   pragma pack(pop)

@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2019-2023 Basler AG
+//  Copyright (c) 2019-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  DV
 //-----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ namespace Pylon
 
     The 'open' status of an interface instance won't change even if an attached camera is used, e.g., opened or closed.
     */
-    interface PUBLIC_INTERFACE IInterface : public IDeviceFactory
+    PYLON_INTERFACE PUBLIC_INTERFACE IInterface : public IDeviceFactory
     {
         /*!
         \brief Opens an interface to be able access it's parameters via GetNodeMap().

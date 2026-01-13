@@ -50,7 +50,7 @@ namespace GENAPI_NAMESPACE
     \brief Interface for registers
     \ingroup GenApi_PublicInterface
     */
-    interface GENAPI_DECL_ABSTRACT IRegister  : virtual public IValue
+    GENICAM_INTERFACE GENAPI_DECL_ABSTRACT IRegister  : virtual public IValue
     {
         //! Set the register's contents
         /*!
@@ -70,10 +70,10 @@ namespace GENAPI_NAMESPACE
         virtual void Get(uint8_t *pBuffer, int64_t Length, bool Verify = false, bool IgnoreCache = false) = 0;
 
         //! Retrieves the Length of the register [Bytes]
-        virtual int64_t GetLength() = 0;
+        virtual int64_t GetLength( bool Verify = false ) = 0;
 
         //! Retrieves the Address of the register
-        virtual int64_t GetAddress() = 0;
+        virtual int64_t GetAddress( bool Verify = false ) = 0;
     };
 
     //*************************************************************
@@ -101,37 +101,33 @@ namespace GENAPI_NAMESPACE
         //! Set the register's contents
         virtual void Set(const uint8_t *pBuffer, int64_t Length, bool Verify = true)
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->Set(pBuffer, Length, Verify);
-            else
+            if(!ref::m_Ptr)
                 throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            ref::m_Ptr->Set(pBuffer, Length, Verify);
         }
 
         //! Fills a buffer with the register's contents
         virtual void Get(uint8_t *pBuffer, int64_t Length, bool Verify = false, bool IgnoreCache = false)
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->Get(pBuffer, Length, Verify, IgnoreCache);
-            else
+            if(!ref::m_Ptr)
                 throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            ref::m_Ptr->Get(pBuffer, Length, Verify, IgnoreCache);
         }
 
         //! Retrieves the Length of the register [Bytes]
-        virtual int64_t GetLength()
+        virtual int64_t GetLength(bool Verify = false)
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->GetLength();
-            else
+            if (!ref::m_Ptr)
                 throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            return ref::m_Ptr->GetLength( Verify );
         }
 
         //! Retrieves the Address of the register
-        virtual int64_t GetAddress()
+        virtual int64_t GetAddress(bool Verify=false)
         {
-            if(ref::m_Ptr)
-                return ref::m_Ptr->GetAddress();
-            else
+            if (!ref::m_Ptr)
                 throw ACCESS_EXCEPTION("Feature not present (reference not valid)");
+            return ref::m_Ptr->GetAddress(Verify);
         }
 
     };

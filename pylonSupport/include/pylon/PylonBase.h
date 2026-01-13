@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -94,7 +94,6 @@ namespace Pylon
         */
     extern "C" PYLONBASE_API const char* CDECL GetPylonVersionString();
 
-
     /**
         \brief Set the value of a property.
 
@@ -164,15 +163,17 @@ namespace Pylon
     */
     class PylonAutoInitTerm
     {
+        bool m_ShutDownLogger;
     public:
-        PYLONBASE_API PylonAutoInitTerm( void )
+        PYLONBASE_API PylonAutoInitTerm( bool shutDownLogger = true )
+            : m_ShutDownLogger( shutDownLogger )
         {
             PylonInitialize();
         }
 
         PYLONBASE_API ~PylonAutoInitTerm( void )
         {
-            PylonTerminate();
+            PylonTerminate( m_ShutDownLogger );
         }
     private:
         // unimplemented new operator to prevent creation on the heap which is a bad idea.

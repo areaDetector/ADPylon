@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Hartmut Nebelung
 //-----------------------------------------------------------------------------
@@ -24,6 +24,7 @@
 #include <pylon/PixelType.h>
 #include <pylon/PayloadType.h>
 #include <pylon/ResultImage.h>
+#include <pylon/SharedByteBuffer.h>
 
 #pragma pack(push, PYLON_PACKING)
 
@@ -103,9 +104,17 @@ namespace Pylon
             , m_ErrorCode( 0 )
             , m_ErrorDescription( "" )
             , m_BlockID( GC_UINT64_MAX )
+            , m_HasChunkData( false )
         {
         }
 
+        ///////////////////////////////////////////////////////////////////////
+        //
+        GrabResult(const GrabResult& rhs) = default;
+
+        ///////////////////////////////////////////////////////////////////////
+        //
+        GrabResult& operator=(const GrabResult& rhs) = default;
 
         ///////////////////////////////////////////////////////////////////////
         //
@@ -329,6 +338,15 @@ namespace Pylon
             return m_BufferSize;
         }
 
+
+        ///////////////////////////////////////////////////////////////////////
+        /// Get information if chunk data is present in the buffer returned by Buffer().
+        bool HasChunkData() const
+        {
+            return m_HasChunkData;
+        }
+
+
     protected:
         const void* m_pContext;
         StreamBufferHandle m_hBuffer;
@@ -349,6 +367,9 @@ namespace Pylon
         uint32_t m_ErrorCode;
         String_t m_ErrorDescription;
         uint64_t m_BlockID;
+
+        CSharedByteBuffer m_GenDcDescriptorBuffer;
+        bool m_HasChunkData;
     };
 
 

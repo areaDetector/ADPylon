@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -34,8 +34,8 @@ namespace Pylon
     // forwards
     class CSimpleMutex;
     class CTlInfo;
-    interface ITransportLayer;
-    interface IDeviceFactory;
+    PYLON_INTERFACE ITransportLayer;
+    PYLON_INTERFACE IDeviceFactory;
     class TlMap;
     class ImplicitTlRefs;
 

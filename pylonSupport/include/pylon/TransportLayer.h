@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ namespace Pylon
     Transport Layer objects are used for enumerating and creating devices accessible
     by a specific transport layer (like the PylonUsb or the PylonGigE transport layer).
     */
-    interface PUBLIC_INTERFACE ITransportLayer : public IDeviceFactory
+    PYLON_INTERFACE PUBLIC_INTERFACE ITransportLayer : public IDeviceFactory
     {
         /*!
         \brief Returns a CTlInfo object holding information about the transport layer.

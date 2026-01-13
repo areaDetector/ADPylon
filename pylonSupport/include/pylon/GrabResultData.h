@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2010-2023 Basler AG
+//  Copyright (c) 2010-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Andreas Gau
 //-----------------------------------------------------------------------------
@@ -133,13 +133,14 @@ namespace Pylon
         /// Get the stride in bytes.
         /*
             Uses Pylon::ComputeStride to compute the stride from the result data.
+        \param[out] strideBytes  Returns the stride in bytes if it can be computed.
 
-        \return The stride in byte.
+        \return Returns true if the stride can be computed.
 
         \pre The preconditions of Pylon::ComputeStride must be met.
 
         \error
-            Throws an exception if the stride value cannot be computed from the result data.
+            Throws an exception if the preconditions aren't met.
         */
         bool GetStride( size_t& strideBytes ) const;
 

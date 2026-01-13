@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2008-2023 Basler AG
+//  Copyright (c) 2008-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Thomas Koeller, Hartmut Nebelung
 //-----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ namespace Pylon
     \brief Extends the ITransportLayer interface by GigE Vision specific
            functionality.
     */
-    interface PUBLIC_INTERFACE IGigETransportLayer : public ITransportLayer
+    PYLON_INTERFACE PUBLIC_INTERFACE IGigETransportLayer : public ITransportLayer
     {
         //! \brief Enumerates all available Basler GigE Vision devices
         /*!

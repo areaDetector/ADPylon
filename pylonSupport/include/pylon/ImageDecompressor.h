@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2019-2023 Basler AG
+//  Copyright (c) 2019-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  MP
 //-----------------------------------------------------------------------------
@@ -283,6 +283,9 @@ namespace Pylon
 
         /*!
         \brief Gets compression information about a grab buffer.
+
+               The grab buffer provided must contain the entire camera payload, including chunk data. The payload must have
+               been received without errors. It must include a compressed image.
         \param[out] compressionInfo Reference to the struct that will receive the compression information if the grab buffer contains such information.
         \param[in] pGrabBuffer Pointer to the grab buffer that holds the compressed data. This parameter must not be NULL.
         \param[in] payloadSize Payload size (in bytes) of the data received (must be less or equal to the size of the grab buffer).
@@ -383,6 +386,9 @@ namespace Pylon
 
         /*!
         \brief Gets the hash of the compression descriptor that is required for decompressing the grab buffer provided.
+
+               The grab buffer provided must contain the entire camera payload, including chunk data. The payload must have
+               been received without errors. It must include a compressed image.
         \param[out] pHash Pointer to the buffer that will receive the compression descriptor hash or
                     NULL if you only want to get the size of the buffer for buffer allocation.
         \param[in,out] pSizeHash On input, the variable specifies the size of the buffer (in bytes)
@@ -459,7 +465,8 @@ namespace Pylon
                This method requires that a compression descriptor has been set previously via the constructor or
                the SetCompressionDescriptor methods. You can determine this via the HasCompressionDescriptor method.
 
-               The grab buffer provided must contain a compressed image that has been received without errors.
+               The grab buffer provided must contain the entire camera payload, including chunk data. The payload must have
+               been received without errors. It must include a compressed image.
         \param[out] pOutputBuffer Pointer to the buffer that will receive the decompressed image. This parameter must
                     not be NULL.
         \param[in,out] pSizeOutputBuffer On input, the variable specifies the size of the buffer (in bytes)
@@ -541,7 +548,8 @@ namespace Pylon
                This method requires that a compression descriptor has been set previously via the constructor or
                the SetCompressionDescriptor methods. You can determine this via the HasCompressionDescriptor method.
 
-               The grab buffer provided must contain a compressed image that has been received without errors.
+               The grab buffer provided must contain the entire camera payload, including chunk data. The payload must have
+               been received without errors. It must include a compressed image.
         \param[out] destinationImage Image object (e.g., instance of CPylonImage) that will be filled with the decompressed
                     image (will be resized if required).
         \param[in] pGrabBuffer Pointer to the grab buffer that holds the compressed data. This parameter must not be NULL.

@@ -59,7 +59,7 @@ namespace GENAPI_NAMESPACE
         }
 
         //! Constructor from INode pointer type.
-        CPointer( B *pB )
+        CPointer(B *pB)
             : m_pT( dynamic_cast<T*>(pB) )
         {
         }
@@ -69,9 +69,10 @@ namespace GENAPI_NAMESPACE
         }
 
         //! Assign INode Pointer
-        void operator=( B *pB )
+        CPointer& operator=(B *pB)
         {
             m_pT = dynamic_cast<T*>(pB);
+            return *this;
         }
 
         //! Dereferencing
@@ -231,9 +232,10 @@ namespace GENAPI_NAMESPACE
         }
 
         //! Assign IBase Pointer
-        void operator=( IBase *pB )
+        CFloatPtr& operator=( IBase *pB )
         {
             CPointer<IFloat, IBase>::operator =(pB);
+            return *this;
         }
 
         //! gets the interface of an integer alias node.
@@ -257,6 +259,8 @@ namespace GENAPI_NAMESPACE
     //! SmartPointer for IPortConstruct interface pointer
     typedef CPointer<IPortConstruct> CPortConstructPtr;
 
+    //! SmartPointer for IPortStackedConstruct interface pointer
+    typedef CPointer<IPortStackedConstruct> CPortStackedConstructPtr;
 
     //! Returns the name of the main interface as string
     //! DEPRECATED, use IBase::GetPrincipalInterfaceType() instead

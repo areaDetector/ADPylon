@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2008-2023 Basler AG
+//  Copyright (c) 2008-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  Thomas Koeller
 //-----------------------------------------------------------------------------
@@ -12,9 +12,16 @@
 #if !defined(PYLON_PLATFORM_H)
 #define PYLON_PLATFORM_H
 
+// define deprecation macro. Since C++ 11, the [[deprecated]] attribute can be used on all compilers.
+#if defined (PYLON_NO_DEPRECATE)
+#   define PYLON_DEPRECATED(message)
+#else
+#   define PYLON_DEPRECATED(message) [[deprecated(message)]]
+#endif
+
+
 #if defined (_MSC_VER) && defined (_WIN32)
 // Platform Microsoft windows, Microsoft tool chain
-
 
 
 /** \brief Is defined, when using the pylon for Windows API */
@@ -32,8 +39,7 @@
 #       error unsupported wordsize (32/64 platform)
 #   endif
 
-
-
+// defines export/import macros for Windows DLL builds
 #   if defined(PYLON_STATIC)
 #       define APIEXPORT
 #       define APIIMPORT
@@ -48,53 +54,52 @@
 #       define CDECL
 #   endif
 
-#   if defined PYLON_NO_DEPRECATE
-#       define PYLON_DEPRECATED(x)
-#   else
-#       if _MSC_VER >= 1400
-#           define PYLON_DEPRECATED(x) __declspec(deprecated(x))
-#       else
-#           define PYLON_DEPRECATED(x) __declspec(deprecated)
-#       endif
-#   endif
-
 // packing used for pylon structs/classes
 #   define PYLON_PACKING 8
 
 #elif (defined(__GNUC__) && defined(__linux__)) || defined(__APPLE__)
 // Platform Linux, gcc or Darwin, llvm toolchain
 
-#ifdef __APPLE__
-    // Platform Darwin / OS X
-#   define PYLON_OSX_BUILD
-#   define PYLON_HAS_BYTEORDER
+#    ifdef __APPLE__
+        // Platform Darwin / OS X
+#       define PYLON_OSX_BUILD
+#       define PYLON_HAS_BYTEORDER
 
-#else
-#   define PYLON_LINUX_BUILD
-    // Platform Linux
+#   else
+#       define PYLON_LINUX_BUILD
+        // Platform Linux
 
-#   define PYLON_HAS_MALLOC_H
-#   define PYLON_HAS_BYTESWAP
-#   define PYLON_HAS_THREADCAP
-#endif
+#       define PYLON_HAS_MALLOC_H
+#       define PYLON_HAS_BYTESWAP
+#       define PYLON_HAS_THREADCAP
+#   endif
 
 /** \brief Is defined when using the pylon for Unix API (Linux & Darwin / OS X */
 #   define PYLON_UNIX_BUILD
 #   define PYLON_HAS_POSIX_THREADS
 
 //TODO this works only on a C99 compiler. We must ensure, that things like SIZE_MAX UINTPTR_MAX are always defined
-#if !defined(__STDC_LIMIT_MACROS)
-#   define  __STDC_LIMIT_MACROS
-#endif
-#if !defined(__STDC_CONSTANT_MACROS)
-#   define  __STDC_CONSTANT_MACROS
-#endif
-#if !defined(__STDC_FORMAT_MACROS)
-#   define  __STDC_FORMAT_MACROS    // for PRI* in inttypes.h
-#endif
+#   if !defined(__STDC_LIMIT_MACROS)
+#       define  __STDC_LIMIT_MACROS
+#   endif
+#   if !defined(__STDC_CONSTANT_MACROS)
+#       define  __STDC_CONSTANT_MACROS
+#   endif
+#   if !defined(__STDC_FORMAT_MACROS)
+#       define  __STDC_FORMAT_MACROS    // for PRI* in inttypes.h
+#   endif
 
-#   include <pylon/api_autoconf.h>
-#   include <stdint.h>
+// define symbol visibilty for linux builds
+#   ifdef PYLON_STATIC
+#       define APIEXPORT
+#       define APIIMPORT
+#   else
+#        define APIEXPORT    __attribute__((visibility("default")))
+#       define APIIMPORT
+#   endif
+
+// No CDECL on Linux
+#   define CDECL
 
 // gnu compiler needs explicit visibility of interfaces, so dynamic_cast works
 #   define PUBLIC_INTERFACE APIEXPORT
@@ -147,16 +152,16 @@
 #error You must include pylon/Platform.h (or at least define GENICAM_USER_ALWAYS_LINK_RELEASE) before including any GenICam headers. Note: If you include only pylon/PylonIncludes.h this will be done automatically.
 #endif
 
+// Force pylon to always link against the release version of the GenICam library.
+#if !defined(PYLON_BUILD_DEBUG)
+#   if !defined(GENICAM_USER_ALWAYS_LINK_RELEASE)
+#       define GENICAM_USER_ALWAYS_LINK_RELEASE
+#   endif
+#endif
+
 // Turn off GenICam compiler warning about untested compiler.
 #if !defined(GENICAM_USER_ACCEPTS_ANY_COMPILER)
 #   define GENICAM_USER_ACCEPTS_ANY_COMPILER
-#endif
-
-// Macro for deprecated classes in pylon 6.0
-#if defined(PYLON_6_0_NO_DEPRECATE) || defined(PYLON_UNIX_BUILD)
-#   define PYLON_6_0_DEPRECATED(message)
-#else
-#   define PYLON_6_0_DEPRECATED(message) PYLON_DEPRECATED(message)
 #endif
 
 #endif /* !defined(PYLON_PLATFORM_H) */

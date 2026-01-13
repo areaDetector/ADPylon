@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //  Basler pylon SDK
-//  Copyright (c) 2006-2023 Basler AG
+//  Copyright (c) 2006-2025 Basler AG
 //  http://www.baslerweb.com
 //  Author:  AH
 //-----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ namespace Pylon
         \interface IProperties
         \brief interface for a property container
     */
-    interface PUBLIC_INTERFACE IProperties
+    PYLON_INTERFACE PUBLIC_INTERFACE IProperties
     {
         /// Retrieves a list of property names
         virtual int GetPropertyNames( StringList_t& ) const = 0;
