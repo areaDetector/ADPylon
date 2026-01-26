@@ -384,6 +384,8 @@ asynStatus ADPylon::connectCamera(void)
         if (findCamera(cameraId_, deviceInfo) != asynSuccess) {
             asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                 "%s::%s camera %s not found\n", driverName, functionName, cameraId_.c_str());
+            // Mark camera not reachable
+            cameraDisconnected();
             return asynError;
         }
         camera_.Attach(Pylon::CTlFactory::GetInstance().CreateDevice(deviceInfo), Pylon::Cleanup_Delete);
