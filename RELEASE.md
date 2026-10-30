@@ -12,6 +12,7 @@ files respectively, in the configure/ directory of the appropriate release of th
 
 Release Notes
 =============
-R1-0 (XX-XX-2023)
-----
+
+R1-0 (Oct. 30, 2026)
+--------------------
 * Initial release
